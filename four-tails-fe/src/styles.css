@@ -1,1 +1,280 @@
-/* You can add global styles to this file, and also import other style files */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Poppins',sans-serif;
+    background:#fff;
+    color:#222;
+    padding-bottom:90px;
+}
+
+.container{
+    width:100%;
+    max-width:1200px;
+    margin:auto;
+    padding:16px;
+}
+
+/* TOPBAR */
+
+.topbar{
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:18px;
+  padding-top:8px;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.logo{
+  width:48px;
+  height:48px;
+  border-radius:16px;
+  background:#ff385c;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:24px;
+  color:white;
+  box-shadow:0 4px 10px rgba(255,56,92,0.3);
+}
+
+.brand h1{
+  font-size:26px;
+  font-weight:700;
+  color:#222;
+}
+
+/* HEADER */
+
+.search-box{
+    width:100%;
+    background:#fff;
+    border-radius:40px;
+    padding:18px 20px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.08);
+    margin-top:10px;
+    margin-bottom:20px;
+}
+
+.search-box input{
+    border:none;
+    outline:none;
+    width:100%;
+    font-size:16px;
+}
+
+/* TABS */
+
+.tabs{
+    display:flex;
+    gap:28px;
+    margin-bottom:24px;
+    overflow-x:auto;
+}
+
+.tab{
+    padding-bottom:10px;
+    color:#666;
+    font-weight:500;
+    cursor:pointer;
+    white-space:nowrap;
+}
+
+.tab.active{
+    color:#000;
+    border-bottom:3px solid #000;
+}
+
+/* SECTION */
+
+.section{
+    margin-bottom:40px;
+}
+
+.section-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.section-title{
+    font-size:30px;
+    font-weight:700;
+    line-height:1.2;
+}
+
+.arrow-btn{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    border:none;
+    background:#f3f3f3;
+    cursor:pointer;
+    font-size:18px;
+}
+
+/* CARDS */
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+}
+
+.card{
+    cursor:pointer;
+}
+
+.card-image{
+    position:relative;
+    border-radius:24px;
+    overflow:hidden;
+    height:250px;
+}
+
+.card-image img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transition:0.3s;
+}
+
+.card:hover img{
+    transform:scale(1.05);
+}
+
+.badge{
+    position:absolute;
+    top:14px;
+    left:14px;
+    background:white;
+    padding:8px 14px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:600;
+}
+
+.heart{
+    position:absolute;
+    top:14px;
+    right:14px;
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.95);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:18px;
+}
+
+.card-info{
+    padding:12px 6px;
+}
+
+.card-title{
+    font-size:20px;
+    font-weight:600;
+    margin-bottom:4px;
+}
+
+.price{
+    color:#555;
+    margin-bottom:4px;
+}
+
+.rating{
+    font-size:14px;
+    color:#444;
+}
+
+/* HOTEL SUBTEXT */
+
+.subtitle{
+    color:#666;
+    margin-top:8px;
+    margin-bottom:20px;
+    max-width:500px;
+}
+
+/* BOTTOM NAV */
+
+.bottom-nav{
+    position:fixed;
+    bottom:0;
+    left:0;
+    width:100%;
+    background:white;
+    border-top:1px solid #eaeaea;
+    display:flex;
+    justify-content:space-around;
+    padding:12px 0;
+    z-index:999;
+}
+
+.nav-item{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    font-size:13px;
+    color:#666;
+    gap:6px;
+}
+
+.nav-item.active{
+    color:#ff385c;
+    font-weight:600;
+}
+
+.nav-icon{
+    font-size:22px;
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+    .section-title{
+    font-size:22px;
+    }
+
+    .card-image{
+    height:220px;
+    }
+
+    .cards{
+    display:flex;
+    overflow-x:auto;
+    gap:16px;
+    padding-bottom:10px;
+    }
+
+    .card{
+    min-width:260px;
+    }
+
+    .logo {
+        width: 42px;
+        height: 42px;
+        font-size: 20px;
+    }
+
+    .brand h1 {
+        font-size: 22px;
+    }
+
+}
