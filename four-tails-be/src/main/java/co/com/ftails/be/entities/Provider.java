@@ -1,5 +1,6 @@
 package co.com.ftails.be.entities;
 
+import java.time.Instant;
 import java.util.List;
 
 import jakarta.persistence.Column;
@@ -10,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -21,11 +23,23 @@ public class Provider {
 	@Column
 	private Long id;
 	
-	@Column
-	private String name;
+	@Column(nullable = false)
+    private Instant createdAt;
+	
+	@Column(nullable = false)
+    private Instant updatedAt;
 	
 	@Column
-	private String picture;
+	private String description;
+
+	@Column
+	private Boolean verified;
+
+	@Column
+	private Double rating;
+	
+	@ManyToOne
+	private User user;
 	
 	@ManyToMany
     @JoinTable(
@@ -43,20 +57,52 @@ public class Provider {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public Instant getCreatedAt() {
+		return createdAt;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setCreatedAt(Instant createdAt) {
+		this.createdAt = createdAt;
 	}
 
-	public String getPicture() {
-		return picture;
+	public Instant getUpdatedAt() {
+		return updatedAt;
 	}
 
-	public void setPicture(String picture) {
-		this.picture = picture;
+	public void setUpdatedAt(Instant updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public Boolean getVerified() {
+		return verified;
+	}
+
+	public void setVerified(Boolean verified) {
+		this.verified = verified;
+	}
+
+	public Double getRating() {
+		return rating;
+	}
+
+	public void setRating(Double rating) {
+		this.rating = rating;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public List<Service> getServices() {
@@ -66,6 +112,4 @@ public class Provider {
 	public void setServices(List<Service> services) {
 		this.services = services;
 	}
-	
-	
 }
