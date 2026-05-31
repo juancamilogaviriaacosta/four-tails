@@ -1,19 +1,51 @@
 @if(!auth.isInLogin()) { 
   <div class="container">
 
+
+
     <!-- TOPBAR -->
-    <div class="topbar">
-      <div class="brand">
-        <div class="logo">
-          🐾
-        </div>
-        <h1>Four Tails</h1>
+<div class="topbar">
+  <div class="brand">
+    <div class="logo">
+      🐾
+    </div>
+    <h1>Four Tails</h1>
+  </div>
+
+  <!-- Usuario NO logueado -->
+  @if(showUserMenu) {
+    <div class="nav-login" (click)="login()">
+      <div class="login-icon">👤</div>
+      <span>Login</span>
+    </div>
+  }
+
+  <!-- Usuario logueado -->
+  @if(showUserMenu) {
+    <div class="nav-login" (click)="login()">
+      <div class="login-icon">👤</div>
+      <span>Login</span>
+    </div>
+  }
+
+  @if(showUserMenu) {
+    <div class="user-dropdown">
+      <div class="dropdown-item" (click)="goToProfile()">
+        👤 Profile
       </div>
-      <div class="nav-login" (click)=login()>
-        <div class="login-icon">👤</div>
-        <span>Login</span>
+      <div class="dropdown-item" (click)="goToMyServices()">
+        🐾 My Services
+      </div>
+      <div class="dropdown-item logout" (click)="auth.logout()">
+        🚪 Logout
       </div>
     </div>
+  }
+  </div>
+
+
+
+
 
     <!-- SEARCH -->
     <div class="search-box">

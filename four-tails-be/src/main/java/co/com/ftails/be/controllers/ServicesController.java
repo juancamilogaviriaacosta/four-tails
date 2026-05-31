@@ -17,12 +17,12 @@ public class ServicesController {
 	@Autowired
 	private ServiceService ss;
 	
-	@GetMapping("api/initDatabase")
+	@GetMapping("/api/initDatabase")
     public ResponseEntity<Map<String, String>> initDatabase() {
         return ss.initDatabase();
     }
 	
-	@GetMapping("api/getServices")
+	@GetMapping("/api/getServices")
     public ResponseEntity<List<ServiceDto>> getServices() {
         return ss.getServices();
     }

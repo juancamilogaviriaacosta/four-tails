@@ -19,4 +19,22 @@ export class App {
   login() {
     this.router.navigate(['/login']);
   }
+
+  isLoggedIn = true; // AuthService
+  showUserMenu = false;
+  username = 'Juan';
+
+  toggleUserMenu(): void {
+    this.showUserMenu = !this.showUserMenu;
+  }
+
+  goToProfile(): void {
+    this.showUserMenu = false;
+    this.router.navigate(['/profile']);
+  }
+
+  goToMyServices(): void {
+    this.showUserMenu = false;
+    this.router.navigate(['/my-services']);
+  }
 }
