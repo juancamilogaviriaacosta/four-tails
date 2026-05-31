@@ -1,55 +1,56 @@
-<div class="container">
+@if(!auth.isInLogin()) { 
+  <div class="container">
 
-<!-- TOPBAR -->
-<div class="topbar">
-  <div class="brand">
-    <div class="logo">
-      🐾
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">
+          🐾
+        </div>
+        <h1>Four Tails</h1>
+      </div>
+      <div class="nav-login" (click)=login()>
+        <div class="login-icon">👤</div>
+        <span>Login</span>
+      </div>
     </div>
-    <h1>Four Tails</h1>
-  </div>
-  <div class="nav-login">
-    <div class="login-icon">👤</div>
-    <span>Login</span>
-  </div>
-</div>
 
-  <!-- SEARCH -->
+    <!-- SEARCH -->
+    <div class="search-box">
+      🔍
+      <input type="text" placeholder="Search">
+    </div>
 
-  <div class="search-box">
-    🔍
-    <input type="text" placeholder="Search">
-  </div>
+    <!-- TABS -->
+    <div class="tabs">
+      <div class="tab active">For your pet</div>
+      <div class="tab">Be a provider</div>
+      <div class="tab">Contact us</div>
+    </div>
 
-  <!-- TABS -->
+    <router-outlet />
 
-  <div class="tabs">
-    <div class="tab active">For your pet</div>
-    <div class="tab">Be a provider</div>
-    <div class="tab">Contact us</div>
   </div>
 
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-content">
+      <p>
+        © 2026 Four Tails. All rights reserved.
+      </p>
+      <div class="socials">
+        <a href="#">
+          📷 Instagram
+        </a>
+        <a href="#">
+          📘 Facebook
+        </a>
+        <a href="#">
+          🎵 TikTok
+        </a>
+      </div>
+    </div>
+  </footer>
+} @else {
   <router-outlet />
-
-</div>
-
-<!-- FOOTER -->
-<footer class="footer">
-  <div class="footer-content">
-    <p>
-      © 2026 Four Tails. All rights reserved.
-    </p>
-    <div class="socials">
-      <a href="#">
-        📷 Instagram
-      </a>
-      <a href="#">
-        📘 Facebook
-      </a>
-      <a href="#">
-        🎵 TikTok
-      </a>
-    </div>
-  </div>
-</footer>
-
+}

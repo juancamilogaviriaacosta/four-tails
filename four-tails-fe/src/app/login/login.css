@@ -1,0 +1,157 @@
+/* LOGIN PAGE */
+
+.login-page {
+    min-height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px 16px;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 420px;
+    background: #fff;
+    border-radius: 28px;
+    padding: 32px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.login-header .logo {
+    margin: 0 auto 16px;
+}
+
+.login-header h2 {
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+
+.login-header p {
+    color: #666;
+    font-size: 14px;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.form-group input {
+    height: 52px;
+    border: 1px solid #ddd;
+    border-radius: 14px;
+    padding: 0 16px;
+    font-size: 15px;
+    outline: none;
+    transition: 0.2s;
+}
+
+.form-group input:focus {
+    border-color: #222;
+}
+
+.btn-login {
+    height: 54px;
+    border: none;
+    border-radius: 14px;
+    background: #222;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-login:hover {
+    opacity: 0.9;
+}
+
+.divider {
+    margin: 26px 0;
+    text-align: center;
+    position: relative;
+}
+
+.divider::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    border-top: 1px solid #e5e5e5;
+}
+
+.divider span {
+    background: white;
+    position: relative;
+    padding: 0 12px;
+    color: #888;
+    font-size: 14px;
+}
+
+.social-login {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.social-btn {
+    height: 52px;
+    border: 1px solid #ddd;
+    border-radius: 14px;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: 0.2s;
+}
+
+.social-btn:hover {
+    background: #f8f8f8;
+}
+
+.social-btn img {
+    width: 22px;
+    height: 22px;
+}
+.close-btn {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 38px;
+    height: 38px;
+    border: none;
+    border-radius: 50%;
+    background: #f3f3f3;
+    cursor: pointer;
+    font-size: 18px;
+    transition: 0.2s;
+}
+
+.close-btn:hover {
+    background: #e9e9e9;
+}
+
+.login-card {
+    position: relative;
+}
