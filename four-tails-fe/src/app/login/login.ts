@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../auth/auth-service';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../utils/auth-service';
 
 @Component({
   selector: 'app-login',
@@ -18,6 +18,10 @@ export class Login {
   };
 
   constructor(public router: Router, public auth: AuthService) {
+  }
+
+  login() {
+    this.auth.login(this.model);
   }
 
   closeLogin() {

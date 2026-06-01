@@ -32,7 +32,7 @@
         <div class="dropdown-item" (click)="goToMyServices()">
           🐾 My Services
         </div>
-        <div class="dropdown-item logout" (click)="auth.logout()">
+        <div class="dropdown-item logout" (click)="logout()">
           🚪 Logout
         </div>
       </div>
@@ -79,4 +79,14 @@
 </footer>
 } @else {
 <router-outlet />
+}
+
+
+@if(loadingService.loading()) {
+<div class="loading-overlay">
+    <div class="loading-modal">
+        <div class="spinner"></div>
+        <p>Loading...</p>
+    </div>
+</div>
 }

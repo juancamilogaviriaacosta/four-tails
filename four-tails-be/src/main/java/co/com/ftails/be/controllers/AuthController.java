@@ -12,6 +12,11 @@ public class AuthController {
 	
 	@PostMapping(path = "/api/auth")
     public ResponseEntity<Map<String, String>> auth(@RequestBody Map<String, String> map) {
+		try {
+			Thread.sleep(1000);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return ResponseEntity.ok(Map.of("token","ASEFNLSKJFNLKASENFKLASD=="));
 	}
 

@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
-import { AuthService } from './auth/auth-service';
-
+import { AuthService } from './utils/auth-service';
+import { LoadingService } from './utils/loading-service';
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet],
@@ -11,11 +11,10 @@ import { AuthService } from './auth/auth-service';
 export class App {
   
   protected readonly title = signal('Four Tails');
-  isLoggedIn = true; // AuthService
   showUserMenu = false;
   username = 'Juan';
 
-  constructor(public router: Router, public auth: AuthService) {
+  constructor(public router: Router, public auth: AuthService, public loadingService: LoadingService) {
   }
 
   login() {
@@ -24,8 +23,13 @@ export class App {
   }
 
   logout() {
-    this.showUserMenu = false;
-    this.auth.logout();
+    this.loadingService.show();
+    setTimeout(() => {
+      this.showUserMenu = false;
+      this.auth.logout();
+      this.loadingService.hide();
+    }, 1000);
+    
   }
 
   toggleUserMenu(): void {
