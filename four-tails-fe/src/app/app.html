@@ -1,88 +1,82 @@
-@if(!auth.isInLogin()) { 
-  <div class="container">
-
-
-
-    <!-- TOPBAR -->
-<div class="topbar">
-  <div class="brand">
-    <div class="logo">
-      🐾
+@if(!auth.isInLogin()) {
+<div class="container">
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo">
+        🐾
+      </div>
+      <h1>Four Tails</h1>
     </div>
-    <h1>Four Tails</h1>
-  </div>
 
-  <!-- Usuario NO logueado -->
-  @if(showUserMenu) {
+    <!-- Usuario NO logueado -->
+    @if(!auth.isLoggedIn()) {
     <div class="nav-login" (click)="login()">
       <div class="login-icon">👤</div>
       <span>Login</span>
     </div>
-  }
+    }
 
-  <!-- Usuario logueado -->
-  @if(showUserMenu) {
-    <div class="nav-login" (click)="login()">
-      <div class="login-icon">👤</div>
-      <span>Login</span>
-    </div>
-  }
+    @if(auth.isLoggedIn()) {
+    <div class="user-menu-container">
+      <div class="nav-login" (click)="toggleUserMenu()">
+        <div class="login-icon">👤</div>
+        <span>{{ username }}</span>
+      </div>
 
-  @if(showUserMenu) {
-    <div class="user-dropdown">
-      <div class="dropdown-item" (click)="goToProfile()">
-        👤 Profile
+      @if(showUserMenu) {
+      <div class="user-dropdown">
+        <div class="dropdown-item" (click)="goToProfile()">
+          👤 Profile
+        </div>
+        <div class="dropdown-item" (click)="goToMyServices()">
+          🐾 My Services
+        </div>
+        <div class="dropdown-item logout" (click)="auth.logout()">
+          🚪 Logout
+        </div>
       </div>
-      <div class="dropdown-item" (click)="goToMyServices()">
-        🐾 My Services
-      </div>
-      <div class="dropdown-item logout" (click)="auth.logout()">
-        🚪 Logout
-      </div>
+      }
     </div>
-  }
+    }
   </div>
 
-
-
-
-
-    <!-- SEARCH -->
-    <div class="search-box">
-      🔍
-      <input type="text" placeholder="Search">
-    </div>
-
-    <!-- TABS -->
-    <div class="tabs">
-      <div class="tab active">For your pet</div>
-      <div class="tab">Be a provider</div>
-      <div class="tab">Contact us</div>
-    </div>
-
-    <router-outlet />
-
+  <!-- SEARCH -->
+  <div class="search-box">
+    🔍
+    <input type="text" placeholder="Search">
   </div>
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div class="footer-content">
-      <p>
-        © 2026 Four Tails. All rights reserved.
-      </p>
-      <div class="socials">
-        <a href="#">
-          📷 Instagram
-        </a>
-        <a href="#">
-          📘 Facebook
-        </a>
-        <a href="#">
-          🎵 TikTok
-        </a>
-      </div>
-    </div>
-  </footer>
-} @else {
+  <!-- TABS -->
+  <div class="tabs">
+    <div class="tab active">For your pet</div>
+    <div class="tab">Be a provider</div>
+    <div class="tab">Contact us</div>
+  </div>
+
   <router-outlet />
+
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-content">
+    <p>
+      © 2026 Four Tails. All rights reserved.
+    </p>
+    <div class="socials">
+      <a href="#">
+        📷 Instagram
+      </a>
+      <a href="#">
+        📘 Facebook
+      </a>
+      <a href="#">
+        🎵 TikTok
+      </a>
+    </div>
+  </div>
+</footer>
+} @else {
+<router-outlet />
 }

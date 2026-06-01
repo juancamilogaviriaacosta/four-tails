@@ -11,18 +11,22 @@ import { AuthService } from './auth/auth-service';
 export class App {
   
   protected readonly title = signal('Four Tails');
-
-  constructor(public router: Router, public auth: AuthService) {
-
-  }
-
-  login() {
-    this.router.navigate(['/login']);
-  }
-
   isLoggedIn = true; // AuthService
   showUserMenu = false;
   username = 'Juan';
+
+  constructor(public router: Router, public auth: AuthService) {
+  }
+
+  login() {
+    this.showUserMenu = false;
+    this.router.navigate(['/login']);
+  }
+
+  logout() {
+    this.showUserMenu = false;
+    this.auth.logout();
+  }
 
   toggleUserMenu(): void {
     this.showUserMenu = !this.showUserMenu;
