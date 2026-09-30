@@ -2,13 +2,7 @@ package co.com.ftails.be.entities;
 
 import java.time.Instant;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "clients")
@@ -18,6 +12,9 @@ public class Client {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column
 	private Long id;
+
+	@Version
+	private Long version;
 	
 	@Column(nullable = false)
     private Instant createdAt;
@@ -34,6 +31,14 @@ public class Client {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Long getVersion() {
+		return version;
+	}
+
+	public void setVersion(Long version) {
+		this.version = version;
 	}
 
 	public Instant getCreatedAt() {

@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "build:backend": "ng build && rm -rf ../four-tails-be/src/main/resources/static/* && cp -r dist/four-tails-fe/browser/* ../four-tails-be/src/main/resources/static/"
   },
   "private": true,
   "packageManager": "npm@10.9.3",

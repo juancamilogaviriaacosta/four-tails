@@ -1,122 +1,90 @@
-<!-- SECTION 1 -->
-<section class="section">
+<!-- ======================================================= DESKTOP ======================================================== -->
+  <section class="promo-carousel" aria-label="Promociones" aria-roledescription="carrusel"
+    (mouseenter)="pauseAutoplay()" (mouseleave)="resumeAutoplay()"
+    (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
+    @if (slides[currentSlide]; as slide) {
+      <div class="promo-slide" [class.promo-market]="currentSlide === 1"
+        [class.promo-sitter]="currentSlide === 2" role="group" aria-roledescription="diapositiva"
+        [attr.aria-label]="(currentSlide + 1) + ' de ' + slides.length">
+        <div class="promo-copy">
+          <span class="promo-eyebrow">Four Tails · {{ slide.eyebrow }}</span>
+          <h2>{{ slide.title }}</h2>
+          <p>{{ slide.description }}</p>
+          <a class="promo-button" [href]="slide.href">{{ slide.action }} <span aria-hidden="true">→</span></a>
+        </div>
+        <div class="promo-image">
+          <img [src]="slide.image" [alt]="slide.alt" />
+        </div>
+      </div>
+    }
 
-    <div class="section-header">
-      <h2 class="section-title">
-        Dog walkers
-      </h2>
+    <button class="carousel-arrow carousel-previous" type="button" aria-label="Promoción anterior"
+      (click)="previousSlide()">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>
+    </button>
+    <button class="carousel-arrow carousel-next" type="button" aria-label="Siguiente promoción"
+      (click)="nextSlide()">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
+    </button>
 
-      <button class="arrow-btn">→</button>
+    <div class="carousel-pagination" role="group" aria-label="Elegir promoción">
+      @for (item of slides; track item.title; let index = $index) {
+        <button type="button" [class.active]="currentSlide === index"
+          [attr.aria-label]="'Mostrar promoción ' + (index + 1)"
+          [attr.aria-current]="currentSlide === index ? 'true' : null"
+          (click)="selectSlide(index)"></button>
+      }
     </div>
-
-    <div class="cards">
-
-      <div class="card">
-
-        <div class="card-image">
-          <img src="https://img.magnific.com/foto-gratis/joven-bella-mujer-caminando-su-perro-parque_1301-3557.jpg"
-            alt="">
-          <div class="badge">Top Dog Walker</div>
-          <div class="heart">♡</div>
-        </div>
-
-        <div class="card-info">
-          <div class="card-title">Jenny</div>
-          <div class="price">$150 per week</div>
-          <div class="rating">★ 5.0</div>
-        </div>
-
-      </div>
-
-      <div class="card">
-
-        <div class="card-image">
-          <img src="https://img.magnific.com/foto-gratis/retrato-joven-atractivo-caminando-calle-mochila-sobre-hombros-concepto-urbano_58466-11938.jpg"
-            alt="">
-          <div class="badge">Top Dog Walker</div>
-          <div class="heart">♡</div>
-        </div>
-
-        <div class="card-info">
-          <div class="card-title">Martin</div>
-          <div class="price">$140 per week</div>
-          <div class="rating">★ 5.0</div>
-        </div>
-
-      </div>
-
-      <div class="card">
-
-        <div class="card-image">
-          <img src="https://img.magnific.com/foto-gratis/mujer-asiatica-paseando-su-perro-husky-al-aire-libre_23-2150764844.jpg"
-            alt="">
-          <div class="badge">Top Dog Walker</div>
-          <div class="heart">♡</div>
-        </div>
-
-        <div class="card-info">
-          <div class="card-title">Sarah</div>
-          <div class="price">$130 per week</div>
-          <div class="rating">★ 4.9</div>
-        </div>
-
-      </div>
-
-    </div>
-
   </section>
 
-  <!-- SECTION 2 -->
-  <section class="section">
-
-    <div class="section-header">
-      <div>
-        <h2 class="section-title">
-          Host for your pet
-        </h2>
-
-        <p class="subtitle">
-          Get extra income by hosting other pets in your home.
-        </p>
-      </div>
-
-      <button class="arrow-btn">→</button>
-    </div>
-
-    <div class="cards">
-
-      <div class="card">
-
-        <div class="card-image">
-          <img src="https://img.magnific.com/fotos-premium/monton-juguetes-perros-sala-estar-muchos-perros-jugando-corriendo-creados-ia-generativa_124507-171711.jpg"
-            alt="">
-          <div class="heart">♡</div>
+  <main class="desktop-main">
+    <section class="desktop-grid"> <!-- CARD 1 -->
+      <article class="desktop-card" id="find"> <img class="card-image"
+          src="fs1.png"
+          alt="Perro con cuidadora" />
+        <div class="card-content"> <a href="#" class="card-button"> Find a Sitter </a>
+          <p class="card-copy"> Book care from<br /> verified sitters </p>
         </div>
-
-        <div class="card-info">
-          <div class="card-title">Johns's place</div>
-          <div class="price">$120 per week</div>
-          <div class="rating">★ 4.8</div>
+      </article> <!-- CARD 2 -->
+      <article class="desktop-card" id="market"> <img class="card-image"
+          src="pm1.png"
+          alt="Mascotas" />
+        <div class="card-content"> <a href="#" class="card-button"> Pet Market </a>
+          <p class="card-copy"> Food, health and<br /> everyday gear </p>
         </div>
-
-      </div>
-
-      <div class="card">
-
-        <div class="card-image">
-          <img src="https://img.magnific.com/foto-gratis/persona-que-trabaja-casa-perro-mascota_23-2149104714.jpg"
-            alt="">
-          <div class="heart">♡</div>
+      </article> <!-- CARD 3 -->
+      <article class="desktop-card" id="sitter"> <img class="card-image"
+          src="bs1.png"
+          alt="Cuidador con perro" />
+        <div class="card-content"> <a href="#" class="card-button"> Become a Sitter </a>
+          <p class="card-copy"> Earn caring for<br /> pets near you </p>
         </div>
-
-        <div class="card-info">
-          <div class="card-title">Pet land</div>
-          <div class="price">$140 per week</div>
-          <div class="rating">★ 5.0</div>
+      </article> <!-- CARD 4 -->
+      <article class="desktop-card" id="work"> <img class="card-image"
+          src="wu1.png"
+          alt="Cuidado de mascota" />
+        <div class="card-content"> <a href="#" class="card-button"> Work With Us </a>
+          <p class="card-copy"> Partners, brands<br /> and new teammates </p>
         </div>
-
-      </div>
-
-    </div>
-
-  </section>
+      </article>
+    </section> <!-- HEADLINE -->
+    <h1 class="headline"> Because they are not just pets.<br /> They are family — and family gets <span class="accent">
+        the good stuff. </span> </h1>
+  </main>
+  <!-- ======================================================= MOBILE ======================================================== -->
+  <main class="mobile-main"> 
+    <!-- MOBILE SERVICES -->
+    <section class="mobile-grid"> <a href="#find" class="mobile-card">
+        <div class="mobile-icon">🔎</div>
+        <p>Find a Sitter</p>
+      </a> <a href="#market" class="mobile-card">
+        <div class="mobile-icon">🛒</div>
+        <p>Pet Market</p>
+      </a> <a href="#sitter" class="mobile-card">
+        <div class="mobile-icon">👤</div>
+        <p>Become a Sitter</p>
+      </a> <a href="#work" class="mobile-card">
+        <div class="mobile-icon">🤝</div>
+        <p>Work With Us</p>
+      </a> </section>
+  </main>

@@ -1,92 +1,53 @@
-@if(!auth.isInLogin()) {
-<div class="container">
-  <!-- TOPBAR -->
-  <div class="topbar">
-    <div class="brand">
-      <div class="logo">
-        🐾
-      </div>
-      <h1>Four Tails</h1>
+<!-- ======================================================= HEADER ======================================================== -->
+  <header class="header">
+    <a href="#" class="logo" aria-label="4tails"><span class="logo-four">4</span> tails </a>
+    <label class="header-search">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"></circle>
+        <path d="m16 16 4 4"></path>
+      </svg>
+      <input type="search" aria-label="Buscar" placeholder="Buscar..." />
+    </label>
+    <!-- Desktop navigation -->
+    <nav class="desktop-nav" aria-label="Navegación principal">
+      <a href="#find"> Find a Sitter </a>
+      <a href="#market"> Pet Market </a>
+      <a href="#sitter"> Become a Sitter </a>
+      <a href="#work"> Work with Us </a>
+    </nav>
+    <!-- Desktop actions -->
+    <div class="header-actions">
+      <a href="#"> Log in </a>
+      <button class="signup">Sign up</button>
     </div>
-
-    <!-- Usuario NO logueado -->
-    @if(!auth.isLoggedIn()) {
-    <div class="nav-login" (click)="login()">
-      <div class="login-icon">👤</div>
-      <span>Login</span>
-    </div>
-    }
-
-    @if(auth.isLoggedIn()) {
-    <div class="user-menu-container">
-      <div class="nav-login" (click)="toggleUserMenu()">
-        <div class="login-icon">👤</div>
-        <span>{{ username }}</span>
-      </div>
-
-      @if(showUserMenu) {
-      <div class="user-dropdown">
-        <div class="dropdown-item" (click)="goToProfile()">
-          👤 Profile
-        </div>
-        <div class="dropdown-item" (click)="goToMyServices()">
-          🐾 My Services
-        </div>
-        <div class="dropdown-item logout" (click)="logout()">
-          🚪 Logout
-        </div>
-      </div>
-      }
-    </div>
-    }
-  </div>
-
-  <!-- SEARCH -->
-  <div class="search-box">
-    🔍
-    <input type="text" placeholder="Search">
-  </div>
-
-  <!-- TABS -->
-  <div class="tabs">
-    <div class="tab active">For your pet</div>
-    <div class="tab">Be a provider</div>
-    <div class="tab">Contact us</div>
-  </div>
+    <!-- Mobile menu -->
+     <button class="hamburger" aria-label="Abrir menú" type="button">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </header>
 
   <router-outlet />
 
-</div>
-
-<!-- FOOTER -->
-<footer class="footer">
-  <div class="footer-content">
-    <p>
-      © 2026 Four Tails. All rights reserved.
-    </p>
-    <div class="socials">
-      <a href="#">
-        📷 Instagram
-      </a>
-      <a href="#">
-        📘 Facebook
-      </a>
-      <a href="#">
-        🎵 TikTok
-      </a>
+  <!-- ======================================================= DESKTOP FOOTER ======================================================== -->
+  <footer class="footer">
+    <div> <a href="#" class="logo footer-logo"> <span class="logo-four"> 4 </span> tails </a> </div>
+    <div class="footer-center">
+      <div>Contact Us</div>
+      <div class="socials"> <a href="#" class="social" aria-label="Facebook"> f </a> <a href="#" class="social"
+          aria-label="Instagram"> ◎ </a> <a href="#" class="social" aria-label="TikTok"> ♪ </a> <a href="#"
+          class="social" aria-label="YouTube"> ▶ </a> </div>
     </div>
-  </div>
-</footer>
-} @else {
-<router-outlet />
-}
-
-
-@if(loadingService.loading()) {
-<div class="loading-overlay">
-    <div class="loading-modal">
-        <div class="spinner"></div>
-        <p>Loading...</p>
+    <div class="footer-right"> <span class="au-badge"> 🐾 </span> <span> AU<br /> Made in Australia </span> </div>
+  </footer>
+  <!-- ======================================================= MOBILE FOOTER ======================================================== -->
+  <footer class="mobile-footer">
+    <div class="mobile-footer-left"> <a href="#" class="logo"> <span class="logo-four"> 4 </span> tails </a> <small>
+        Made in Australia </small> </div>
+    <div class="mobile-footer-right"> <small> Contact Us </small>
+      <div class="socials"> <a href="#" class="social" aria-label="Facebook"> f </a> <a href="#" class="social"
+          aria-label="Instagram"> ◎ </a> <a href="#" class="social" aria-label="TikTok"> ♪ </a> <a href="#"
+          class="social" aria-label="YouTube"> ▶ </a> </div>
     </div>
-</div>
-}
+  </footer>

@@ -3,15 +3,7 @@ package co.com.ftails.be.entities;
 import java.time.Instant;
 import java.util.List;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "users")
@@ -21,6 +13,9 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column
 	private Long id;
+
+	@Version
+	private Long version;
 	
 	@Column(nullable = false)
     private Instant createdAt;
@@ -69,6 +64,14 @@ public class User {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Long getVersion() {
+		return version;
+	}
+
+	public void setVersion(Long version) {
+		this.version = version;
 	}
 
 	public Instant getCreatedAt() {
