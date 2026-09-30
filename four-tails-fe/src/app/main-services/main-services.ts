@@ -19,7 +19,7 @@ export class MainServices implements OnInit, OnDestroy {
     },
     {
       eyebrow: 'PET MARKET',
-      title: 'Their favorites, all in one place.',
+      title: 'All in one place.',
       description: 'Discover everyday essentials for happier, healthier pets.',
       action: 'Explore the market',
       href: '#market',
@@ -28,7 +28,7 @@ export class MainServices implements OnInit, OnDestroy {
     },
     {
       eyebrow: 'JOIN OUR COMMUNITY',
-      title: 'Make caring your next adventure.',
+      title: 'Caring will make your day.',
       description: 'Turn your love for animals into meaningful work.',
       action: 'Become a sitter',
       href: '#sitter',
