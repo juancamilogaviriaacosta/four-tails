@@ -57,7 +57,7 @@ export class SearchSitters {
     },
     {
       name: 'Liam Parker',
-      image: 'bs1.png',
+      image: 'https://img.magnific.com/foto-gratis/paseo-matutino-perro_158595-4280.jpg',
       description: 'Experienced with energetic pups, long walks, and relaxed evenings.',
       address: 'Astoria, Queens, NY',
       rating: '4.95',
@@ -66,7 +66,7 @@ export class SearchSitters {
     },
     {
       name: 'Jenny Anderson',
-      image: 'fs1.png',
+      image: 'https://img.magnific.com/foto-gratis/vista-joven-mujer-caucasica-jugando-entrenando-su-perro-dalmata_158595-7698.jpg',
       description: 'Calm, attentive care for dogs who love a little extra company.',
       address: 'Williamsburg, Brooklyn, NY',
       rating: '4.98',
