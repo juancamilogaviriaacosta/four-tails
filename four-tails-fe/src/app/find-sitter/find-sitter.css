@@ -1,0 +1,283 @@
+:host {
+	display: block;
+}
+
+.find-sitter-page {
+	min-height: calc(100vh - 60px);
+	min-height: calc(100dvh - 60px);
+	display: grid;
+	place-items: start center;
+	padding: clamp(32px, 7vw, 76px) 20px;
+	background: radial-gradient(ellipse at 12% 8%, #eaf8fc 0, transparent 36%), #fffaf0;
+}
+
+.find-sitter-panel {
+	width: min(100%, 760px);
+	padding: clamp(24px, 5vw, 48px);
+	border: 1px solid #e3edef;
+	border-radius: 8px;
+	background: #fff;
+	box-shadow: 0 18px 50px rgb(40 39 95 / 8%);
+}
+
+.find-sitter-intro {
+	margin-bottom: 32px;
+}
+
+.find-sitter-eyebrow {
+	color: var(--blue-dark);
+	font-size: 11px;
+	font-weight: 800;
+	letter-spacing: 1px;
+}
+
+.find-sitter-intro h1 {
+	margin-top: 10px;
+	color: var(--navy);
+	font-size: 40px;
+	line-height: 1.1;
+}
+
+.find-sitter-intro p {
+	margin-top: 10px;
+	color: #596675;
+	font-size: 15px;
+	line-height: 1.5;
+}
+
+.find-sitter-form {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 22px 18px;
+}
+
+.form-field {
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.form-field label,
+.form-field .field-label,
+.date-fields legend {
+	color: var(--navy);
+	font-size: 13px;
+	font-weight: 700;
+}
+
+.form-field input,
+.form-field select,
+.form-field .pet-picker-trigger {
+	width: 100%;
+	min-height: 48px;
+	padding: 0 13px;
+	border: 1px solid #d5e2e5;
+	border-radius: 5px;
+	outline: none;
+	background: #fbfdfd;
+	color: var(--navy);
+	font: inherit;
+	font-size: 14px;
+	cursor: pointer;
+	transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+}
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field .pet-picker-trigger:focus-visible {
+	border-color: var(--blue);
+	background: #fff;
+	box-shadow: 0 0 0 3px rgb(8 166 209 / 13%);
+}
+
+.pet-picker-trigger {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	text-align: left;
+}
+
+.pet-picker-chevron {
+	color: #60747a;
+	font-size: 18px;
+}
+
+.date-fields {
+	min-width: 0;
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 12px;
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+.date-fields legend {
+	grid-column: 1 / -1;
+	margin-bottom: 8px;
+}
+
+.find-sitter-form > button {
+	min-height: 48px;
+	align-self: end;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 12px;
+	border: 0;
+	border-radius: 5px;
+	background: var(--blue);
+	color: #fff;
+	font: inherit;
+	font-size: 14px;
+	font-weight: 800;
+	cursor: pointer;
+	transition: background 160ms ease, transform 160ms ease;
+}
+
+.find-sitter-form > button:hover {
+	transform: translateY(-1px);
+	background: var(--blue-dark);
+}
+
+.find-sitter-form > button span {
+	font-size: 20px;
+	line-height: 1;
+}
+
+.pet-modal-backdrop {
+	position: fixed;
+	inset: 0;
+	z-index: 1000;
+	display: grid;
+	place-items: center;
+	padding: 20px;
+	background: rgb(26 33 46 / 48%);
+}
+
+.pet-modal {
+	width: min(100%, 440px);
+	padding: 28px;
+	border: 1px solid #e3edef;
+	border-radius: 8px;
+	background: #fff;
+	box-shadow: 0 24px 70px rgb(16 26 38 / 24%);
+}
+
+.pet-modal-header {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 20px;
+}
+
+.pet-modal-header h2 {
+	margin-top: 8px;
+	color: var(--navy);
+	font-size: 25px;
+}
+
+.pet-modal-close {
+	width: 36px;
+	height: 36px;
+	flex: 0 0 auto;
+	border: 0;
+	border-radius: 50%;
+	background: #f0f7f8;
+	color: var(--navy);
+	font-size: 24px;
+	line-height: 1;
+	cursor: pointer;
+}
+
+.pet-counter-list {
+	margin: 22px 0;
+	border-top: 1px solid #edf1f2;
+}
+
+.pet-counter-row {
+	min-height: 68px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	border-bottom: 1px solid #edf1f2;
+}
+
+.pet-counter-name {
+	color: var(--navy);
+	font-size: 15px;
+	font-weight: 700;
+}
+
+.pet-counter-controls {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+}
+
+.pet-counter-controls button {
+	width: 36px;
+	height: 36px;
+	border: 1px solid #cddde1;
+	border-radius: 50%;
+	background: #fff;
+	color: var(--navy);
+	font-size: 20px;
+	line-height: 1;
+	cursor: pointer;
+}
+
+.pet-counter-controls button:disabled {
+	color: #aab8bb;
+	cursor: not-allowed;
+}
+
+.pet-counter-controls output {
+	min-width: 18px;
+	color: var(--navy);
+	font-size: 15px;
+	font-weight: 700;
+	text-align: center;
+}
+
+.pet-modal-done {
+	width: 100%;
+	min-height: 46px;
+	border: 0;
+	border-radius: 5px;
+	background: var(--blue);
+	color: #fff;
+	font: inherit;
+	font-size: 14px;
+	font-weight: 800;
+	cursor: pointer;
+}
+
+.pet-modal-done:hover {
+	background: var(--blue-dark);
+}
+
+@media (max-width: 600px) {
+	.find-sitter-page {
+		padding: 24px 16px;
+	}
+
+	.find-sitter-intro {
+		margin-bottom: 24px;
+	}
+
+	.find-sitter-intro h1 {
+		font-size: 30px;
+	}
+
+	.find-sitter-form {
+		grid-template-columns: 1fr;
+		gap: 18px;
+	}
+
+	.find-sitter-form > button {
+		margin-top: 4px;
+	}
+}

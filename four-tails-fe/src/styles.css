@@ -257,11 +257,13 @@ img {
     justify-content: center;
     min-width: 135px;
     padding: 11px 19px;
+    border: 0;
     border-radius: 24px;
     background: var(--blue);
     color: #fff;
     font-size: 14px;
     font-weight: 800;
+    cursor: pointer;
     transition: transform 0.2s ease, background 0.2s ease;
 }
 

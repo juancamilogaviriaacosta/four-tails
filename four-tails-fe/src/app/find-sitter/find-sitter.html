@@ -1,0 +1,87 @@
+<main class="find-sitter-page">
+	<section class="find-sitter-panel" aria-labelledby="find-sitter-title">
+		<header class="find-sitter-intro">
+			<span class="find-sitter-eyebrow">FOUR TAILS · PET CARE</span>
+			<h1 id="find-sitter-title">Find care they’ll love.</h1>
+			<p>Tell us what your pet needs and when you need a helping hand.</p>
+		</header>
+
+		<form class="find-sitter-form" (ngSubmit)="onSubmit()" #findSitterForm="ngForm">
+			<div class="form-field">
+				<span id="kind-of-pet-label" class="field-label">Kind of pet</span>
+				<button id="kind-of-pet" class="pet-picker-trigger" type="button"
+					aria-labelledby="kind-of-pet-label" aria-haspopup="dialog"
+					[attr.aria-expanded]="petModalOpen" (click)="openPetModal()">
+					<span>{{ selectedPetSummary || 'Choose pets' }}</span>
+					<span class="pet-picker-chevron" aria-hidden="true">⌄</span>
+				</button>
+				<input type="hidden" name="kindOfPet" [value]="selectedPetSummary" />
+			</div>
+
+			<div class="form-field">
+				<label for="your-address">Your address</label>
+				<input id="your-address" name="address" type="text" />
+			</div>
+
+			<div class="form-field">
+				<label for="service">Which service are you looking for?</label>
+				<select id="service" name="service">
+					<option value="" selected disabled>Select a service</option>
+					<option value="hosting">Hosting</option>
+                    <option value="sitting">Sitting</option>
+                    <option value="daycare">Daycare</option>
+                    <option value="house-visit">House visits</option>
+					<option value="walking">Walking</option>
+					<option value="grooming">Grooming</option>
+				</select>
+			</div>
+
+			<fieldset class="date-fields">
+				<div class="form-field">
+					<label for="start-date">Start date</label>
+					<input id="start-date" name="startDate" type="date" />
+				</div>
+				<div class="form-field">
+					<label for="end-date">End date</label>
+					<input id="end-date" name="endDate" type="date" />
+				</div>
+			</fieldset>
+
+			<button type="submit">Search sitters <span aria-hidden="true">→</span></button>
+		</form>
+	</section>
+
+	@if (petModalOpen) {
+		<div class="pet-modal-backdrop" (click)="closePetModal()" (keydown.escape)="closePetModal()">
+			<section class="pet-modal" role="dialog" aria-modal="true" aria-labelledby="pet-modal-title"
+				(click)="$event.stopPropagation()">
+				<header class="pet-modal-header">
+					<div>
+						<span class="find-sitter-eyebrow">YOUR PETS</span>
+						<h2 id="pet-modal-title">Who needs care?</h2>
+					</div>
+					<button class="pet-modal-close" type="button" aria-label="Close pet selector"
+						autofocus (click)="closePetModal()">×</button>
+				</header>
+
+				<div class="pet-counter-list">
+					@for (pet of pets; track pet.name) {
+						<div class="pet-counter-row">
+							<span class="pet-counter-name">{{ pet.name }}</span>
+							<div class="pet-counter-controls">
+								<button type="button" [disabled]="pet.quantity === 0"
+									[attr.aria-label]="'Remove one ' + pet.name"
+									(click)="changePetQuantity(pet.name, -1)">−</button>
+								<output aria-live="polite">{{ pet.quantity }}</output>
+								<button type="button" [attr.aria-label]="'Add one ' + pet.name"
+									(click)="changePetQuantity(pet.name, 1)">+</button>
+							</div>
+						</div>
+					}
+				</div>
+
+				<button class="pet-modal-done" type="button" (click)="closePetModal()">Done</button>
+			</section>
+		</div>
+	}
+</main>

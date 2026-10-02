@@ -42,7 +42,7 @@
       <article class="desktop-card" id="find"> <img class="card-image"
           src="fs1.png"
           alt="Perro con cuidadora" />
-        <div class="card-content"> <a href="#" class="card-button"> Find a Sitter </a>
+        <div class="card-content"> <button type="button" class="card-button" (click)="navigateToFindSitter()"> Find a Sitter </button>
           <p class="card-copy"> Book care from<br /> verified sitters </p>
         </div>
       </article> <!-- CARD 2 -->
@@ -74,16 +74,20 @@
   <!-- ======================================================= MOBILE ======================================================== -->
   <main class="mobile-main"> 
     <!-- MOBILE SERVICES -->
-    <section class="mobile-grid"> <a href="#find" class="mobile-card">
+    <section class="mobile-grid">
+      <button class="mobile-card" (click)="navigateToFindSitter()"> 
         <div class="mobile-icon">🔎</div>
         <p>Find a Sitter</p>
-      </a> <a href="#market" class="mobile-card">
+      </button>
+      <a href="#market" class="mobile-card">
         <div class="mobile-icon">🛒</div>
         <p>Pet Market</p>
-      </a> <a href="#sitter" class="mobile-card">
+      </a>
+      <a href="#sitter" class="mobile-card">
         <div class="mobile-icon">👤</div>
         <p>Become a Sitter</p>
-      </a> <a href="#work" class="mobile-card">
+      </a>
+      <a href="#work" class="mobile-card">
         <div class="mobile-icon">🤝</div>
         <p>Work With Us</p>
       </a> </section>

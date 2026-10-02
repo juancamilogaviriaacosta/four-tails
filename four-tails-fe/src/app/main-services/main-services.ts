@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-main-services',
@@ -40,6 +41,10 @@ export class MainServices implements OnInit, OnDestroy {
   currentSlide = 0;
   private autoplayTimer?: ReturnType<typeof setInterval>;
   private touchStartX: number | null = null;
+
+  constructor(private router: Router) {
+
+  }
 
   ngOnInit(): void {
     this.resumeAutoplay();
@@ -95,5 +100,9 @@ export class MainServices implements OnInit, OnDestroy {
     if (this.autoplayTimer === undefined) {
       this.autoplayTimer = setInterval(() => this.nextSlide(), 6000);
     }
+  }
+
+  navigateToFindSitter(): void {
+    this.router.navigate(['/find-sitter']);
   }
 }
