@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -12,6 +12,9 @@ import { AuthService } from '../utils/auth-service';
 })
 export class Login {
 
+  @Input() modalMode = false;
+  @Output() closed = new EventEmitter<void>();
+
   model: any = {
     username: '',
     password: '',
@@ -21,10 +24,18 @@ export class Login {
   }
 
   login() {
-    this.auth.login(this.model);
+    //this.auth.login(this.model);
+    this.closeLogin();
+    this.router.navigate(['/']);
+    
   }
 
   closeLogin() {
+    if (this.modalMode) {
+      this.closed.emit();
+      return;
+    }
+
     this.router.navigate(['/']);
   }
 }

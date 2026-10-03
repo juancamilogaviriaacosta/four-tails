@@ -1,32 +1,25 @@
 <div class="login-page">
-
     <div class="login-card">
-        <button class="close-btn" (click)="closeLogin()">
+        <button class="close-btn" type="button" aria-label="Close sign in" (click)="closeLogin()">
             ✕
         </button>
-
         <div class="login-header">
             <div class="logo">🐾</div>
-            <h2>Sign in</h2>
+            <h2 id="login-title">Sign in</h2>
             <p>Access your account or continue with a social provider</p>
         </div>
-
-        <form class="login-form" #loginForm="ngForm">
-
+        <form class="login-form" #loginForm="ngForm" (ngSubmit)="login()">
             <div class="form-group">
                 <label>Username</label>
                 <input type="text" name="username" [(ngModel)]="model.username" required placeholder="Email or username">
             </div>
-
             <div class="form-group">
                 <label>Password</label>
                 <input type="password" name="password" [(ngModel)]="model.password" required placeholder="********">
             </div>
-
-            <button type="submit" class="btn-login" (click)="login()">
+            <button type="submit" class="btn-login">
                 Sign in
             </button>
-
         </form>
 
         <div class="divider">
@@ -34,27 +27,21 @@
         </div>
 
         <div class="social-login">
-
             <button class="social-btn">
                 <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg"
                      alt="Google">
                 Google
             </button>
-
             <button class="social-btn">
                 <img src="https://cdn-icons-png.flaticon.com/512/124/124010.png"
                      alt="Facebook">
                 Facebook
             </button>
-
             <button class="social-btn">
                 <img src="https://cdn-icons-png.flaticon.com/512/0/747.png"
                      alt="Apple">
                 Apple
             </button>
-
         </div>
-
     </div>
-
 </div>

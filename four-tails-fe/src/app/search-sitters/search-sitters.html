@@ -13,7 +13,7 @@
 
 		<div class="sitter-list" aria-label="Pet sitter results">
 			@for (sitter of sitters; track sitter.name) {
-				<article class="sitter-card">
+				<a class="sitter-card" [routerLink]="['/sitter-details']">
 					<img class="sitter-photo" [src]="sitter.image" [alt]="sitter.name + ' caring for a dog'" />
 					<div class="sitter-details">
 						<div class="sitter-name-row">
@@ -29,7 +29,7 @@
 							<p class="sitter-fare"><strong>${{ sitter.fare }}</strong> <span>/ hour</span></p>
 						</div>
 					</div>
-				</article>
+				</a>
 			}
 		</div>
 	</section>

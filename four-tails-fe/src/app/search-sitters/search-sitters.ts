@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-search-sitters',
-  imports: [FormsModule],
+  imports: [FormsModule, RouterLink],
   templateUrl: './search-sitters.html',
   styleUrl: './search-sitters.css',
 })

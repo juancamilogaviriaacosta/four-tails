@@ -1,0 +1,114 @@
+<main class="profile-page">
+	<div class="profile-shell">
+		<nav class="breadcrumb" aria-label="Breadcrumb">
+			<a href="/search-sitters">Pet sitters</a>
+			<span aria-hidden="true">/</span>
+			<span>{{ sitter.name }}</span>
+		</nav>
+
+		<header class="profile-heading">
+			<div>
+				<div class="profile-title-row">
+					<h1>{{ sitter.name }}</h1>
+					<span class="verified-badge"><span aria-hidden="true">✓</span> Identity verified</span>
+				</div>
+				<div class="profile-subtitle">
+					<span class="rating"><span aria-hidden="true">★</span> {{ sitter.rating }}</span>
+					<a href="#reviews">{{ sitter.reviews }} reviews</a>
+					<span class="subtitle-divider" aria-hidden="true">·</span>
+					<span>{{ sitter.address }}</span>
+				</div>
+			</div>
+			<button class="share-button" type="button" aria-label="Share sitter profile" title="Share profile">
+				<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V3m0 0L7 8m5-5 5 5M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6" /></svg>
+			</button>
+		</header>
+
+		<section class="photo-gallery" aria-label="Photos of Maya and her pet care">
+			<img class="gallery-main" [src]="photos[0].url" [alt]="photos[0].alt" />
+			<div class="gallery-side">
+				@for (photo of photos.slice(1); track photo.url) {
+					<img [src]="photo.url" [alt]="photo.alt" />
+				}
+				<div class="gallery-profile">
+					<img [src]="sitter.image" [alt]="sitter.name" />
+					<span>Meet {{ sitter.name }}</span>
+				</div>
+			</div>
+			<span class="photo-count">{{ photos.length + 1 }} photos</span>
+		</section>
+
+		<div class="profile-layout">
+			<div class="profile-content">
+				<section class="intro-section">
+					<div class="section-heading sitter-intro-heading">
+						<div>
+							<h2>Pet care with a little extra love</h2>
+							<p>Pet sitter · Williamsburg, Brooklyn</p>
+						</div>
+						<img class="avatar" [src]="sitter.image" [alt]="sitter.name" />
+					</div>
+					<p class="description">Hi, I’m Maya! I’ve spent the last 8 years caring for dogs of every size and personality. My home is calm, pet-friendly, and close to the waterfront for lovely daily walks. I’ll keep you updated with photos and little notes, so you can relax while you’re away.</p>
+					<div class="quick-facts">
+						<div class="fact"><span class="fact-icon fact-check" aria-hidden="true">✓</span><span><strong>Verified sitter</strong><small>Identity checked</small></span></div>
+						<div class="fact"><span class="fact-icon fact-clock" aria-hidden="true">◷</span><span><strong>Fast response</strong><small>Usually within an hour</small></span></div>
+						<div class="fact"><span class="fact-icon fact-paw" aria-hidden="true">♥</span><span><strong>8 years’ experience</strong><small>Pet care &amp; training</small></span></div>
+					</div>
+				</section>
+
+				<section class="location-section" aria-labelledby="location-title">
+					<div class="section-heading">
+						<div>
+						<h2 id="location-title">Where you’ll be</h2>
+						<p>{{ sitter.address }}</p>
+					</div>
+					</div>
+					<div class="map-frame">
+						<iframe title="Map of Williamsburg, Brooklyn" src="https://www.openstreetmap.org/export/embed.html?bbox=-73.971%2C40.704%2C-73.935%2C40.726&amp;layer=mapnik&amp;marker=40.715%2C-73.953" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+					</div>
+					<p class="map-caption"><span aria-hidden="true">⌖</span> Exact address shared after booking</p>
+				</section>
+
+				<section class="reviews-section" id="reviews" aria-labelledby="reviews-title">
+					<div class="section-heading reviews-heading">
+						<div>
+						<h2 id="reviews-title"><span aria-hidden="true">★</span> {{ sitter.rating }} · {{ sitter.reviews }} reviews</h2>
+						<p>What pet parents are saying</p>
+						</div>
+					</div>
+					<div class="review-list">
+						<article class="review">
+							<div class="review-topline"><div class="review-author"><span class="review-avatar avatar-coral">J</span><div><h3>Jordan</h3><p>February 2026 · Dog boarding</p></div></div><span class="review-score">★★★★★</span></div>
+							<p>Maya was wonderful with our nervous rescue. We got thoughtful updates every day, and our pup came home happy and settled. We’ve already booked again.</p>
+						</article>
+						<article class="review">
+							<div class="review-topline"><div class="review-author"><span class="review-avatar avatar-green">A</span><div><h3>Alex</h3><p>January 2026 · Day care</p></div></div><span class="review-score">★★★★★</span></div>
+							<p>Super responsive, caring, and easy to coordinate with. I felt completely at ease leaving Milo with her for the day.</p>
+						</article>
+					</div>
+					<button class="all-reviews-button" type="button">Show all {{ sitter.reviews }} reviews</button>
+				</section>
+			</div>
+
+			<aside class="booking-card" aria-label="Request a booking">
+				<div class="booking-price"><strong>${{ sitter.rate }}</strong><span>per night</span></div>
+				<p class="booking-rating"><span aria-hidden="true">★</span> {{ sitter.rating }} <span>· {{ sitter.reviews }} reviews</span></p>
+				<form class="booking-form" (ngSubmit)="requestBooking()">
+					<div class="date-fields">
+						<label>Check-in<input type="date" name="startDate" [(ngModel)]="startDate" required /></label>
+						<label>Check-out<input type="date" name="endDate" [(ngModel)]="endDate" [min]="startDate" required /></label>
+					</div>
+					<button class="request-button" type="submit">Request to book</button>
+				</form>
+				<p class="no-charge-note">You won’t be charged yet</p>
+				@if (bookingRequested) {
+					<p class="booking-confirmation" role="status">Request ready for {{ startDate }} to {{ endDate }}. Maya will confirm availability.</p>
+				}
+				<div class="booking-divider"></div>
+				<div class="host-status"><span class="status-dot" aria-hidden="true"></span><div><strong>{{ sitter.lastSeen }}</strong><span>Response rate: 100%</span></div></div>
+				<p class="booking-help">Still deciding? Send Maya a message to ask about your pet’s routine.</p>
+				<button class="message-button" type="button">Message {{ sitter.name.split(' ')[0] }}</button>
+			</aside>
+		</div>
+	</div>
+</main>

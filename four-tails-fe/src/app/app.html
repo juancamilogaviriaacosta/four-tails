@@ -17,18 +17,40 @@
     </nav>
     <!-- Desktop actions -->
     <div class="header-actions">
-      <a href="#"> Log in </a>
+      <button class="login-trigger" type="button" (click)="login()">Log in</button>
       <button class="signup">Sign up</button>
     </div>
     <!-- Mobile menu -->
-     <button class="hamburger" aria-label="Abrir menú" type="button">
+     <button class="hamburger" type="button" aria-label="Menú de navegación"
+       aria-controls="mobile-menu" [attr.aria-expanded]="mobileMenuOpen" (click)="toggleMobileMenu()">
       <span></span>
       <span></span>
       <span></span>
     </button>
   </header>
 
+  @if (mobileMenuOpen) {
+    <div class="mobile-menu-backdrop" (click)="closeMobileMenu()">
+      <nav id="mobile-menu" class="mobile-menu-panel" aria-label="Mobile navigation" (click)="$event.stopPropagation()">
+        <a href="#find" (click)="closeMobileMenu()">Find a Sitter</a>
+        <a href="#market" (click)="closeMobileMenu()">Pet Market</a>
+        <a href="#sitter" (click)="closeMobileMenu()">Become a Sitter</a>
+        <a href="#work" (click)="closeMobileMenu()">Work with Us</a>
+        <button type="button" class="mobile-login login-trigger" (click)="login()">Log in</button>
+      </nav>
+    </div>
+  }
+
   <router-outlet />
+
+  @if (showLoginModal) {
+    <div class="login-modal-backdrop" (click)="closeLoginModal()">
+      <section class="login-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="login-title"
+        (click)="$event.stopPropagation()">
+        <app-login [modalMode]="true" (closed)="closeLoginModal()" />
+      </section>
+    </div>
+  }
 
   <!-- ======================================================= DESKTOP FOOTER ======================================================== -->
   <footer class="footer">

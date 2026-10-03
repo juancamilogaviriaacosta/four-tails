@@ -1,10 +1,11 @@
-import { Component, signal } from '@angular/core';
+import { Component, HostListener, signal } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
+import { Login } from './login/login';
 import { AuthService } from './utils/auth-service';
 import { LoadingService } from './utils/loading-service';
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, Login],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -12,6 +13,8 @@ export class App {
   
   protected readonly title = signal('Four Tails');
   showUserMenu = false;
+  showLoginModal = false;
+  mobileMenuOpen = false;
   username = 'Juan';
 
   constructor(public router: Router, public auth: AuthService, public loadingService: LoadingService) {
@@ -19,7 +22,28 @@ export class App {
 
   login() {
     this.showUserMenu = false;
-    this.router.navigate(['/login']);
+    this.mobileMenuOpen = false;
+    this.showLoginModal = true;
+  }
+
+  closeLoginModal(): void {
+    this.showLoginModal = false;
+  }
+
+  @HostListener('document:keydown.escape')
+  closeLoginModalOnEscape(): void {
+    if (this.showLoginModal) {
+      this.closeLoginModal();
+    }
+    this.mobileMenuOpen = false;
+  }
+
+  toggleMobileMenu(): void {
+    this.mobileMenuOpen = !this.mobileMenuOpen;
+  }
+
+  closeMobileMenu(): void {
+    this.mobileMenuOpen = false;
   }
 
   logout() {
@@ -44,5 +68,9 @@ export class App {
   goToMyServices(): void {
     this.showUserMenu = false;
     this.router.navigate(['/my-services']);
+  }
+
+  isNotInLoginPage() {
+    return this.router.url !== '/login';
   }
 }
