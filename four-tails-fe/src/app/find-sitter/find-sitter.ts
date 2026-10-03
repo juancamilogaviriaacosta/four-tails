@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { LoadingService } from '../utils/loading-service';
 
 @Component({
   selector: 'app-find-sitter',
@@ -17,7 +18,7 @@ export class FindSitter {
     { name: 'Bird', quantity: 0 },
   ];
 
-  constructor(private router: Router) {
+  constructor(private router: Router, public loadingService: LoadingService) {
 
   }
 
@@ -42,10 +43,10 @@ export class FindSitter {
   }
 
   onSubmit(): void {
-    this.router.navigate(['/search-sitters'], {     
-      queryParams: {
-        pets: this.selectedPetSummary,
-      },
-    });
+    this.loadingService.show();
+    setTimeout(() => {
+      this.loadingService.hide();
+      this.router.navigate(['/search-sitters'], { queryParams: { pets: this.selectedPetSummary } });
+    }, 1000);
   }
 }

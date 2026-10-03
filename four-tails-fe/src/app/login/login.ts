@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../utils/auth-service';
+import { LoadingService } from '../utils/loading-service';
 
 @Component({
   selector: 'app-login',
@@ -20,13 +21,17 @@ export class Login {
     password: '',
   };
 
-  constructor(public router: Router, public auth: AuthService) {
+  constructor(public router: Router, public auth: AuthService, public loadingService: LoadingService) {
   }
 
   login() {
-    //this.auth.login(this.model);
-    this.closeLogin();
-    this.router.navigate(['/']);
+    this.loadingService.show();
+    setTimeout(() => {
+      //this.auth.login(this.model);
+      this.loadingService.hide();
+      this.closeLogin();
+      this.router.navigate(['/']);
+    }, 1000);
     
   }
 

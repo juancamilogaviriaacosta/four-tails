@@ -52,6 +52,15 @@
     </div>
   }
 
+  @if (loadingService.loading()) {
+    <div class="loading-overlay" role="status" aria-live="polite">
+      <div class="loading-modal">
+        <span class="spinner" aria-hidden="true"></span>
+        <p>Loading...</p>
+      </div>
+    </div>
+  }
+
   <!-- ======================================================= DESKTOP FOOTER ======================================================== -->
   <footer class="footer">
     <div> <a href="#" class="logo footer-logo"> <span class="logo-four"> 4 </span> tails </a> </div>
