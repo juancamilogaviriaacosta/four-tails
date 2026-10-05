@@ -15,7 +15,7 @@ export class App {
   showUserMenu = false;
   showLoginModal = false;
   mobileMenuOpen = false;
-  username = 'Juan';
+  username = '';
 
   constructor(public router: Router, public auth: AuthService, public loadingService: LoadingService) {
   }
@@ -60,6 +60,13 @@ export class App {
     this.showUserMenu = !this.showUserMenu;
   }
 
+  closeUserMenuOnFocusOut(event: FocusEvent): void {
+    const container = event.currentTarget as HTMLElement;
+    if (!container.contains(event.relatedTarget as Node | null)) {
+      this.showUserMenu = false;
+    }
+  }
+
   goToProfile(): void {
     this.showUserMenu = false;
     this.router.navigate(['/profile']);
@@ -72,5 +79,13 @@ export class App {
 
   isNotInLoginPage() {
     return this.router.url !== '/login';
+  }
+
+  setUserName(username: string) {
+    this.username = username;
+  }
+
+  goToMessages() {
+    this.router.navigate(['/messages']);
   }
 }

@@ -184,6 +184,7 @@ img {
 
 /* HAMBURGER */
 .hamburger {
+    position: relative;
     display: none;
     width: 30px;
     height: 30px;
@@ -195,12 +196,29 @@ img {
     cursor: pointer;
 }
 
-.hamburger span {
+.hamburger .hamburger-line {
     width: 28px;
     height: 3px;
     display: block;
     border-radius: 4px;
     background: var(--blue);
+}
+
+.hamburger .hamburger-count {
+    position: absolute;
+    top: -3px;
+    right: -4px;
+    min-width: 17px;
+    height: 17px;
+    display: grid;
+    place-items: center;
+    padding: 0 4px;
+    border-radius: 50%;
+    background: #e53935;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1;
 }
 
 /* =========================================================        DESKTOP MAIN     ========================================================= */
@@ -382,6 +400,20 @@ img {
 
     .hamburger {
         display: flex;
+    }
+}
+
+@media (min-width: 1101px) and (max-width: 1300px) {
+    .desktop-nav {
+        display: none;
+    }
+
+    .header-actions {
+        margin-left: auto;
+    }
+
+    .header-search {
+        width: min(24vw, 260px);
     }
 }
 

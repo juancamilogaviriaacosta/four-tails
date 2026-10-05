@@ -4,18 +4,26 @@
 
 .user-dropdown {
     position: absolute;
-    top: 60px;
+    top: calc(100% + 8px);
     right: 0;
     width: 220px;
     background: white;
-    border-radius: 16px;
+    border: 1px solid #e7e7e7;
+    border-radius: 8px;
     box-shadow: 0 8px 25px rgba(0,0,0,.12);
     overflow: hidden;
     z-index: 1000;
 }
 
 .dropdown-item {
+    display: block;
+    width: 100%;
     padding: 14px 18px;
+    border: 0;
+    background: white;
+    color: inherit;
+    font: inherit;
+    text-align: left;
     cursor: pointer;
     transition: .2s;
     font-size: 15px;
@@ -56,7 +64,8 @@
 }
 
 .mobile-menu-panel a,
-.mobile-login {
+.mobile-menu-panel .mobile-messages,
+.mobile-menu-panel .mobile-notifications {
     width: 100%;
     min-height: 48px;
     display: flex;
@@ -74,37 +83,137 @@
 }
 
 .mobile-menu-panel a:hover,
-.mobile-login:hover {
+.mobile-menu-panel .mobile-messages:hover,
+.mobile-menu-panel .mobile-notifications:hover {
     color: var(--blue-dark);
 }
 
-.mobile-login {
-    border-bottom: 0;
-    color: inherit;
-    font-weight: 400;
+.mobile-menu-panel .mobile-messages,
+.mobile-menu-panel .mobile-notifications {
+    justify-content: space-between;
 }
 
-.login-trigger,
-.mobile-login {
+.mobile-event-count {
+    min-width: 20px;
+    height: 20px;
+    display: grid;
+    place-items: center;
+    padding: 0 5px;
+    border-radius: 50%;
+    background: #e53935;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.mobile-menu-panel .mobile-login,
+.mobile-menu-panel .mobile-signup {
+    width: 100%;
+    min-height: 44px;
+    margin-top: 12px;
+    border: 1px solid var(--blue);
+    border-radius: 22px;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.mobile-menu-panel .mobile-login {
+    background: #fff;
+    color: var(--blue-dark);
+}
+
+.mobile-menu-panel .mobile-login:hover {
+    background: var(--light-blue);
+}
+
+.mobile-menu-panel .mobile-signup {
+    border-color: var(--blue);
+    background: var(--blue);
+    color: #fff;
+}
+
+.mobile-menu-panel .mobile-signup:hover {
+    border-color: var(--blue-dark);
+    background: var(--blue-dark);
+}
+
+
+.login-trigger {
     border: 1px solid var(--blue-dark);
-    border-radius: 5px;
+    border-radius: 22px;
     background: #fff;
     color: var(--blue-dark);
     font-weight: 700;
     transition: background 0.2s ease, border-color 0.2s ease;
 }
 
-.login-trigger:hover,
-.mobile-login:hover {
+.login-trigger:hover {
     border-color: var(--blue-dark);
     background: var(--light-blue);
     color: var(--blue-dark);
+}
+
+.header-actions .icon-action {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 8px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.header-actions .profile-action {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: auto;
+}
+
+.profile-action span {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.header-actions .icon-action svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.event-count {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: grid;
+  place-items: center;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: #e53935;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
 }
 
 @media (min-width: 1101px) {
     .mobile-menu-backdrop {
         display: none;
     }
+    
 }
 
 @media (max-width: 700px) {

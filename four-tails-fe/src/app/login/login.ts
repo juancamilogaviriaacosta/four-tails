@@ -15,6 +15,7 @@ export class Login {
 
   @Input() modalMode = false;
   @Output() closed = new EventEmitter<void>();
+  @Output() setUserName = new EventEmitter<string>();
 
   model: any = {
     username: '',
@@ -31,6 +32,8 @@ export class Login {
       this.loadingService.hide();
       this.closeLogin();
       this.router.navigate(['/']);
+      localStorage.setItem('token', JSON.stringify(this.model));
+      this.setUserName.emit(this.model.username);
     }, 1000);
     
   }
