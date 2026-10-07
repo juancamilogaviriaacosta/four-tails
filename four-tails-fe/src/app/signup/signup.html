@@ -1,0 +1,55 @@
+<div class="login-page">
+    <div class="login-card">
+        <button class="close-btn" type="button" aria-label="Close sign up" (click)="closeSignup()">
+            ✕
+        </button>
+        <div class="login-header">
+            <div class="logo">🐾</div>
+            <h2 id="login-title">Sign up</h2>
+            <p>Access your account or continue with a social provider</p>
+        </div>
+        <form class="login-form" #loginForm="ngForm" (ngSubmit)="signUp()">
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" name="username" [(ngModel)]="model.username" required placeholder="Email or username">
+            </div>
+            <div class="form-group">
+                <label>First Name</label>
+                <input type="text" name="firstName" [(ngModel)]="model.firstName" required placeholder="First name">
+            </div>
+            <div class="form-group">
+                <label>Last Name</label>
+                <input type="text" name="lastName" [(ngModel)]="model.lastName" required placeholder="Last name">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" [(ngModel)]="model.password" required placeholder="********">
+            </div>
+            <button type="submit" class="btn-login">
+                Sign up
+            </button>
+        </form>
+
+        <div class="divider">
+            <span>or continue with</span>
+        </div>
+
+        <div class="social-login">
+            <button class="social-btn">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg"
+                     alt="Google">
+                Google
+            </button>
+            <button class="social-btn">
+                <img src="https://cdn-icons-png.flaticon.com/512/124/124010.png"
+                     alt="Facebook">
+                Facebook
+            </button>
+            <button class="social-btn">
+                <img src="https://cdn-icons-png.flaticon.com/512/0/747.png"
+                     alt="Apple">
+                Apple
+            </button>
+        </div>
+    </div>
+</div>

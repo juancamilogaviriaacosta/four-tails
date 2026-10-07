@@ -54,7 +54,7 @@
     </div>
   } @else {
     <button class="login-trigger" type="button" (click)="login()">Log in</button>
-    <button class="signup">Sign up</button>
+    <button class="signup" (click)="signup()">Sign up</button>
   }
   
   </div>
@@ -84,7 +84,7 @@
       <button class="mobile-messages" type="button" (click)="logout()">Logout</button>
     } @else {
       <button type="button" class="mobile-login" (click)="login()">Log in</button>
-      <button type="button" class="mobile-signup" >Sign up</button>
+      <button type="button" class="mobile-signup" (click)="signup()">Sign up</button>
     }    
   </nav>
 </div>
@@ -97,6 +97,15 @@
   <section class="login-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="login-title"
     (click)="$event.stopPropagation()">
     <app-login [modalMode]="true" (closed)="closeLoginModal()" (setUserName)="setUserName($event)"/>
+  </section>
+</div>
+}
+
+@if (showSignupModal) {
+<div class="login-modal-backdrop" (click)="closeSignupModal()">
+  <section class="login-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="login-title"
+    (click)="$event.stopPropagation()">
+    <app-signup [modalMode]="true" (closed)="closeSignupModal()"/>
   </section>
 </div>
 }

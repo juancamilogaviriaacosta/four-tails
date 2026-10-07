@@ -1,0 +1,70 @@
+<section class="profile-page">
+  <div class="profile-card">
+    <div class="card-header">
+      <div>
+        <p class="eyebrow">Account</p>
+        <h1>Edit profile</h1>
+      </div>
+    </div>
+
+    <form class="profile-form" #profileForm="ngForm" (ngSubmit)="saveProfile()">
+      <div class="profile-picture-block">
+        <img
+          class="profile-image"
+          [src]="profile.profilePicture"
+          [alt]="profile.firstName + ' ' + profile.lastName + ' profile picture'"
+        />
+
+        <div class="picture-actions">
+          <label class="upload-btn" for="profile-picture-input">Change photo</label>
+          <input id="profile-picture-input" type="file" accept="image/*" hidden (change)="onFileSelected($event)" />
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="field-group">
+          <label for="firstName">First name</label>
+          <input id="firstName" class="text-input" type="text" name="firstName" [(ngModel)]="profile.firstName" />
+        </div>
+
+        <div class="field-group">
+          <label for="lastName">Last name</label>
+          <input id="lastName" class="text-input" type="text" name="lastName" [(ngModel)]="profile.lastName" />
+        </div>
+
+        <div class="field-group">
+          <label for="dateOfBirth">Date of birth</label>
+          <input id="dateOfBirth" class="text-input" type="date" name="dateOfBirth" [(ngModel)]="profile.dateOfBirth" />
+        </div>
+
+        <div class="field-group">
+          <label for="email">Email</label>
+          <input
+            id="email"
+            class="text-input"
+            type="email"
+            name="email"
+            [(ngModel)]="profile.email"
+            readonly
+          />
+        </div>
+
+        <div class="field-group full-width">
+          <label for="phone">Phone</label>
+          <input id="phone" class="text-input" type="tel" name="phone" [(ngModel)]="profile.phone" />
+        </div>
+
+        <div class="field-group full-width">
+          <label for="address">Address</label>
+          <textarea id="address" class="text-input textarea" name="address" [(ngModel)]="profile.address" rows="3"></textarea>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="save-btn" type="submit">Save changes</button>
+      </div>
+
+      <p class="success-message" *ngIf="saved">Profile updated successfully.</p>
+    </form>
+  </div>
+</section>

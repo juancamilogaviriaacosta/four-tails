@@ -251,6 +251,12 @@ img {
     background: var(--cream);
 }
 
+.desktop-card:nth-child(2) .card-button,
+.desktop-card:nth-child(4) .card-button {
+    background: var(--yellow);
+    color: var(--navy);
+}
+
 /* CARD IMAGE */
 .card-image {
     width: 100%;
@@ -290,10 +296,7 @@ img {
     transform: translateY(-2px);
 }
 
-.desktop-card:nth-child(4) .card-button {
-    background: var(--yellow);
-    color: var(--navy);
-}
+
 
 /* CARD TEXT */
 .card-copy {

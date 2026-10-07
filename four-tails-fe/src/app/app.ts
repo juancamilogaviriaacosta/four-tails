@@ -3,9 +3,10 @@ import { Router, RouterOutlet } from '@angular/router';
 import { Login } from './login/login';
 import { AuthService } from './utils/auth-service';
 import { LoadingService } from './utils/loading-service';
+import { Signup } from './signup/signup';
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Login],
+  imports: [RouterOutlet, Login, Signup],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -16,6 +17,7 @@ export class App {
   showLoginModal = false;
   mobileMenuOpen = false;
   username = '';
+  showSignupModal = false;
 
   constructor(public router: Router, public auth: AuthService, public loadingService: LoadingService) {
   }
@@ -30,10 +32,23 @@ export class App {
     this.showLoginModal = false;
   }
 
+  signup() {
+    this.showUserMenu = false;
+    this.mobileMenuOpen = false;
+    this.showSignupModal = true;
+  }
+
+  closeSignupModal(): void {
+    this.showSignupModal = false;
+  }
+
   @HostListener('document:keydown.escape')
-  closeLoginModalOnEscape(): void {
+  closeLoginOrSignupModalOnEscape(): void {
     if (this.showLoginModal) {
       this.closeLoginModal();
+    }
+    if (this.showSignupModal) {
+      this.closeSignupModal();
     }
     this.mobileMenuOpen = false;
   }
@@ -69,7 +84,7 @@ export class App {
 
   goToProfile(): void {
     this.showUserMenu = false;
-    this.router.navigate(['/profile']);
+    this.router.navigate(['/edit-profile']);
   }
 
   goToMyServices(): void {
