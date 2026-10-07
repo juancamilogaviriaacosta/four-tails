@@ -65,8 +65,10 @@ export class App {
     this.loadingService.show();
     setTimeout(() => {
       this.showUserMenu = false;
+      this.mobileMenuOpen = false;
       this.auth.logout();
       this.loadingService.hide();
+      this.router.navigate(['/']);
     }, 1000);
     
   }
