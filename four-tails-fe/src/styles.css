@@ -47,7 +47,7 @@ img {
     --navy: #28275f;
     --yellow: #ffc91b;
     --cream: #fff5df;
-    --light-blue: #eaf8fc;
+    --light-blue: #eaf8fb;
     --white: #ffffff;
     --radius-xl: 34px;
     --radius-lg: 28px;
@@ -71,12 +71,14 @@ img {
     display: inline-flex;
     align-items: center;
     color: var(--blue);
+    font-family: "Chango", sans-serif;
+    font-weight: 400;
+    font-style: normal;
     font-size: 30px;
-    font-weight: 900;
-    letter-spacing: -2px;
+    letter-spacing: -0.8px;
+    line-height: 1;
     white-space: nowrap;
 }
-
 .logo-four {
     width: 32px;
     height: 32px;
@@ -85,10 +87,10 @@ img {
     justify-content: center;
     margin-right: 3px;
     background: var(--yellow);
-    color: var(--blue);
+    color: var(--navy);
     border-radius: 7px;
-    font-size: 27px;
-    font-weight: 900;
+    font-size: 30px;
+    font-weight: 400;
     line-height: 1;
 }
 

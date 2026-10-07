@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { LoadingService } from '../utils/loading-service';
 
 @Component({
   selector: 'app-edit-profile',
@@ -21,6 +22,10 @@ export class EditProfile {
     address: '',
   };
 
+  constructor(private loadingService: LoadingService) {
+
+  }
+
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
@@ -37,6 +42,10 @@ export class EditProfile {
   }
 
   saveProfile(): void {
-    this.saved = true;
+    this.loadingService.show();
+    setTimeout(() => {
+      this.saved = true;
+      this.loadingService.hide();
+    }, 1000);
   }
 }
