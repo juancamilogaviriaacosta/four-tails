@@ -6,6 +6,7 @@ import { SearchSitters } from './search-sitters/search-sitters';
 import { SitterDetails } from './sitter-details/sitter-details';
 import { Messages } from './messages/messages';
 import { EditProfile } from './edit-profile/edit-profile';
+import { BecomeSitter } from './become-sitter/become-sitter';
 
 export const routes: Routes = [
     { path: '', component: MainServices  },
@@ -14,4 +15,5 @@ export const routes: Routes = [
     { path: 'sitter-details', component: SitterDetails },
     { path: 'messages', component: Messages },
     { path: 'edit-profile', component: EditProfile },
+    { path: 'become-sitter', component: BecomeSitter },
 ];

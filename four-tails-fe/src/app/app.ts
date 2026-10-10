@@ -1,4 +1,6 @@
-import { Component, HostListener, signal } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, signal } from '@angular/core';
+import { App as CapacitorApp } from '@capacitor/app';
+import { PluginListenerHandle } from '@capacitor/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { Login } from './login/login';
 import { AuthService } from './utils/auth-service';
@@ -10,7 +12,7 @@ import { Signup } from './signup/signup';
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App {
+export class App implements OnInit, OnDestroy {
   
   protected readonly title = signal('Four Tails');
   showUserMenu = false;
@@ -18,8 +20,33 @@ export class App {
   mobileMenuOpen = false;
   username = '';
   showSignupModal = false;
+  private backButtonListener?: PluginListenerHandle;
 
   constructor(public router: Router, public auth: AuthService, public loadingService: LoadingService) {
+  }
+
+  async ngOnInit(): Promise<void> {
+    this.backButtonListener = await CapacitorApp.addListener('backButton', ({ canGoBack }) => {
+      if (this.showLoginModal || this.showSignupModal) {
+        this.closeLoginOrSignupModalOnEscape();
+        return;
+      }
+
+      if (this.mobileMenuOpen) {
+        this.closeMobileMenu();
+        return;
+      }
+
+      if (canGoBack) {
+        window.history.back();
+      } else {
+        void CapacitorApp.exitApp();
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    void this.backButtonListener?.remove();
   }
 
   login() {

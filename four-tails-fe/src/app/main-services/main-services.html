@@ -1,41 +1,38 @@
 <!-- ======================================================= DESKTOP ======================================================== -->
-  <section class="promo-carousel" aria-label="Promociones" aria-roledescription="carrusel"
-    (mouseenter)="pauseAutoplay()" (mouseleave)="resumeAutoplay()"
-    (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
-    @if (slides[currentSlide]; as slide) {
-      <div class="promo-slide" [class.promo-market]="currentSlide === 1"
-        [class.promo-sitter]="currentSlide === 2" role="group" aria-roledescription="diapositiva"
-        [attr.aria-label]="(currentSlide + 1) + ' de ' + slides.length">
-        <div class="promo-copy">
-          <span class="promo-eyebrow">Four Tails · {{ slide.eyebrow }}</span>
-          <h2>{{ slide.title }}</h2>
-          <p>{{ slide.description }}</p>
-          <a class="promo-button" [href]="slide.href">{{ slide.action }} <span aria-hidden="true">→</span></a>
-        </div>
-        <div class="promo-image">
-          <img [src]="slide.image" [alt]="slide.alt" />
-        </div>
+<section class="promo-carousel" aria-label="Promotions" aria-roledescription="carousel"
+  (mouseenter)="pauseAutoplay()" (mouseleave)="resumeAutoplay()">
+  @if (slides[currentSlide]; as slide) {
+    <article class="promo-banner" role="group" aria-roledescription="slide"
+      [attr.aria-label]="(currentSlide + 1) + ' of ' + slides.length">
+      <div class="promo-banner__column promo-banner__column--copy">
+        <span class="promo-banner__icon" aria-hidden="true">{{ slide.icon }}</span>
+        <p class="promo-banner__title">{{ slide.title }}</p>
       </div>
-    }
+      <div class="promo-banner__column promo-banner__column--image">
+        <img [src]="slide.image" [alt]="slide.alt" />
+      </div>
+      <div class="promo-banner__column">
+        <a class="promo-banner__book-now" [href]="slide.href">{{ slide.action }}</a>
+      </div>
+    </article>
+  }
 
-    <button class="carousel-arrow carousel-previous" type="button" aria-label="Promoción anterior"
-      (click)="previousSlide()">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>
-    </button>
-    <button class="carousel-arrow carousel-next" type="button" aria-label="Siguiente promoción"
-      (click)="nextSlide()">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
-    </button>
-
-    <div class="carousel-pagination" role="group" aria-label="Elegir promoción">
-      @for (item of slides; track item.title; let index = $index) {
+  <div class="promo-carousel__controls">
+    <button type="button" class="promo-carousel__arrow" aria-label="Previous promotion"
+      (click)="previousSlide()">&#8592;</button>
+    <div class="promo-carousel__indicators" role="group" aria-label="Choose promotion">
+      @for (slide of slides; track slide.title; let index = $index) {
         <button type="button" [class.active]="currentSlide === index"
-          [attr.aria-label]="'Mostrar promoción ' + (index + 1)"
+          [attr.aria-label]="'Show promotion ' + (index + 1)"
           [attr.aria-current]="currentSlide === index ? 'true' : null"
           (click)="selectSlide(index)"></button>
       }
     </div>
-  </section>
+    <button type="button" class="promo-carousel__arrow" aria-label="Next promotion"
+      (click)="nextSlide()">&#8594;</button>
+  </div>
+</section>
+
 
   <main class="desktop-main">
     <section class="desktop-grid"> <!-- CARD 1 -->
@@ -56,7 +53,7 @@
       <article class="desktop-card" id="sitter"> <img class="card-image"
           src="bs1.png"
           alt="Cuidador con perro" />
-        <div class="card-content"> <button type="button" class="card-button" (click)="navigateToFindSitter()"> Become a Sitter </button>
+        <div class="card-content"> <button type="button" class="card-button" (click)="navigateToBecomeSitter()"> Become a Sitter </button>
           <p class="card-copy"> Earn caring for<br /> pets near you </p>
         </div>
       </article> <!-- CARD 4 -->
@@ -76,19 +73,19 @@
     <!-- MOBILE SERVICES -->
     <section class="mobile-grid">
       <button class="mobile-card" (click)="navigateToFindSitter()"> 
-        <div class="mobile-icon">🔎</div>
+        <div class="mobile-icon"><img src="18-search.png" alt="Find a Sitter"/></div>
         <p>Find a Sitter</p>
       </button>
       <a href="#market" class="mobile-card">
-        <div class="mobile-icon">🛒</div>
+        <div class="mobile-icon"><img src="99-pet-market.png" alt="Pet Market"/></div>
         <p>Pet Market</p>
       </a>
-      <a href="#sitter" class="mobile-card">
-        <div class="mobile-icon">👤</div>
+      <button href="#sitter" class="mobile-card" (click)="navigateToBecomeSitter()">
+        <div class="mobile-icon"><img src="39-become-sitter.png" alt="Become a Sitter"/></div>
         <p>Become a Sitter</p>
-      </a>
+      </button>
       <a href="#work" class="mobile-card">
-        <div class="mobile-icon">🤝</div>
+        <div class="mobile-icon"><img src="100-work-with-us.png" alt="Work With Us"/></div>
         <p>Work With Us</p>
       </a> </section>
   </main>

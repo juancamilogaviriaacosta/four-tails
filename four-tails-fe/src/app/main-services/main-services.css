@@ -1,269 +1,170 @@
 .promo-carousel {
-	position: relative;
 	width: min(1100px, calc(100% - 110px));
 	max-width: 1100px;
-	margin: 15px auto 22px;
-	overflow: hidden;
-	border-radius: 10px;
-	touch-action: pan-y;
+	margin: 22px auto 32px;
+	color: var(--navy);
 }
 
-.promo-slide {
-	min-height: 300px;
+.promo-banner {
+	height: 210px;
 	display: grid;
-	grid-template-columns: 1fr 0.9fr;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	border-radius: 24px;
+	background: var(--cream);
 	overflow: hidden;
-	background: #e5f5f7;
-	animation: promo-enter 350ms ease both;
 }
 
-.promo-slide.promo-market {
-	background: #fff1d5;
+.promo-banner__column {
+	min-width: 0;
+	display: grid;
+	place-items: center;
+	padding: 20px;
+	text-align: center;
+	font-size: 16px;
+	font-weight: 700;
 }
 
-.promo-slide.promo-sitter {
-	background: #e9f3e8;
-}
-
-.promo-copy {
+.promo-banner__column--copy {
 	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
 	justify-content: center;
-	padding: 38px 28px 58px clamp(32px, 6vw, 76px);
+	gap: 14px;
+	text-align: left;
 }
 
-.promo-eyebrow {
-	margin-bottom: 12px;
-	color: #087fae;
-	font-size: 11px;
-	font-weight: 800;
-	letter-spacing: 1px;
+.promo-banner__icon {
+	width: 48px;
+	height: 48px;
+	flex: 0 0 48px;
+	display: grid;
+	place-items: center;
+	border-radius: 50%;
+	background: #f5c83e;
+	font-size: 27px;
 }
 
-.promo-copy h2 {
-	max-width: 480px;
-	color: #28275f;
-	font-size: 36px;
-	line-height: 1.08;
+.promo-banner__title {
+	max-width: 270px;
+	font-family: Georgia, 'Times New Roman', serif;
+	font-size: clamp(25px, 2.6vw, 34px);
+	font-weight: 700;
+	line-height: 1.05;
 }
 
-.promo-copy p {
-	max-width: 390px;
-	margin-top: 12px;
-	color: #3d4660;
-	font-size: 15px;
-	line-height: 1.5;
+.promo-banner__column--image {
+	padding: 12px;
 }
 
-.promo-button {
+.promo-banner__column--image img {
+	width: 100%;
+	height: 160px;
+	border-radius: 24px;
+	object-fit: cover;
+}
+
+.promo-banner__book-now {
 	min-height: 42px;
 	display: inline-flex;
 	align-items: center;
-	gap: 12px;
-	margin-top: 20px;
-	padding: 0 18px;
-	border-radius: 5px;
-	background: #08a6d1;
-	color: #fff;
-	font-size: 14px;
-	font-weight: 700;
-	transition: background 160ms ease, transform 160ms ease;
-}
-
-.promo-button:hover {
-	transform: translateY(-1px);
-	background: #087fae;
-}
-
-.promo-button span {
-	font-size: 20px;
-	line-height: 1;
-}
-
-.promo-image {
-	min-width: 0;
-	display: flex;
-	align-items: flex-end;
 	justify-content: center;
-	padding: 10px 10px 10px 10px;
-}
-
-.promo-image img {
-	width: 100%;
-	height: 280px;
-	object-fit: contain;
-	object-position: center bottom;
-}
-
-.carousel-arrow {
-	position: absolute;
-	top: 50%;
-	z-index: 1;
-	width: 38px;
-	height: 38px;
-	display: grid;
-	place-items: center;
-	transform: translateY(-50%);
+	padding: 0 20px;
 	border: 0;
+	border-radius: 24px;
+	background: var(--blue);
+	color: #fff;
+	text-decoration: none;
+	font: inherit;
+	cursor: pointer;
+}
+
+.promo-banner__book-now:hover {
+	background: var(--blue-dark);
+}
+
+.promo-carousel__controls {
+	min-height: 38px;
+	display: grid;
+	grid-template-columns: 1fr auto 1fr;
+	align-items: center;
+	margin-top: 6px;
+}
+
+.promo-carousel__arrow {
+	width: 30px;
+	height: 30px;
+	justify-self: start;
+	border: 1px solid #dce7e4;
 	border-radius: 50%;
 	background: #fff;
-	color: #28275f;
-	box-shadow: 0 2px 10px rgb(40 39 95 / 14%);
+	color: var(--navy);
 	cursor: pointer;
-	transition: color 160ms ease, background 160ms ease;
 }
 
-.carousel-arrow:hover {
-	background: #28275f;
-	color: #fff;
+.promo-carousel__arrow:last-child {
+	justify-self: end;
 }
 
-.carousel-arrow svg {
-	width: 20px;
-	height: 20px;
-	fill: none;
-	stroke: currentColor;
-	stroke-linecap: round;
-	stroke-linejoin: round;
-	stroke-width: 2;
-}
-
-.carousel-previous {
-	left: 14px;
-}
-
-.carousel-next {
-	right: 14px;
-}
-
-.carousel-pagination {
-	position: absolute;
-	bottom: 20px;
-	left: clamp(32px, 6vw, 76px);
+.promo-carousel__indicators {
 	display: flex;
 	align-items: center;
 	gap: 7px;
 }
 
-.carousel-pagination button {
+.promo-carousel__indicators button {
 	width: 8px;
 	height: 8px;
 	padding: 0;
 	border: 0;
 	border-radius: 8px;
-	background: #aebfc3;
+	background: #9cb7b2;
 	cursor: pointer;
-	transition: width 180ms ease, background 180ms ease;
 }
 
-.carousel-pagination button.active {
-	width: 23px;
-	background: #08a6d1;
-}
-
-@keyframes promo-enter {
-	from { opacity: 0.7; }
-	to { opacity: 1; }
-}
-
-@media (max-width: 850px) {
-	.promo-slide {
-		min-height: 260px;
-		grid-template-columns: 1fr 0.8fr;
-	}
-
-	.promo-copy {
-		padding-left: 42px;
-	}
-
-	.promo-copy h2 {
-		font-size: 30px;
-	}
-
-	.promo-image {
-		padding-right: 24px;
-	}
-
-	.promo-image img {
-		height: 240px;
-	}
-
-	.carousel-pagination {
-		left: 42px;
-	}
+.promo-carousel__indicators button.active {
+	width: 22px;
+	background: var(--blue);
 }
 
 @media (max-width: 700px) {
 	.promo-carousel {
-		width: calc(100% - 32px);
-		margin: 14px auto 20px;
-		border-radius: 8px;
+		width: calc(100% - 28px);
 	}
 
-	.promo-slide {
+	.promo-banner {
+		height: 430px;
+		grid-template-columns: minmax(0, 1fr);
+		grid-template-rows: minmax(0, 1fr) 200px minmax(0, 1fr);
+	}
+
+	.promo-banner__column {
 		min-height: 0;
-		grid-template-columns: 1fr;
+		border-right: 0;
 	}
 
-	.promo-image {
-		grid-row: 1;
-		height: 178px;
-		padding: 12px 42px 0;
+	.promo-banner__column--copy {
+		gap: 10px;
+		padding: 10px 16px;
 	}
 
-	.promo-image img {
-		height: 166px;
+	.promo-banner__icon {
+		width: 40px;
+		height: 40px;
+		flex-basis: 40px;
+		font-size: 23px;
 	}
 
-	.promo-copy {
-		grid-row: 2;
-		padding: 14px 24px 58px;
-	}
-
-	.promo-eyebrow {
-		margin-bottom: 7px;
-		font-size: 10px;
-	}
-
-	.promo-copy h2 {
-		max-width: 320px;
+	.promo-banner__title {
 		font-size: 25px;
 	}
 
-	.promo-copy p {
-		margin-top: 7px;
-		font-size: 13px;
+	.promo-banner__column:last-child {
+		border-bottom: 0;
 	}
 
-	.promo-button {
-		min-height: 38px;
-		margin-top: 12px;
-		font-size: 13px;
-	}
-
-	.carousel-arrow {
-		top: 89px;
-		width: 34px;
-		height: 34px;
-	}
-
-	.carousel-previous {
-		left: 8px;
-	}
-
-	.carousel-next {
-		right: 8px;
-	}
-
-	.carousel-pagination {
-		bottom: 19px;
-		left: 24px;
+	.promo-banner__column--image img {
+		height: 180px;
 	}
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.promo-slide {
-		animation: none;
-	}
+	.promo-banner { animation: none; }
 }
