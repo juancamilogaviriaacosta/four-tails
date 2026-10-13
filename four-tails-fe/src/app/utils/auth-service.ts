@@ -39,6 +39,34 @@ export class AuthService {
     });
   }
 
+  getRole() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      return null;
+    }
+    try {
+      const payload = JSON.parse(token);
+      return payload.role;
+    } catch (error) {
+      console.error('Error parsing token:', error);
+      return null;
+    }
+  }
+
+  getUserName() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      return '';
+    }
+    try {
+      const payload = JSON.parse(token);
+      return payload.username;
+    } catch (error) {
+      console.error('Error parsing token:', error);
+      return '';
+    }
+  }
+
   logout() {    
     localStorage.clear();
     this.router.navigate(['/']);

@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../utils/auth-service';
 
 @Component({
   selector: 'app-main-services',
@@ -38,7 +39,7 @@ export class MainServices implements OnInit, OnDestroy {
   currentSlide = 0;
   private autoplayTimer?: ReturnType<typeof setInterval>;
 
-  constructor(private router: Router) {
+  constructor(public router: Router, public authService: AuthService) {
 
   }
 
@@ -81,5 +82,17 @@ export class MainServices implements OnInit, OnDestroy {
 
   navigateToBecomeSitter() {
     this.router.navigate(['/become-sitter']);
+  }
+
+  navigateSitterDashboard() {
+    this.router.navigate(['/sitter-dashboard']);
+  }
+
+  navigateToMyBookings() {
+    this.router.navigate(['/my-bookings']);
+  }
+
+  navigateToPetMarket() {
+    this.router.navigate(['/pet-market']);
   }
 }

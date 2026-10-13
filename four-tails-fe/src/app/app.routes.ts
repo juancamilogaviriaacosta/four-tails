@@ -7,6 +7,9 @@ import { SitterDetails } from './sitter-details/sitter-details';
 import { Messages } from './messages/messages';
 import { EditProfile } from './edit-profile/edit-profile';
 import { BecomeSitter } from './become-sitter/become-sitter';
+import { SitterDashboard } from './sitter-dashboard/sitter-dashboard';
+import { MyBookings } from './my-bookings/my-bookings';
+import { PetMarket } from './pet-market/pet-market';
 
 export const routes: Routes = [
     { path: '', component: MainServices  },
@@ -16,4 +19,7 @@ export const routes: Routes = [
     { path: 'messages', component: Messages },
     { path: 'edit-profile', component: EditProfile },
     { path: 'become-sitter', component: BecomeSitter },
+    { path: 'sitter-dashboard', component: SitterDashboard },
+    { path: 'my-bookings', component: MyBookings },
+    { path: 'pet-market', component: PetMarket },
 ];

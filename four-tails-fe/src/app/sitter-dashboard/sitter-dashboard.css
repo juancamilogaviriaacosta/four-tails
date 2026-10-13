@@ -1,0 +1,464 @@
+.dashboard-page {
+	--ink: #242d3a;
+	--muted: #77818b;
+	--line: #e5e9e8;
+	--teal: #087e78;
+	--teal-soft: #e4f4ef;
+	width: min(1180px, calc(100% - 48px));
+	margin: 0 auto;
+	padding: 54px 0 50px;
+	color: var(--ink);
+}
+
+.dashboard-heading {
+	display: flex;
+	align-items: flex-end;
+	justify-content: space-between;
+	gap: 24px;
+	margin-bottom: 28px;
+}
+
+.eyebrow,
+.chart-kicker {
+	margin-bottom: 9px;
+	color: var(--teal);
+	font-size: 10px;
+	font-weight: 800;
+	letter-spacing: 1.4px;
+}
+
+.dashboard-heading h1 {
+	font-size: 36px;
+	line-height: 1.1;
+}
+
+.heading-copy {
+	margin-top: 9px;
+	color: var(--muted);
+	font-size: 14px;
+}
+
+.month-stamp {
+	display: inline-flex;
+	align-items: center;
+	gap: 9px;
+	padding: 10px 13px;
+	border: 1px solid var(--line);
+	border-radius: 6px;
+	color: #4f5b61;
+	font-size: 13px;
+	font-weight: 650;
+	white-space: nowrap;
+}
+
+.month-indicator {
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: #d2a438;
+}
+
+.metrics-grid {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 14px;
+}
+
+.metric-card {
+	min-width: 0;
+	padding: 17px 18px 18px;
+	border: 1px solid var(--line);
+	border-top: 3px solid transparent;
+	border-radius: 7px;
+	background: #fff;
+}
+
+.earnings-card { border-top-color: #158b83; }
+.bookings-card { border-top-color: #d8ae43; }
+.rating-card { border-top-color: #e28a6c; }
+.pets-card { border-top-color: #7da66e; }
+
+.metric-topline {
+	display: flex;
+	min-height: 38px;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	margin-bottom: 14px;
+}
+
+.metric-icon {
+	display: grid;
+	width: 36px;
+	height: 36px;
+	flex: 0 0 auto;
+	place-items: center;
+	border-radius: 6px;
+}
+
+.metric-icon svg {
+	width: 19px;
+	height: 19px;
+	fill: none;
+	stroke: currentColor;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	stroke-width: 1.7;
+}
+
+.earnings-icon { background: #e4f4ef; color: #087e78; }
+.bookings-icon { background: #fbf3dc; color: #94721f; }
+.rating-icon { background: #fff0e9; color: #b56548; }
+.rating-icon svg { fill: #e5a46d; }
+.pets-icon { background: #edf4e8; color: #5e8053; }
+
+.metric-trend,
+.metric-period,
+.pet-status {
+	font-size: 10px;
+	font-weight: 700;
+}
+
+.metric-trend {
+	padding: 5px 7px;
+	border-radius: 4px;
+	background: #eaf5ed;
+	color: #477654;
+}
+
+.metric-period { color: #8b9295; }
+
+.rating-stars {
+	color: #d29d32;
+	font-size: 12px;
+	letter-spacing: 1px;
+	white-space: nowrap;
+}
+
+.pet-status {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	color: #64825d;
+	white-space: nowrap;
+}
+
+.pet-status span {
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	background: #72a367;
+}
+
+.metric-label {
+	color: #69747b;
+	font-size: 12px;
+	font-weight: 600;
+}
+
+.metric-value {
+	margin-top: 5px;
+	font-size: 29px;
+	font-weight: 750;
+	line-height: 1.2;
+}
+
+.value-suffix {
+	color: #8d969a;
+	font-size: 14px;
+	font-weight: 500;
+}
+
+.metric-caption {
+	margin-top: 7px;
+	color: #929a9d;
+	font-size: 11px;
+}
+
+.charts-section {
+	display: grid;
+	grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+	gap: 16px;
+	margin-top: 22px;
+}
+
+.chart-panel {
+	min-width: 0;
+	padding: 21px 22px 17px;
+	border: 1px solid var(--line);
+	border-radius: 7px;
+	background: #fff;
+}
+
+.chart-heading {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 12px;
+}
+
+.chart-kicker {
+	margin-bottom: 6px;
+	font-size: 9px;
+}
+
+.chart-heading h2 {
+	font-size: 17px;
+	line-height: 1.25;
+}
+
+.chart-subtitle {
+	margin-top: 5px;
+	color: var(--muted);
+	font-size: 11px;
+}
+
+.chart-total,
+.booking-total {
+	display: grid;
+	gap: 3px;
+	text-align: right;
+}
+
+.chart-total span,
+.booking-total span {
+	color: var(--muted);
+	font-size: 10px;
+}
+
+.chart-total strong {
+	color: var(--teal);
+	font-size: 16px;
+}
+
+.booking-total strong {
+	font-size: 20px;
+	line-height: 1;
+}
+
+.earnings-chart {
+	display: grid;
+	height: 218px;
+	grid-template-columns: 42px minmax(0, 1fr);
+	margin-top: 20px;
+}
+
+.y-axis {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	padding: 0 8px 24px 0;
+	color: #9aa1a3;
+	font-size: 9px;
+	text-align: right;
+}
+
+.bar-chart {
+	position: relative;
+	display: grid;
+	min-width: 0;
+	grid-template-columns: repeat(5, minmax(0, 1fr));
+	gap: 8px;
+}
+
+.chart-guides {
+	position: absolute;
+	inset: 0 0 24px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	pointer-events: none;
+}
+
+.chart-guides span {
+	border-top: 1px dashed #e8ece9;
+}
+
+.bar-column {
+	z-index: 1;
+	display: flex;
+	min-width: 0;
+	flex-direction: column;
+	align-items: center;
+}
+
+.bar-value {
+	height: 17px;
+	color: #768187;
+	font-size: 9px;
+	font-weight: 650;
+	white-space: nowrap;
+}
+
+.bar-track {
+	display: flex;
+	width: 100%;
+	height: 177px;
+	align-items: flex-end;
+	justify-content: center;
+}
+
+.earnings-bar {
+	width: min(34px, 64%);
+	min-height: 8px;
+	border-radius: 4px 4px 0 0;
+	background: linear-gradient(180deg, #55b2a1, #087e78);
+	transition: filter 0.2s ease;
+}
+
+.bar-column:hover .earnings-bar { filter: brightness(1.08); }
+
+.bar-label {
+	width: 100%;
+	padding-top: 8px;
+	color: #8a9498;
+	font-size: 9px;
+	text-align: center;
+	white-space: nowrap;
+}
+
+.chart-footnote {
+	display: flex;
+	align-items: center;
+	gap: 7px;
+	margin-top: 9px;
+	color: #748087;
+	font-size: 10px;
+}
+
+.earnings-legend-dot {
+	width: 8px;
+	height: 8px;
+	border-radius: 2px;
+	background: #168c80;
+}
+
+.service-chart {
+	display: grid;
+	gap: 22px;
+	margin-top: 29px;
+}
+
+.service-row {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) 38px;
+	align-items: center;
+	gap: 9px 12px;
+}
+
+.service-info {
+	display: flex;
+	min-width: 0;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px;
+	color: #56616a;
+	font-size: 12px;
+}
+
+.service-info span {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.service-info strong {
+	color: var(--ink);
+	font-size: 12px;
+}
+
+.service-track {
+	position: relative;
+	overflow: hidden;
+	height: 8px;
+	grid-column: 1;
+	border-radius: 10px;
+	background: #f0f2ef;
+}
+
+.service-bar {
+	display: block;
+	height: 100%;
+	border-radius: inherit;
+}
+
+.service-bar.teal { background: #168c80; }
+.service-bar.yellow { background: #d2aa49; }
+.service-bar.coral { background: #dc896e; }
+.service-bar.green { background: #80a66f; }
+
+.service-percentage {
+	grid-column: 2;
+	grid-row: 2;
+	color: #8a9498;
+	font-size: 10px;
+	text-align: right;
+}
+
+.services-footnote {
+	display: flex;
+	justify-content: space-between;
+	gap: 10px;
+	margin-top: 24px;
+	padding-top: 13px;
+	border-top: 1px solid #edf0ed;
+	color: #899295;
+	font-size: 10px;
+}
+
+.services-footnote strong {
+	color: #168276;
+	font-size: 10px;
+}
+
+@media (max-width: 900px) {
+	.metrics-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	.charts-section { grid-template-columns: 1fr; }
+	.services-panel { min-height: 320px; }
+}
+
+@media (max-width: 560px) {
+	.dashboard-page {
+		width: calc(100% - 28px);
+		padding: 32px 0 36px;
+	}
+
+	.dashboard-heading {
+		align-items: flex-start;
+		margin-bottom: 21px;
+	}
+
+	.dashboard-heading h1 { font-size: 30px; }
+	.heading-copy { max-width: 245px; line-height: 1.4; }
+
+	.month-stamp {
+		gap: 6px;
+		padding: 8px;
+		font-size: 10px;
+	}
+
+	.metrics-grid { gap: 9px; }
+
+	.metric-card { padding: 13px 12px 14px; }
+	.metric-topline { margin-bottom: 11px; }
+	.metric-icon { width: 32px; height: 32px; }
+	.metric-icon svg { width: 17px; height: 17px; }
+	.metric-value { font-size: 25px; }
+	.metric-caption { line-height: 1.35; }
+	.rating-stars { font-size: 9px; letter-spacing: 0; }
+	.metric-trend, .metric-period, .pet-status { font-size: 9px; }
+
+	.charts-section { gap: 12px; margin-top: 14px; }
+	.chart-panel { padding: 17px 14px 14px; }
+	.earnings-chart { grid-template-columns: 36px minmax(0, 1fr); }
+	.bar-chart { gap: 4px; }
+	.bar-value { font-size: 8px; }
+	.bar-label { font-size: 8px; }
+	.service-chart { gap: 20px; }
+}
+
+@media (max-width: 360px) {
+	.dashboard-heading { flex-direction: column; gap: 12px; }
+	.metrics-grid { grid-template-columns: 1fr 1fr; }
+	.metric-card { padding-inline: 10px; }
+}

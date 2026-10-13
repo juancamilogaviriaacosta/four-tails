@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -15,11 +15,11 @@ export class Login {
 
   @Input() modalMode = false;
   @Output() closed = new EventEmitter<void>();
-  @Output() setUserName = new EventEmitter<string>();
-
+  
   model: any = {
     username: '',
     password: '',
+    role: ''
   };
 
   constructor(public router: Router, public auth: AuthService, public loadingService: LoadingService) {
@@ -29,11 +29,16 @@ export class Login {
     this.loadingService.show();
     setTimeout(() => {
       //this.auth.login(this.model);
+      if (this.model.username === 'sitter') {
+        this.model.role = 'sitter';
+      } else if (this.model.username === 'owner') {
+        this.model.role = 'owner';
+      } else if(this.model.username === 'admin'){
+        this.model.role = 'admin';
+      }
+      localStorage.setItem('token', JSON.stringify(this.model));
       this.loadingService.hide();
       this.closeLogin();
-      this.router.navigate(['/']);
-      localStorage.setItem('token', JSON.stringify(this.model));
-      this.setUserName.emit(this.model.username);
     }, 1000);
     
   }

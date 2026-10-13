@@ -125,10 +125,6 @@ export class App implements OnInit, OnDestroy {
     return this.router.url !== '/login';
   }
 
-  setUserName(username: string) {
-    this.username = username;
-  }
-
   goToMessages() {
     this.router.navigate(['/messages']);
   }

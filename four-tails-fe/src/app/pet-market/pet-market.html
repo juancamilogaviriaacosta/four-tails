@@ -1,0 +1,95 @@
+<main class="market-page">
+	<section class="market-feature" aria-labelledby="market-title">
+		<div class="feature-copy">
+			<p class="eyebrow">THE PET MARKET</p>
+			<h1 id="market-title">Good things for<br />good pets.</h1>
+			<p>Thoughtful food, everyday essentials and little things that make tails wag.</p>
+			<a class="feature-link" href="#shop-products">Shop the collection <span aria-hidden="true">&#8594;</span></a>
+		</div>
+		<div class="feature-photo">
+			<img src="pm1.png" alt="A dog and cat exploring a pet shop" />
+			<span class="photo-note">Picked with care, for every kind of companion.</span>
+		</div>
+		<div class="feature-stamp" aria-hidden="true"><span>4</span><small>tails<br />approved</small></div>
+	</section>
+
+	<section class="shop-section" id="shop-products" aria-labelledby="products-title">
+		<div class="shop-topline">
+			<div>
+				<p class="eyebrow">SHOP THE GOOD STUFF</p>
+				<h2 id="products-title">Made for their kind of wonderful</h2>
+			</div>
+			<div class="shop-tools">
+				<label class="product-search">
+					<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m16 16 4 4"></path></svg>
+					<input type="search" aria-label="Search products" placeholder="Find something good..." [value]="searchQuery" (input)="onSearch($event)" />
+				</label>
+				<button class="cart-trigger" type="button" [attr.aria-expanded]="cartOpen" aria-controls="cart-panel" (click)="cartOpen = !cartOpen">
+					<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2l2.2 11.2a2 2 0 0 0 2 1.6h8.6a2 2 0 0 0 2-1.6L21 8H6"></path><circle cx="10" cy="20" r="1"></circle><circle cx="18" cy="20" r="1"></circle></svg>
+					<span>Bag</span><span class="cart-count">{{ cartCount }}</span>
+				</button>
+				@if (cartOpen) {
+					<aside class="cart-panel" id="cart-panel" aria-label="Shopping bag">
+						<div class="cart-heading"><h3>Your bag</h3><button type="button" aria-label="Close bag" (click)="cartOpen = false">&#215;</button></div>
+						@for (item of cartItems; track item.product.id) {
+							<div class="cart-line">
+								<span class="cart-item-icon">{{ item.product.icon }}</span>
+								<div class="cart-item-copy"><strong>{{ item.product.name }}</strong><span>{{ item.product.price | currency:'AUD' }}</span></div>
+								<div class="quantity-control">
+									<button type="button" [attr.aria-label]="'Remove one ' + item.product.name" (click)="changeQuantity(item.product.id, -1)">−</button>
+									<span>{{ item.quantity }}</span>
+									<button type="button" [attr.aria-label]="'Add one ' + item.product.name" (click)="changeQuantity(item.product.id, 1)">+</button>
+								</div>
+							</div>
+						} @empty {
+							<p class="empty-cart">Your bag is waiting for something lovely.</p>
+						}
+						<div class="cart-subtotal"><span>Subtotal</span><strong>{{ cartTotal | currency:'AUD' }}</strong></div>
+						<button class="continue-button" type="button" (click)="cartOpen = false">Continue shopping</button>
+					</aside>
+				}
+			</div>
+		</div>
+
+		<div class="category-row" role="group" aria-label="Filter products by category">
+			@for (category of categories; track category) {
+				<button type="button" [class.active]="activeCategory === category" [attr.aria-pressed]="activeCategory === category" (click)="selectCategory(category)">{{ category }}</button>
+			}
+			<span class="product-count">{{ filteredProducts.length }} products</span>
+		</div>
+
+		<div class="product-grid">
+			@for (product of filteredProducts; track product.id) {
+				<article class="product-card">
+					<div class="product-art" [class]="'product-art ' + product.pack">
+						@if (product.badge) { <span class="product-badge">{{ product.badge }}</span> }
+						<div class="package" aria-hidden="true">
+							<span class="package-top"></span>
+							<span class="package-label"><small>4 TAILS</small><strong>{{ product.packLabel }}</strong><span>{{ product.icon }}</span></span>
+						</div>
+						<span class="product-art-caption">{{ product.category }}</span>
+					</div>
+					<div class="product-details">
+						<div class="product-title-row"><h3>{{ product.name }}</h3><span class="product-rating"><span aria-hidden="true">★</span> {{ product.rating }}</span></div>
+						<p class="product-description">{{ product.description }}</p>
+						<div class="product-buy-row">
+							<strong class="product-price">{{ product.price | currency:'AUD' }}</strong>
+							<button class="add-button" type="button" [class.in-bag]="quantityFor(product.id) > 0" [attr.aria-label]="'Add ' + product.name + ' to bag'" (click)="addToCart(product)">
+								@if (quantityFor(product.id) > 0) { <span>{{ quantityFor(product.id) }} in bag · Add</span> } @else { <span>Add to bag</span> }
+								<span aria-hidden="true">+</span>
+							</button>
+						</div>
+					</div>
+				</article>
+			} @empty {
+				<div class="no-products"><span aria-hidden="true">⌕</span><h3>No finds this time</h3><p>Try another search or browse a different category.</p></div>
+			}
+		</div>
+	</section>
+
+	<section class="market-note" aria-label="Our promise">
+		<span class="note-mark" aria-hidden="true">✳</span>
+		<p><strong>Good for them. Good by nature.</strong> Better picks for everyday pet life, made with care.</p>
+		<span class="note-aside">Made with love in Australia</span>
+	</section>
+</main>

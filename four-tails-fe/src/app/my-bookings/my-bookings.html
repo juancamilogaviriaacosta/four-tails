@@ -1,0 +1,118 @@
+<main class="bookings-page">
+	<section class="bookings-heading" aria-labelledby="bookings-title">
+		<div>
+			<p class="eyebrow">YOUR SCHEDULE</p>
+			<h1 id="bookings-title">My bookings</h1>
+			<p class="heading-copy">Keep track of the pets and people counting on you.</p>
+		</div>
+		<div class="booking-total" aria-label="4 upcoming bookings">
+			<span class="total-number">{{ bookings.length }}</span>
+			<span>this week</span>
+		</div>
+	</section>
+
+	<section class="calendar" aria-label="Booking calendar">
+		<div class="calendar-toolbar">
+			<div class="period-controls">
+				<button class="today-button" type="button" (click)="goToToday()">Today</button>
+				<div class="arrow-controls" aria-label="Change date">
+					<button type="button" aria-label="Previous period" (click)="navigatePeriod(-1)">
+						<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6" /></svg>
+					</button>
+					<button type="button" aria-label="Next period" (click)="navigatePeriod(1)">
+						<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg>
+					</button>
+				</div>
+				<h2>{{ periodLabel }}</h2>
+			</div>
+
+			<div class="view-switcher" role="group" aria-label="Calendar view">
+				<button type="button" [class.active]="activeView === 'Month'" [attr.aria-pressed]="activeView === 'Month'" (click)="setView('Month')">Month</button>
+				<button type="button" [class.active]="activeView === 'Week'" [attr.aria-pressed]="activeView === 'Week'" (click)="setView('Week')">Week</button>
+				<button type="button" [class.active]="activeView === 'Day'" [attr.aria-pressed]="activeView === 'Day'" (click)="setView('Day')">Day</button>
+			</div>
+		</div>
+
+		@if (activeView === 'Month') {
+			<div class="month-calendar">
+				<div class="weekday-row" aria-hidden="true">
+					@for (day of weekdays; track day) {
+						<span>{{ day }}</span>
+					}
+				</div>
+				<div class="month-grid">
+					@for (date of monthDays; track trackDate($index, date)) {
+						<button class="month-cell" type="button" [class.outside-month]="!isCurrentMonth(date)" [class.today-cell]="isToday(date)" (click)="selectDate(date)" [attr.aria-label]="'View bookings for ' + (date | date:'fullDate')">
+							<span class="date-number">{{ date | date:'d' }}</span>
+							<span class="cell-bookings">
+								@for (booking of bookingsForDate(date); track booking.pet) {
+									<span class="month-event" [class]="'month-event ' + booking.color">
+										<strong>{{ booking.time }}</strong> {{ booking.pet }}
+									</span>
+								}
+							</span>
+						</button>
+					}
+				</div>
+			</div>
+		}
+
+		@if (activeView === 'Week') {
+			<div class="week-calendar">
+				<div class="week-grid">
+					@for (date of weekDays; track trackDate($index, date)) {
+						<section class="week-day" [class.today-column]="isToday(date)">
+							<button class="week-day-heading" type="button" (click)="selectDate(date)">
+								<span>{{ date | date:'EEE' }}</span>
+								<strong>{{ date | date:'d' }}</strong>
+							</button>
+							<div class="week-events">
+								@for (booking of bookingsForDate(date); track booking.pet) {
+									<article class="booking-event" [class]="'booking-event ' + booking.color">
+										<time>{{ booking.time }}</time>
+										<strong>{{ booking.pet }}</strong>
+										<span>{{ booking.service }}</span>
+									</article>
+								} @empty {
+									<span class="empty-day">No bookings</span>
+								}
+							</div>
+						</section>
+					}
+				</div>
+			</div>
+		}
+
+		@if (activeView === 'Day') {
+			<section class="day-agenda" aria-label="Bookings for selected day">
+				<div class="agenda-date">
+					<span class="agenda-day-number">{{ currentDate | date:'d' }}</span>
+					<span>{{ currentDate | date:'EEEE' }}</span>
+				</div>
+				@for (booking of bookingsForDate(currentDate); track booking.pet) {
+					<article class="agenda-booking">
+						<time>{{ booking.time }}</time>
+						<span class="agenda-marker" [class]="'agenda-marker ' + booking.color" aria-hidden="true"></span>
+						<div class="agenda-details">
+							<h3>{{ booking.service }} with {{ booking.pet }}</h3>
+							<p>{{ booking.owner }} <span aria-hidden="true">·</span> {{ booking.pet }}</p>
+						</div>
+						<span class="booking-status">Confirmed</span>
+					</article>
+				} @empty {
+					<div class="empty-agenda">
+						<span class="empty-spark" aria-hidden="true">✳</span>
+						<h3>A little breathing room</h3>
+						<p>No bookings scheduled for this day.</p>
+					</div>
+				}
+			</section>
+		}
+	</section>
+
+	<footer class="calendar-footer">
+		<span class="legend-dot blue"></span><span>Walk</span>
+		<span class="legend-dot yellow"></span><span>Day care</span>
+		<span class="legend-dot green"></span><span>Home visit</span>
+	</footer>
+</main>
