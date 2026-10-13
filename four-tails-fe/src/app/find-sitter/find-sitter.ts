@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoadingService } from '../utils/loading-service';
+import { Utils } from '../utils/utils';
 
 @Component({
   selector: 'app-find-sitter',
@@ -10,6 +11,9 @@ import { LoadingService } from '../utils/loading-service';
   styleUrl: './find-sitter.css',
 })
 export class FindSitter {
+  startDate = '';
+  endDate = '';
+  address = '';
   petModalOpen = false;
 
   readonly pets = [
@@ -19,7 +23,14 @@ export class FindSitter {
   ];
 
   constructor(private router: Router, public loadingService: LoadingService) {
+    const today = new Date();
+    this.startDate = Utils.toDateInputValue(today);
 
+    const checkout = new Date(today);
+    checkout.setDate(checkout.getDate() + 4);
+    this.endDate = Utils.toDateInputValue(checkout);
+
+    this.address = 'Toowoomba QLD, Australia'
   }
 
   get selectedPetSummary(): string {

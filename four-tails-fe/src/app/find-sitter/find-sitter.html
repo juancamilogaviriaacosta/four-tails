@@ -20,7 +20,7 @@
 
 			<div class="form-field">
 				<label for="your-address">Your address</label>
-				<input id="your-address" name="address" type="text" />
+				<input id="your-address" name="address" type="text" [(ngModel)]="address"/>
 			</div>
 
 			<div class="form-field">
@@ -39,11 +39,11 @@
 			<fieldset class="date-fields">
 				<div class="form-field">
 					<label for="start-date">Start date</label>
-					<input id="start-date" name="startDate" type="date" />
+					<input id="start-date" name="startDate" type="date" [(ngModel)]="startDate"/>
 				</div>
 				<div class="form-field">
 					<label for="end-date">End date</label>
-					<input id="end-date" name="endDate" type="date" />
+					<input id="end-date" name="endDate" type="date" [(ngModel)]="endDate"/>
 				</div>
 			</fieldset>
 

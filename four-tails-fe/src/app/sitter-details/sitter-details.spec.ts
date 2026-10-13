@@ -19,4 +19,21 @@ describe('SitterDetails', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('opens the confirmation and cancels without requesting a booking', () => {
+    component.requestBooking();
+    expect(component.bookingConfirmationOpen).toBe(true);
+
+    component.cancelBooking();
+    expect(component.bookingConfirmationOpen).toBe(false);
+    expect(component.bookingRequested).toBe(false);
+  });
+
+  it('requests a booking only after confirmation', () => {
+    component.requestBooking();
+    component.confirmBooking();
+
+    expect(component.bookingConfirmationOpen).toBe(false);
+    expect(component.bookingRequested).toBe(true);
+  });
 });

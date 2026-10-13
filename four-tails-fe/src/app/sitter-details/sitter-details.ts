@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Utils } from '../utils/utils';
 
 @Component({
   selector: 'app-sitter-details',
@@ -10,7 +11,17 @@ import { FormsModule } from '@angular/forms';
 export class SitterDetails {
   startDate = '';
   endDate = '';
+  bookingConfirmationOpen = false;
   bookingRequested = false;
+
+  constructor() {
+    const today = new Date();
+    this.startDate = Utils.toDateInputValue(today);
+
+    const checkout = new Date(today);
+    checkout.setDate(checkout.getDate() + 4);
+    this.endDate = Utils.toDateInputValue(checkout);
+  }
 
   readonly sitter = {
     name: 'Maya Watson',
@@ -42,6 +53,15 @@ export class SitterDetails {
   ];
 
   requestBooking(): void {
+    this.bookingConfirmationOpen = true;
+  }
+
+  cancelBooking(): void {
+    this.bookingConfirmationOpen = false;
+  }
+
+  confirmBooking(): void {
+    this.bookingConfirmationOpen = false;
     this.bookingRequested = true;
   }
 }

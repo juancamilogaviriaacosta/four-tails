@@ -548,6 +548,69 @@
 	cursor: pointer;
 }
 
+.booking-modal-backdrop {
+	position: fixed;
+	inset: 0;
+	z-index: 1000;
+	display: grid;
+	place-items: center;
+	padding: 20px;
+	background: rgb(19 35 39 / 55%);
+}
+
+.booking-modal {
+	width: min(100%, 430px);
+	padding: 25px;
+	border: 1px solid #d9e5e7;
+	border-radius: 7px;
+	background: #fff;
+	box-shadow: 0 16px 48px rgb(19 35 39 / 22%);
+}
+
+.booking-modal h2 {
+	color: var(--navy);
+	font-size: 20px;
+}
+
+.booking-modal p {
+	margin-top: 12px;
+	color: #526267;
+	font-size: 13px;
+	line-height: 1.6;
+}
+
+.booking-modal-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 10px;
+	margin-top: 23px;
+}
+
+.booking-modal-actions button {
+	min-height: 42px;
+	padding: 0 16px;
+	border-radius: 4px;
+	font-size: 12px;
+	font-weight: 700;
+	cursor: pointer;
+}
+
+.booking-modal-cancel {
+	border: 1px solid #bfcfd2;
+	background: #fff;
+	color: var(--navy);
+}
+
+.booking-modal-confirm {
+	border: 1px solid #078ca3;
+	background: #078ca3;
+	color: #fff;
+}
+
+.booking-modal-confirm:hover {
+	background: #066e80;
+}
+
 @media (max-width: 760px) {
 	.profile-page {
 		padding: 22px 18px 54px;
