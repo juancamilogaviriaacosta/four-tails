@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 type ProductCategory = 'Food' | 'Toys' | 'Health' | 'Accessories';
 
@@ -23,7 +24,7 @@ interface CartItem {
 
 @Component({
   selector: 'app-pet-market',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './pet-market.html',
   styleUrl: './pet-market.css',
 })

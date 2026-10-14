@@ -7,7 +7,7 @@
 			<a class="feature-link" href="#shop-products">Shop the collection <span aria-hidden="true">&#8594;</span></a>
 		</div>
 		<div class="feature-photo">
-			<img src="pm1.png" alt="A dog and cat exploring a pet shop" />
+			<img src="pm1.png" alt="A dog and cat exploring a pet shop"/>
 			<span class="photo-note">Picked with care, for every kind of companion.</span>
 		</div>
 		<div class="feature-stamp" aria-hidden="true"><span>4</span><small>tails<br />approved</small></div>
@@ -28,6 +28,10 @@
 					<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2l2.2 11.2a2 2 0 0 0 2 1.6h8.6a2 2 0 0 0 2-1.6L21 8H6"></path><circle cx="10" cy="20" r="1"></circle><circle cx="18" cy="20" r="1"></circle></svg>
 					<span>Bag</span><span class="cart-count">{{ cartCount }}</span>
 				</button>
+				<a class="orders-trigger" routerLink="/my-orders" aria-label="My orders">
+					<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"></path><path d="M14 3v5h5M9 12h7M9 16h7"></path></svg>
+					<span>My orders</span>
+				</a>
 				@if (cartOpen) {
 					<aside class="cart-panel" id="cart-panel" aria-label="Shopping bag">
 						<div class="cart-heading"><h3>Your bag</h3><button type="button" aria-label="Close bag" (click)="cartOpen = false">&#215;</button></div>

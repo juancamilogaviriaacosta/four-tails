@@ -1,90 +1,118 @@
-<main class="messages-app">
-    <aside class="conversation-list">
-      <h1>Messages</h1>
+<main class="messages-page">
+	<header class="messages-heading">
+		<div>
+			<p class="messages-eyebrow">Four Tails</p>
+			<h1>{{ labels.title }}</h1>
+			<p class="messages-subtitle">{{ labels.subtitle }}</p>
+		</div>
+		<span class="heading-mark" aria-hidden="true">✳</span>
+	</header>
 
-      <button class="conversation active">
-        <div class="avatar chloe-avatar">C</div>
-        <div class="conversation-info">
-          <strong>Chloe</strong>
-          <span>Bella is having a great t...</span>
-        </div>
-        <div class="conversation-meta">
-          <time>9:41</time>
-          <b>2</b>
-        </div>
-      </button>
+	<section
+		class="messages-layout"
+		[class.mobile-conversation]="mobileView === 'conversation'"
+		[class.mobile-contacts]="mobileView === 'contacts'"
+		[attr.aria-label]="labels.title"
+	>
+		<aside class="contacts-panel" [attr.aria-label]="labels.title">
+			<div class="contacts-heading">
+				<div class="contacts-title-row">
+					<h2>{{ labels.title }}</h2>
+					<span class="contact-count">{{ filteredContacts.length }}</span>
+				</div>
+				<label class="contact-search">
+					<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m16 16 4 4"></path></svg>
+					<input
+						type="search"
+						[(ngModel)]="searchTerm"
+						[placeholder]="labels.search"
+						[attr.aria-label]="labels.search"
+					/>
+				</label>
+			</div>
 
-      <button class="conversation">
-        <div class="avatar liam-avatar">L</div>
-        <div class="conversation-info">
-          <strong>Liam</strong>
-          <span>See you Friday at 7am.</span>
-        </div>
-        <time>Yesterday</time>
-      </button>
+			<nav class="contact-list" [attr.aria-label]="labels.title">
+				@for (contact of filteredContacts; track contact.id) {
+					<button
+						type="button"
+						class="contact-item"
+						[class.contact-item--active]="selectedContact.id === contact.id"
+						[attr.aria-current]="selectedContact.id === contact.id ? 'true' : null"
+						(click)="selectContact(contact)"
+					>
+						<span class="avatar contact-avatar" [style.backgroundColor]="contact.avatarColor">{{ contact.initials }}</span>
+						<span class="contact-copy">
+							<span class="contact-topline">
+								<span class="contact-name">{{ contact.name }}</span>
+								<time class="contact-time">{{ contact.lastMessageTime }}</time>
+							</span>
+							<span class="contact-bottomline">
+								<span class="contact-preview">{{ contact.lastMessage }}</span>
+								@if (contact.unread > 0) {
+									<span class="unread-count" [attr.aria-label]="contact.unread">{{ contact.unread }}</span>
+								}
+							</span>
+						</span>
+					</button>
+				} @empty {
+					<p class="empty-list">{{ searchTerm ? labels.emptySearch : labels.emptyContacts }}</p>
+				}
+			</nav>
+			<p class="privacy-note">
+				<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 5 6v5c0 4.5 2.9 7.8 7 10 4.1-2.2 7-5.5 7-10V6l-7-3Z"></path><path d="m9 12 2 2 4-4"></path></svg>
+				{{ labels.secure }}
+			</p>
+		</aside>
 
-      <button class="conversation">
-        <div class="avatar initials">MR</div>
-        <div class="conversation-info">
-          <strong>Mia</strong>
-          <span>I gave Milo his tablet.</span>
-        </div>
-        <time>Mon</time>
-      </button>
+		<section class="conversation-panel" [attr.aria-label]="selectedContact.name">
+			<header class="conversation-header">
+				<button
+					type="button"
+					class="back-button"
+					[attr.aria-label]="labels.back"
+					(click)="showContacts()"
+				>
+					<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>
+				</button>
+				<span class="avatar conversation-avatar" [style.backgroundColor]="selectedContact.avatarColor">{{ selectedContact.initials }}</span>
+				<div class="conversation-person">
+					<h2>{{ selectedContact.name }}</h2>
+					<p [class.person-online]="selectedContact.status === 'online'">
+						<span class="status-dot" aria-hidden="true"></span>
+						{{ selectedContact.status === 'online' ? labels.online : selectedContact.lastSeen }}
+					</p>
+				</div>
+				<span class="conversation-role">{{ selectedContact.role }}</span>
+			</header>
 
-      <button class="conversation">
-        <div class="avatar help-avatar">🐶</div>
-        <div class="conversation-info">
-          <strong>4tails Help</strong>
-          <span>Your refund is done.</span>
-        </div>
-        <time>28 Sep</time>
-      </button>
-    </aside>
+			<div class="conversation-messages" [attr.aria-label]="selectedContact.name">
+				<div class="day-marker"><span>{{ labels.today }}</span></div>
+				@for (message of selectedContact.messages; track message.id) {
+					<article class="message-row" [class.message-row--mine]="message.sentByMe">
+						<div class="message-bubble" [class.message-bubble--mine]="message.sentByMe">
+							<p>{{ message.text }}</p>
+							<footer>
+								<span>{{ message.sentByMe ? labels.you : selectedContact.name }}</span>
+								<time>{{ message.time }}</time>
+							</footer>
+						</div>
+					</article>
+				}
+			</div>
 
-    <section class="chat">
-      <header class="chat-header">
-        <div class="profile">
-          <div class="avatar chloe-avatar">C</div>
-          <strong>Chloe</strong>
-        </div>
-        <button class="booking-btn">View booking</button>
-      </header>
-
-      <div class="chat-body">
-        <div class="message-row outgoing">
-          <div>
-            <div class="bubble outgoing-bubble">How did Bella sleep?</div>
-            <div class="message-time">8:52 am <span class="checks">✓✓</span></div>
-          </div>
-        </div>
-
-        <div class="message-row incoming">
-          <div>
-            <div class="bubble incoming-bubble">Very well! We just had a long walk.</div>
-            <div class="message-time">9:38 am</div>
-          </div>
-        </div>
-
-        <div class="message-row incoming">
-          <div>
-            <img class="dog-photo" src="https://img.magnific.com/foto-gratis/pequeno-perro-lindo-ojos-cerrados_1161-312.jpg" alt="Bella after a walk">
-            <div class="message-time">9:40 am</div>
-          </div>
-        </div>
-
-        <div class="message-row outgoing">
-          <div>
-            <div class="bubble outgoing-bubble">Thank you!!</div>
-            <div class="message-time">9:43 am <span class="checks">✓✓</span></div>
-          </div>
-        </div>
-      </div>
-
-      <footer class="composer">
-        <button class="attachment-btn" aria-label="Attach photo">▣</button>
-        <input type="text" placeholder="Write a message" aria-label="Write a message">
-        <button class="send-btn" aria-label="Send message">➤</button>
-      </footer>
-    </section>
-  </main>
+			<form class="composer" (ngSubmit)="sendMessage()">
+				<input
+					type="text"
+					name="message"
+					[(ngModel)]="messageDraft"
+					[placeholder]="labels.input"
+					[attr.aria-label]="labels.input"
+					autocomplete="off"
+				/>
+				<button type="submit" class="send-button" [attr.aria-label]="labels.send" [disabled]="!messageDraft.trim()">
+					<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 3-7.2 18-3.7-7.1L3 10.2 21 3Z"></path><path d="M10.1 13.9 15 9"></path></svg>
+				</button>
+			</form>
+		</section>
+	</section>
+</main>

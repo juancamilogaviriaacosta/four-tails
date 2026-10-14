@@ -2,7 +2,17 @@
 	<section class="bookings-heading" aria-labelledby="bookings-title">
 		<div>
 			<p class="eyebrow">YOUR SCHEDULE</p>
-			<h1 id="bookings-title">My bookings</h1>
+			<div class="booking-title-row">
+				<h1 id="bookings-title">My bookings</h1>
+				<button
+					class="pending-count"
+					type="button"
+					[attr.aria-label]="pendingRequests.length + ' pending bookings to accept'"
+					(click)="openPendingModal()"
+				>
+					{{ pendingRequests.length }}
+				</button>
+			</div>
 			<p class="heading-copy">Keep track of the pets and people counting on you.</p>
 		</div>
 		<div class="booking-total" aria-label="4 upcoming bookings">
@@ -116,3 +126,50 @@
 		<span class="legend-dot green"></span><span>Home visit</span>
 	</footer>
 </main>
+
+@if (isPendingModalOpen) {
+	<div class="pending-backdrop" (click)="closePendingModal()" (document:keydown.escape)="closePendingModal()">
+		<section
+			class="pending-modal"
+			role="dialog"
+			aria-modal="true"
+			aria-labelledby="pending-title"
+			(click)="$event.stopPropagation()"
+		>
+			<header class="pending-modal-header">
+				<div>
+					<p class="eyebrow">BOOKING REQUESTS</p>
+					<h2 id="pending-title">Pending bookings <span>{{ pendingRequests.length }}</span></h2>
+				</div>
+				<button class="modal-close" type="button" aria-label="Close" (click)="closePendingModal()">
+					<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg>
+				</button>
+			</header>
+
+			<div class="pending-list">
+				@for (request of pendingRequests; track request.id) {
+					<article class="pending-request">
+						<div class="request-owner">
+							<span class="request-avatar">{{ request.initials }}</span>
+							<div>
+								<h3>{{ request.owner }}</h3>
+								<p>Request for <strong>{{ request.pet }}</strong></p>
+							</div>
+						</div>
+						<div class="request-details">
+							<span>{{ request.service }}</span>
+							<time>{{ request.date | date:'EEE, MMM d' }} · {{ request.time }}</time>
+						</div>
+						<p class="request-note">{{ request.note }}</p>
+						<div class="request-actions">
+							<button class="decline-button" type="button" (click)="resolvePendingRequest(request.id)">Decline</button>
+							<button class="accept-button" type="button" (click)="resolvePendingRequest(request.id, true)">Accept</button>
+						</div>
+					</article>
+				} @empty {
+					<p class="pending-empty">There are no pending booking requests.</p>
+				}
+			</div>
+		</section>
+	</div>
+}

@@ -12,6 +12,18 @@ interface Booking {
   color: 'blue' | 'yellow' | 'green';
 }
 
+interface PendingBooking {
+  id: number;
+  owner: string;
+  initials: string;
+  pet: string;
+  service: string;
+  date: Date;
+  time: string;
+  color: Booking['color'];
+  note: string;
+}
+
 @Component({
   selector: 'app-my-bookings',
   imports: [CommonModule],
@@ -23,6 +35,8 @@ export class MyBookings {
   currentDate = new Date();
   readonly weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   readonly bookings: Booking[] = this.createSampleBookings();
+  pendingRequests: PendingBooking[] = this.createSamplePendingRequests();
+  isPendingModalOpen = false;
 
   get monthLabel(): string {
     return new Intl.DateTimeFormat('en', { month: 'long', year: 'numeric' }).format(this.currentDate);
@@ -39,6 +53,29 @@ export class MyBookings {
     const start = new Intl.DateTimeFormat('en', { month: 'short', day: 'numeric' }).format(week[0]);
     const end = new Intl.DateTimeFormat('en', { month: 'short', day: 'numeric', year: 'numeric' }).format(week[6]);
     return `${start} - ${end}`;
+  }
+
+  openPendingModal(): void {
+    this.isPendingModalOpen = true;
+  }
+
+  closePendingModal(): void {
+    this.isPendingModalOpen = false;
+  }
+
+  resolvePendingRequest(id: number, accepted = false): void {
+    const request = this.pendingRequests.find((pending) => pending.id === id);
+    if (accepted && request) {
+      this.bookings.push({
+        date: request.date,
+        time: request.time,
+        pet: request.pet,
+        service: request.service,
+        owner: request.owner,
+        color: request.color,
+      });
+    }
+    this.pendingRequests = this.pendingRequests.filter((request) => request.id !== id);
   }
 
   get monthDays(): Date[] {
@@ -113,6 +150,24 @@ export class MyBookings {
       { offset: 2, time: '11:30', pet: 'Luna', service: 'Day care', owner: 'James R.', color: 'yellow' as const },
       { offset: 3, time: '14:00', pet: 'Biscuit', service: 'Home visit', owner: 'Ava M.', color: 'green' as const },
       { offset: 5, time: '10:00', pet: 'Coco', service: 'Dog walking', owner: 'Noah K.', color: 'blue' as const },
+    ];
+
+    return samples.map((sample) => {
+      const date = new Date(monday);
+      date.setDate(monday.getDate() + sample.offset);
+      return { ...sample, date };
+    });
+  }
+
+  private createSamplePendingRequests(): PendingBooking[] {
+    const monday = new Date();
+    monday.setDate(monday.getDate() - ((monday.getDay() + 6) % 7));
+    monday.setHours(0, 0, 0, 0);
+
+    const samples = [
+      { id: 1, owner: 'Olivia Bennett', initials: 'OB', pet: 'Milo', service: 'Dog walking', offset: 2, time: '09:30', color: 'blue' as const, note: 'Milo loves a long walk in the park. His leash and treats will be ready by the door.' },
+      { id: 2, owner: 'Ethan Parker', initials: 'EP', pet: 'Daisy', service: 'Day care', offset: 4, time: '08:00', color: 'yellow' as const, note: 'Daisy is friendly and gets along well with other dogs. She takes medication with lunch.' },
+      { id: 3, owner: 'Amelia Brooks', initials: 'AB', pet: 'Oliver', service: 'Home visit', offset: 5, time: '12:00', color: 'green' as const, note: 'Oliver needs a quick lunch visit and some company while I am away.' },
     ];
 
     return samples.map((sample) => {
