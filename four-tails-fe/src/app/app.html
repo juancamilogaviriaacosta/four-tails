@@ -19,15 +19,15 @@
 
   <div class="header-actions">
 
-  @if (auth.isLoggedIn()) {
-    <button class="icon-action" type="button" aria-label="Messages" (click)="goToMessages()">
+  @if (authService.isLoggedIn()) {
+    <button class="icon-action" type="button" aria-label="Messages" (click)="navigateToMessages()">
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path d="M21 11.5a8.5 8.5 0 0 1-12.6 7.4L3 21l2.1-5.4A8.5 8.5 0 1 1 21 11.5Z"></path>
       </svg>
       <span class="event-count" aria-label="1 evento">1</span>
     </button>
 
-    <button class="icon-action" type="button" aria-label="Notifications" (click)="goToNotifications()">
+    <button class="icon-action" type="button" aria-label="Notifications" (click)="navigateToNotifications()">
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
         <path d="M10 21h4"></path>
@@ -43,11 +43,11 @@
           <circle cx="12" cy="8" r="4"></circle>
           <path d="M4 21a8 8 0 0 1 16 0"></path>
         </svg>
-        <span>{{ auth.getUserName() }}</span>
+        <span>{{ authService.getUserName() }}</span>
       </button>
       @if (showUserMenu) {
         <div id="user-dropdown" class="user-dropdown" role="menu" aria-label="Profile menu">
-          <button class="dropdown-item" type="button" role="menuitem" (click)="goToProfile()">Edit profile</button>
+          <button class="dropdown-item" type="button" role="menuitem" (click)="navigateToProfile()">Edit profile</button>
           <button class="dropdown-item logout" type="button" role="menuitem" (click)="logout()">Logout</button>
         </div>
       }
@@ -64,7 +64,7 @@
     <span class="hamburger-line"></span>
     <span class="hamburger-line"></span>
     <span class="hamburger-line"></span>
-    @if (auth.isLoggedIn()) {
+    @if (authService.isLoggedIn()) {
       <span class="hamburger-count" aria-hidden="true">3</span>
     }
   </button>
@@ -73,14 +73,23 @@
 @if (mobileMenuOpen) {
 <div class="mobile-menu-backdrop" (click)="closeMobileMenu()">
   <nav id="mobile-menu" class="mobile-menu-panel" aria-label="Mobile navigation" (click)="$event.stopPropagation()">
-    <a href="#find" (click)="closeMobileMenu()">Find a Sitter</a>
-    <a href="#market" (click)="closeMobileMenu()">Pet Market</a>
-    <a href="#sitter" (click)="closeMobileMenu()">Become a Sitter</a>
-    <a href="#work" (click)="closeMobileMenu()">Work with Us</a>
-    @if (auth.isLoggedIn()) {
-      <button class="mobile-messages" type="button" (click)="goToMessages()">Messages <span class="mobile-event-count" aria-label="2 eventos">2</span></button>
-      <button class="mobile-notifications" type="button" (click)="goToNotifications()">Notifications <span class="mobile-event-count" aria-label="1 evento">1</span></button>
-      <button class="mobile-messages" type="button">Edit Profile</button>
+    
+    <button class="mobile-messages" type="button" (click)="navigateToFindSitter()">Find a Sitter</button>
+    <button class="mobile-messages" type="button" (click)="navigateToPetMarket()">Pet market</button>
+
+    @if (authService.getRole()?.toLowerCase() === 'sitter') {
+      <button class="mobile-messages" type="button" (click)="navigateSitterDashboard()">Dashboard</button>
+    }
+
+    @if (authService.getRole()?.toLowerCase() !== 'sitter') {
+      <button class="mobile-messages" type="button" (click)="navigateToBecomeSitter()">Become a sitter</button>
+    }
+
+    @if (authService.isLoggedIn()) {
+      <button class="mobile-messages" type="button" (click)="navigateToMyBookings()">My bookings</button>
+      <button class="mobile-messages" type="button" (click)="navigateToMessages()">Messages <span class="mobile-event-count" aria-label="2 eventos">2</span></button>
+      <button class="mobile-notifications" type="button" (click)="navigateToNotifications()">Notifications <span class="mobile-event-count" aria-label="1 evento">1</span></button>
+      <button class="mobile-messages" type="button" (click)="navigateToProfile()">Edit Profile</button>
       <button class="mobile-messages" type="button" (click)="logout()">Logout</button>
     } @else {
       <button type="button" class="mobile-login" (click)="login()">Log in</button>

@@ -6,7 +6,7 @@
 	--chat-green-dark: #087fae;
 	--chat-wash: #f1f6f2;
 	width: min(1180px, calc(100% - 64px));
-	min-height: min(760px, calc(100dvh - 108px));
+	min-height: 0;
 	margin: 24px auto 32px;
 	display: flex;
 	flex-direction: column;
@@ -55,8 +55,8 @@
 }
 
 .messages-layout {
-	min-height: 500px;
-	height: clamp(500px, calc(100dvh - 190px), 760px);
+	min-height: 320px;
+	height: clamp(320px, calc(100dvh - 300px), 760px);
 	display: grid;
 	grid-template-columns: minmax(285px, 340px) minmax(0, 1fr);
 	border: 1px solid var(--chat-line);
@@ -484,7 +484,7 @@
 	.messages-page {
 		width: 100%;
 		min-height: 0;
-		height: calc(100dvh - 60px);
+		height: 100%;
 		margin: 0;
 	}
 

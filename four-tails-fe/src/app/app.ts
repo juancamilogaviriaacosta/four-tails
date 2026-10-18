@@ -22,7 +22,7 @@ export class App implements OnInit, OnDestroy {
   showSignupModal = false;
   private backButtonListener?: PluginListenerHandle;
 
-  constructor(public router: Router, public auth: AuthService, public loadingService: LoadingService) {
+  constructor(public router: Router, public authService: AuthService, public loadingService: LoadingService) {
   }
 
   async ngOnInit(): Promise<void> {
@@ -93,7 +93,7 @@ export class App implements OnInit, OnDestroy {
     setTimeout(() => {
       this.showUserMenu = false;
       this.mobileMenuOpen = false;
-      this.auth.logout();
+      this.authService.logout();
       this.loadingService.hide();
       this.router.navigate(['/']);
     }, 1000);
@@ -111,27 +111,55 @@ export class App implements OnInit, OnDestroy {
     }
   }
 
-  goToProfile(): void {
-    this.showUserMenu = false;
-    this.router.navigate(['/edit-profile']);
-  }
-
-  goToMyServices(): void {
-    this.showUserMenu = false;
-    this.router.navigate(['/my-services']);
-  }
-
   isNotInLoginPage() {
     return this.router.url !== '/login';
   }
 
-  goToMessages() {
+  navigateToProfile(): void {
+    this.showUserMenu = false;
+    this.mobileMenuOpen = false;
+    this.router.navigate(['/edit-profile']);
+  }
+
+  navigateToMessages() {
+    this.showUserMenu = false;
     this.mobileMenuOpen = false;
     this.router.navigate(['/messages']);
   }
 
-  goToNotifications(): void {
+  navigateToNotifications(): void {
+    this.showUserMenu = false;
     this.mobileMenuOpen = false;
     this.router.navigate(['/notifications']);
+  }
+
+  navigateToFindSitter(): void {
+    this.showUserMenu = false;
+    this.mobileMenuOpen = false;
+    this.router.navigate(['/find-sitter']);
+  }
+
+  navigateToPetMarket(): void {
+    this.showUserMenu = false;
+    this.mobileMenuOpen = false;
+    this.router.navigate(['/pet-market']);
+  }
+
+  navigateSitterDashboard(): void {
+    this.showUserMenu = false;
+    this.mobileMenuOpen = false;
+    this.router.navigate(['/sitter-dashboard']);
+  }
+
+  navigateToBecomeSitter(): void {
+    this.showUserMenu = false;
+    this.mobileMenuOpen = false;
+    this.router.navigate(['/become-sitter']);
+  }
+
+  navigateToMyBookings(): void {
+    this.showUserMenu = false;
+    this.mobileMenuOpen = false;
+    this.router.navigate(['/my-bookings']);
   }
 }
