@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,21 +24,14 @@ import co.com.ftails.be.repositories.RoleRepository;
 import co.com.ftails.be.repositories.ServiceRepository;
 import co.com.ftails.be.repositories.UserRepository;
 
-
 @org.springframework.stereotype.Service
+@AllArgsConstructor
 public class ServiceService {
 
-	@Autowired
-	private ServiceRepository sr;
-	
-	@Autowired
-	private UserRepository ur;
-	
-	@Autowired
-	private ProviderRepository pr;
-		
-	@Autowired
-	private RoleRepository rr;
+	private final ServiceRepository sr;
+	private final UserRepository ur;
+	private final ProviderRepository pr;
+	private final RoleRepository rr;
 		
 	@Transactional
 	public ResponseEntity<Map<String, String>> initDatabase() {

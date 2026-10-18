@@ -1,0 +1,8 @@
+{
+  "signup": {
+    "errors": {
+      "emailAlreadyRegistered": "An account with this email already exists.",
+      "generic": "Unable to create your account. Please try again."
+    }
+  }
+}

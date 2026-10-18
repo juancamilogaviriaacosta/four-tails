@@ -39,6 +39,10 @@ export class AuthService {
     });
   }
 
+  signUp(form: any) {
+    return this.http.post('/api/signUp', form);
+  }
+
   getRole() {
     const token = localStorage.getItem('token');
     if (!token) {

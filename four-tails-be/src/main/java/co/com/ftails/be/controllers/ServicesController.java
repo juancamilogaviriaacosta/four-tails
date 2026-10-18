@@ -3,6 +3,7 @@ package co.com.ftails.be.controllers;
 import java.util.List;
 import java.util.Map;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,10 +13,10 @@ import co.com.ftails.be.dtos.ServiceDto;
 import co.com.ftails.be.services.ServiceService;
 
 @RestController
+@AllArgsConstructor
 public class ServicesController {
-	
-	@Autowired
-	private ServiceService ss;
+
+	private final ServiceService ss;
 	
 	@GetMapping("/api/initDatabase")
     public ResponseEntity<Map<String, String>> initDatabase() {
