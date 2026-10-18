@@ -126,6 +126,12 @@ export class App implements OnInit, OnDestroy {
   }
 
   goToMessages() {
+    this.mobileMenuOpen = false;
     this.router.navigate(['/messages']);
+  }
+
+  goToNotifications(): void {
+    this.mobileMenuOpen = false;
+    this.router.navigate(['/notifications']);
   }
 }

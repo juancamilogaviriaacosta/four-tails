@@ -592,7 +592,7 @@ img {
 
     /* MOBILE FOOTER */
     .mobile-footer {
-        min-height: 94px;
+        min-height: 87px;
         display: grid;
         grid-template-columns: 1fr auto;
         align-items: center;

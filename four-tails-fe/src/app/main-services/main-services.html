@@ -46,13 +46,15 @@
           <button type="button" class="card-button" (click)="navigateToPetMarket()"> Pet Market  </button>
           <p class="card-copy"> Food, health and<br /> everyday gear </p>
         </div>
-      </article> 
-      <article class="desktop-card" id="work"> <img class="card-image" src="19-bookings.png" alt="Cuidado de mascota" />
-        <div class="card-content">
-          <button type="button" class="card-button" (click)="navigateToMyBookings()"> My bookings </button>
-          <p class="card-copy"> Partners, brands<br /> and new teammates </p>
-        </div>
       </article>
+      @if (authService.isLoggedIn()) {
+        <article class="desktop-card" id="work"> <img class="card-image" src="19-bookings.png" alt="Cuidado de mascota" />
+          <div class="card-content">
+            <button type="button" class="card-button" (click)="navigateToMyBookings()"> My bookings </button>
+            <p class="card-copy"> Partners, brands<br /> and new teammates </p>
+          </div>
+        </article>
+      }
       @if (authService.getRole()?.toLowerCase() === 'sitter') {
         <article class="desktop-card" id="sitter"> <img class="card-image" src="17-home.png" alt="Cuidador con perro" />
           <div class="card-content">
@@ -91,10 +93,12 @@
         <div class="mobile-icon"><img src="99-pet-market.png" alt="Pet Market"/></div>
         <p>Pet Market</p>
       </button>
-      <button href="#work" class="mobile-card" (click)="navigateToMyBookings()">
-        <div class="mobile-icon"><img src="19-bookings.png" alt="My bookings"/></div>
-        <p>My bookings</p>
-      </button>
+      @if (authService.isLoggedIn()) {
+        <button href="#work" class="mobile-card" (click)="navigateToMyBookings()">
+          <div class="mobile-icon"><img src="19-bookings.png" alt="My bookings"/></div>
+          <p>My bookings</p>
+        </button>
+      }
       @if (authService.getRole()?.toLowerCase() === 'sitter') {
         <button href="#sitter" class="mobile-card" (click)="navigateSitterDashboard()">
           <div class="mobile-icon"><img src="17-home.png" alt="Dashboard"/></div>

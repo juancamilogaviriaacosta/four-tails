@@ -130,9 +130,9 @@
 	}
 
 	.promo-banner {
-		height: 430px;
+		height: 300px;
 		grid-template-columns: minmax(0, 1fr);
-		grid-template-rows: minmax(0, 1fr) 200px minmax(0, 1fr);
+		
 	}
 
 	.promo-banner__column {
@@ -161,7 +161,7 @@
 	}
 
 	.promo-banner__column--image img {
-		height: 180px;
+		height: 120px;
 	}
 }
 

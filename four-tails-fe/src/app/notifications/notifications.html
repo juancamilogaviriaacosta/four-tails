@@ -1,0 +1,76 @@
+<div class="notifications-backdrop">
+	<section
+		class="notifications-panel"
+		aria-labelledby="notifications-title"
+	>
+		<header class="notifications-heading">
+			<div>
+				<p class="notifications-eyebrow">Four Tails</p>
+				<div class="notifications-title-row">
+					<h1 id="notifications-title">Notifications</h1>
+					<span class="notification-count">{{ unreadCount }}</span>
+				</div>
+			</div>
+			<button class="close-button" type="button" aria-label="Close notifications" (click)="close()">
+				<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m18 6-12 12M6 6l12 12"></path></svg>
+			</button>
+		</header>
+
+		<div class="notifications-controls">
+			<div class="notification-filters" role="group" aria-label="Filter notifications">
+				<button type="button" [class.filter-active]="activeFilter === 'all'" (click)="activeFilter = 'all'">
+					All
+				</button>
+				<button type="button" [class.filter-active]="activeFilter === 'unread'" (click)="activeFilter = 'unread'">
+					Unread
+				</button>
+			</div>
+			<button class="mark-read-button" type="button" [disabled]="unreadCount === 0" (click)="markAllAsRead()">
+				Mark all as read
+			</button>
+		</div>
+
+		<label class="notification-search">
+			<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m16 16 4 4"></path></svg>
+			<input type="search" [(ngModel)]="searchTerm" placeholder="Search notifications..." aria-label="Search notifications" />
+		</label>
+
+		<nav class="notification-list" aria-label="Notifications">
+			@for (notification of filteredNotifications; track notification.id) {
+				<article class="notification-item" [class.notification-item--unread]="!notification.read">
+					<span class="notification-icon" [class]="'notification-icon notification-icon--' + notification.type" aria-hidden="true">
+						<svg viewBox="0 0 24 24">
+							@switch (notification.type) {
+								@case ('booking') {
+									<rect x="3.5" y="5" width="17" height="16" rx="2"></rect><path d="M7.5 3v4M16.5 3v4M3.5 10h17M8 14h3"></path>
+								}
+								@case ('message') {
+									<path d="M20 11.5a8 8 0 0 1-8 8 8.4 8.4 0 0 1-3.5-.8L4 20l1.3-3.8A8 8 0 1 1 20 11.5Z"></path><path d="M8 11h.01M12 11h.01M16 11h.01"></path>
+								}
+								@case ('review') {
+									<path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9L12 3Z"></path>
+								}
+								@default {
+									<path d="M12 3c-2.2 0-3.5 2.3-3.5 4.2 0 1.5.8 2.5 2 2.5 1 0 1.5-.8 1.5-1.7 0 .9.5 1.7 1.5 1.7 1.2 0 2-1 2-2.5C15.5 5.3 14.2 3 12 3Z"></path><path d="M7 11c-2.2 0-3.5 2-3.5 4.1C3.5 17 4.4 18 5.5 18c1 0 1.5-.7 1.5-1.5 0 1.4.5 3.8 2 3.8 1 0 1.5-1.1 1.5-2.2 0 1.1.5 2.2 1.5 2.2s2-2.4 2-3.8c0 .8.5 1.5 1.5 1.5 1.1 0 2-1 2-2.9C19.5 13 18.2 11 16 11c-1.3 0-2.3.8-2.8 2-.4-.9-1-1.5-1.2-1.5s-.8.6-1.2 1.5C9.3 11.8 8.3 11 7 11Z"></path>
+								}
+							}
+						</svg>
+					</span>
+					<div class="notification-copy">
+						<div class="notification-topline">
+							<h2>{{ notification.title }}</h2>
+							<time>{{ notification.time }}</time>
+						</div>
+						<p>{{ notification.description }}</p>
+						<span class="notification-category">{{ notification.category }}</span>
+					</div>
+					@if (!notification.read) {
+						<span class="unread-dot" aria-label="Unread"></span>
+					}
+				</article>
+			} @empty {
+				<p class="empty-notifications">{{ searchTerm ? 'No notifications match your search.' : 'You are all caught up.' }}</p>
+			}
+		</nav>
+	</section>
+</div>

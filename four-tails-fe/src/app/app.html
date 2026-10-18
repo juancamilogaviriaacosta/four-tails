@@ -27,7 +27,7 @@
       <span class="event-count" aria-label="1 evento">1</span>
     </button>
 
-    <button class="icon-action" type="button" aria-label="Notifications">
+    <button class="icon-action" type="button" aria-label="Notifications" (click)="goToNotifications()">
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
         <path d="M10 21h4"></path>
@@ -79,7 +79,7 @@
     <a href="#work" (click)="closeMobileMenu()">Work with Us</a>
     @if (auth.isLoggedIn()) {
       <button class="mobile-messages" type="button" (click)="goToMessages()">Messages <span class="mobile-event-count" aria-label="2 eventos">2</span></button>
-      <button class="mobile-notifications" type="button">Notifications <span class="mobile-event-count" aria-label="1 evento">1</span></button>
+      <button class="mobile-notifications" type="button" (click)="goToNotifications()">Notifications <span class="mobile-event-count" aria-label="1 evento">1</span></button>
       <button class="mobile-messages" type="button">Edit Profile</button>
       <button class="mobile-messages" type="button" (click)="logout()">Logout</button>
     } @else {
