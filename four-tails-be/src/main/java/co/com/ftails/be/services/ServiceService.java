@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import co.com.ftails.be.entities.*;
+import co.com.ftails.be.repositories.*;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,16 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import co.com.ftails.be.dtos.ProviderDto;
 import co.com.ftails.be.dtos.ServiceDto;
-import co.com.ftails.be.entities.IdentityProvider;
-import co.com.ftails.be.entities.Provider;
-import co.com.ftails.be.entities.Role;
-import co.com.ftails.be.entities.RoleType;
-import co.com.ftails.be.entities.Service;
-import co.com.ftails.be.entities.User;
-import co.com.ftails.be.repositories.ProviderRepository;
-import co.com.ftails.be.repositories.RoleRepository;
-import co.com.ftails.be.repositories.ServiceRepository;
-import co.com.ftails.be.repositories.UserRepository;
 
 @org.springframework.stereotype.Service
 @AllArgsConstructor
@@ -32,25 +24,50 @@ public class ServiceService {
 	private final UserRepository ur;
 	private final ProviderRepository pr;
 	private final RoleRepository rr;
-		
+	private final KindOfPetRepository kr;
+
 	@Transactional
-	public ResponseEntity<Map<String, String>> initDatabase() {
+	public Map<String, String> initDatabase() {
 		Instant now = Instant.now();
-		
+
 		Service service1 = new Service();
 		service1.setCreatedAt(now);
 		service1.setUpdatedAt(now);
-		service1.setName("Dog walker");
-		service1.setPicture("https://img.magnific.com/fotos-premium/seccion-baja-paseador-perros-caminando-grupo-perros-su-correa-calle_629685-88059.jpg");
+		service1.setName("Hosting");
+		service1.setPicture("https://img.magnific.com/fotos-premium/monton-juguetes-perros-sala-estar-muchos-perros-jugando-corriendo-creados-ia-generativa_124507-171711.jpg");
 		sr.save(service1);
-		
+
 		Service service2 = new Service();
 		service2.setCreatedAt(now);
 		service2.setUpdatedAt(now);
-		service2.setName("Host");
-		service2.setPicture("https://img.magnific.com/fotos-premium/monton-juguetes-perros-sala-estar-muchos-perros-jugando-corriendo-creados-ia-generativa_124507-171711.jpg");
+		service2.setName("Sitting");
 		sr.save(service2);
-		
+
+		Service service3 = new Service();
+		service3.setCreatedAt(now);
+		service3.setUpdatedAt(now);
+		service3.setName("Daycare");
+		sr.save(service3);
+
+		Service service4 = new Service();
+		service4.setCreatedAt(now);
+		service4.setUpdatedAt(now);
+		service4.setName("House visits");
+		sr.save(service4);
+
+		Service service5 = new Service();
+		service5.setCreatedAt(now);
+		service5.setUpdatedAt(now);
+		service5.setName("Walking");
+		service5.setPicture("https://img.magnific.com/fotos-premium/seccion-baja-paseador-perros-caminando-grupo-perros-su-correa-calle_629685-88059.jpg");
+		sr.save(service5);
+
+		Service service6 = new Service();
+		service6.setCreatedAt(now);
+		service6.setUpdatedAt(now);
+		service6.setName("Grooming");
+		sr.save(service6);
+
 		Role roleAdmin = new Role();
 		roleAdmin.setCreatedAt(now);
 		roleAdmin.setUpdatedAt(now);
@@ -158,11 +175,28 @@ public class ServiceService {
 		provider3.setUser(user3);
 		provider3.setServices(Arrays.asList(service2));
 		pr.save(provider3);
-		
-		return ResponseEntity.ok(Map.of("message","ok"));
+
+		KindOfPet kp1 =  new KindOfPet();
+		kp1.setCreatedAt(now);
+		kp1.setUpdatedAt(now);
+		kp1.setName("Dog");
+		kr.save(kp1);
+
+		KindOfPet kp2 =  new KindOfPet();
+		kp2.setCreatedAt(now);
+		kp2.setUpdatedAt(now);
+		kp2.setName("Cat");
+		kr.save(kp2);
+
+		KindOfPet kp3 =  new KindOfPet();
+		kp3.setCreatedAt(now);
+		kp3.setUpdatedAt(now);
+		kp3.setName("Bird");
+		kr.save(kp3);
+		return Map.of("message","ok");
 	}
 
-	public ResponseEntity<List<ServiceDto>> getServices() {
+	public List<ServiceDto> getServices() {
 		List<Service> services = sr.findAll();
 	    List<ServiceDto> response = new ArrayList<>();
 	    for (Service service : services) {
@@ -181,6 +215,6 @@ public class ServiceService {
 	        sDto.setProviders(providers);
 	        response.add(sDto);
 	    }
-	    return ResponseEntity.ok(response);
+	    return response;
 	}
 }

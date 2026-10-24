@@ -12,10 +12,12 @@ import { MyBookings } from './my-bookings/my-bookings';
 import { PetMarket } from './pet-market/pet-market';
 import { MyOrders } from './my-orders/my-orders';
 import { Notifications } from './notifications/notifications';
+import { authGuard } from './utils/auth-guard';
+import { findSitterResolver } from './find-sitter/find-sitter-resolver';
 
 export const routes: Routes = [
     { path: '', component: MainServices  },
-    { path: 'find-sitter', component: FindSitter },
+    { path: 'find-sitter', component: FindSitter, canActivate: [authGuard], resolve: { preload: findSitterResolver } },
     { path: 'search-sitters', component: SearchSitters },
     { path: 'sitter-details', component: SitterDetails },
     { path: 'messages', component: Messages },

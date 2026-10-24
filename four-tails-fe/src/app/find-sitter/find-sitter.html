@@ -27,12 +27,9 @@
 				<label for="service">Which service are you looking for?</label>
 				<select id="service" name="service">
 					<option value="" selected disabled>Select a service</option>
-					<option value="hosting">Hosting</option>
-                    <option value="sitting">Sitting</option>
-                    <option value="daycare">Daycare</option>
-                    <option value="house-visit">House visits</option>
-					<option value="walking">Walking</option>
-					<option value="grooming">Grooming</option>
+					@for(tmp of services; track tmp.id) {
+						<option value="tmp.id">{{ tmp.name }}</option>
+					}
 				</select>
 			</div>
 

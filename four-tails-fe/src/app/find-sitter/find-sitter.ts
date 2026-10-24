@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingService } from '../utils/loading-service';
 import { Utils } from '../utils/utils';
 
@@ -15,6 +15,8 @@ export class FindSitter {
   endDate = '';
   address = '';
   petModalOpen = false;
+  kindOfPets;
+  services;
 
   readonly pets = [
     { name: 'Dog', quantity: 0 },
@@ -22,7 +24,10 @@ export class FindSitter {
     { name: 'Bird', quantity: 0 },
   ];
 
-  constructor(private router: Router, public loadingService: LoadingService) {
+  constructor(private router: Router, public loadingService: LoadingService, private ar: ActivatedRoute) {
+    this.kindOfPets = this.ar.snapshot.data['preload'].kindOfPets;
+    this.services = this.ar.snapshot.data['preload'].services;
+
     const today = new Date();
     this.startDate = Utils.toDateInputValue(today);
 
