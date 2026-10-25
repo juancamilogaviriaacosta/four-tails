@@ -14,15 +14,10 @@ export class FindSitter {
   startDate = '';
   endDate = '';
   address = '';
+  service = '';
   petModalOpen = false;
-  kindOfPets;
-  services;
-
-  readonly pets = [
-    { name: 'Dog', quantity: 0 },
-    { name: 'Cat', quantity: 0 },
-    { name: 'Bird', quantity: 0 },
-  ];
+  kindOfPets:any = [];
+  services:any = [];
 
   constructor(private router: Router, public loadingService: LoadingService, private ar: ActivatedRoute) {
     this.kindOfPets = this.ar.snapshot.data['preload'].kindOfPets;
@@ -39,8 +34,8 @@ export class FindSitter {
   }
 
   get selectedPetSummary(): string {
-    const selectedPets = this.pets.filter((pet) => pet.quantity > 0);
-    return selectedPets.map((pet) => `${pet.name}: ${pet.quantity}`).join(', ');
+    const selectedPets = this.kindOfPets.filter((pet:any) => pet.quantity > 0);
+    return selectedPets.map((pet:any) => `${pet.name}: ${pet.quantity}`).join(', ');
   }
 
   openPetModal(): void {
@@ -52,7 +47,7 @@ export class FindSitter {
   }
 
   changePetQuantity(petName: string, change: number): void {
-    const pet = this.pets.find((item) => item.name === petName);
+    const pet:any = this.kindOfPets.find((item:any) => item.name === petName);
     if (pet) {
       pet.quantity = Math.max(0, pet.quantity + change);
     }
@@ -61,8 +56,17 @@ export class FindSitter {
   onSubmit(): void {
     this.loadingService.show();
     setTimeout(() => {
+      const pets = this.kindOfPets.filter((pet: any) => pet.quantity > 0).map((pet: any) => ({ id: pet.id, quantity: pet.quantity }));
+      this.router.navigate(['/search-sitters'], {
+        queryParams: {
+          pets: JSON.stringify(pets),
+          address: this.address,
+          service: this.service,
+          startDate: this.startDate,
+          endDate: this.endDate,
+        },
+      });
       this.loadingService.hide();
-      this.router.navigate(['/search-sitters'], { queryParams: { pets: this.selectedPetSummary } });
     }, 1000);
   }
 }

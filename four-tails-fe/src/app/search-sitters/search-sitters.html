@@ -51,16 +51,16 @@
 					<div class="search-modal-field search-modal-wide">
 						<label for="edit-pets">Kind of pet and quantity</label>
 						<input id="edit-pets" name="pets" type="text" placeholder="Dog: 2, Cat: 1"
-							[(ngModel)]="search.pets" />
+							 />
 					</div>
 					<div class="search-modal-field search-modal-wide">
 						<label for="edit-address">Your address</label>
 						<input id="edit-address" name="address" type="text" placeholder="City, neighborhood, or ZIP code"
-							[(ngModel)]="search.address" />
+							 />
 					</div>
 					<div class="search-modal-field search-modal-wide">
 						<label for="edit-service">Service</label>
-						<select id="edit-service" name="service" [(ngModel)]="search.service">
+						<select id="edit-service" name="service" >
 							<option value="">Any service</option>
 							<option value="hosting">Hosting</option>
 							<option value="sitting">Sitting</option>
@@ -72,11 +72,11 @@
 					</div>
 					<div class="search-modal-field">
 						<label for="edit-start-date">Start date</label>
-						<input id="edit-start-date" name="startDate" type="date" [(ngModel)]="search.startDate" />
+						<input id="edit-start-date" name="startDate" type="date"  />
 					</div>
 					<div class="search-modal-field">
 						<label for="edit-end-date">End date</label>
-						<input id="edit-end-date" name="endDate" type="date" [(ngModel)]="search.endDate" />
+						<input id="edit-end-date" name="endDate" type="date" />
 					</div>
 					<div class="search-modal-actions search-modal-wide">
 						<button class="search-modal-cancel" type="button" (click)="closeSearchModal()">Cancel</button>

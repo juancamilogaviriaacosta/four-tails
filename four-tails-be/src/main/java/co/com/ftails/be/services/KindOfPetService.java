@@ -22,6 +22,7 @@ public class KindOfPetService {
             KindOfPetDto dto = new KindOfPetDto();
             dto.setId(tmp.getId());
             dto.setName(tmp.getName());
+            dto.setQuantity(0);
             response.add(dto);
         }
         return response;

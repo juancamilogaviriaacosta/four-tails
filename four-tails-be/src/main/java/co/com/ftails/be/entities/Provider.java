@@ -1,6 +1,7 @@
 package co.com.ftails.be.entities;
 
 import java.time.Instant;
+import java.math.BigDecimal;
 import java.util.List;
 
 import jakarta.persistence.*;
@@ -12,7 +13,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "providers")
 public class Provider {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column
@@ -20,13 +21,13 @@ public class Provider {
 
 	@Version
 	private Long version;
-	
+
 	@Column(nullable = false)
-    private Instant createdAt;
-	
+	private Instant createdAt;
+
 	@Column(nullable = false)
-    private Instant updatedAt;
-	
+	private Instant updatedAt;
+
 	@Column
 	private String description;
 
@@ -35,15 +36,21 @@ public class Provider {
 
 	@Column
 	private Double rating;
-	
+
+	@Column
+	private Integer reviews;
+
+	@Column(precision = 10, scale = 2)
+	private BigDecimal fare;
+
 	@ManyToOne
 	private User user;
-	
+
 	@ManyToMany
-    @JoinTable(
-        name = "provider_services",
-        joinColumns = @JoinColumn(name = "provider_id"),
-        inverseJoinColumns = @JoinColumn(name = "service_id")
-    )
-    private List<Service> services;
+	@JoinTable(
+			name = "provider_services",
+			joinColumns = @JoinColumn(name = "provider_id"),
+			inverseJoinColumns = @JoinColumn(name = "service_id")
+	)
+	private List<Service> services;
 }

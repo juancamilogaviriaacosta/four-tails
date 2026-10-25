@@ -10,24 +10,10 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 })
 export class SearchSitters {
   searchModalOpen = false;
-  search = {
-    pets: '',
-    address: '',
-    service: '',
-    startDate: '',
-    endDate: '',
-  };
 
-  constructor(
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-  ) {
-    this.search.pets = this.route.snapshot.queryParamMap.get('pets') ?? '';
-    this.search.address = this.route.snapshot.queryParamMap.get('address') ?? '';
-    this.search.service = this.route.snapshot.queryParamMap.get('service') ?? '';
-    this.search.startDate = this.route.snapshot.queryParamMap.get('startDate') ?? '';
-    this.search.endDate = this.route.snapshot.queryParamMap.get('endDate') ?? '';
-  }
+  constructor(private readonly route: ActivatedRoute, private readonly router: Router, private ar: ActivatedRoute) {
+    this.sitters = this.ar.snapshot.data['preload'].sitters;
+  } 
 
   openSearchModal(): void {
     this.searchModalOpen = true;
@@ -40,7 +26,7 @@ export class SearchSitters {
   applySearch(): void {
     void this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: this.search,
+      //queryParams: this.search,
     });
     this.closeSearchModal();
   }
@@ -76,7 +62,7 @@ export class SearchSitters {
     {
       name: 'Martin Dawson',
       image: 'https://img.magnific.com/foto-gratis/retrato-joven-atractivo-caminando-calle-mochila-sobre-hombros-concepto-urbano_58466-11938.jpg',
-      description: 'Experienced with energetic pups, long walks, and relaxed evenings.',
+      description: 'Experienced with energetic pups, long walks, and relaxed eveparamsnings.',
       address: 'Astoria, Queens, NY',
       rating: '4.95',
       reviews: 31,

@@ -25,10 +25,10 @@
 
 			<div class="form-field">
 				<label for="service">Which service are you looking for?</label>
-				<select id="service" name="service">
+				<select id="service" name="service" [(ngModel)]="service">
 					<option value="" selected disabled>Select a service</option>
 					@for(tmp of services; track tmp.id) {
-						<option value="tmp.id">{{ tmp.name }}</option>
+						<option [value]="tmp.id">{{ tmp.name }}</option>
 					}
 				</select>
 			</div>
@@ -62,7 +62,7 @@
 				</header>
 
 				<div class="pet-counter-list">
-					@for (pet of pets; track pet.name) {
+					@for (pet of kindOfPets; track pet.name) {
 						<div class="pet-counter-row">
 							<span class="pet-counter-name">{{ pet.name }}</span>
 							<div class="pet-counter-controls">

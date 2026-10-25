@@ -4,11 +4,13 @@ import java.util.List;
 import java.util.Map;
 
 import co.com.ftails.be.dtos.KindOfPetDto;
+import co.com.ftails.be.dtos.ProviderDto;
 import co.com.ftails.be.services.KindOfPetService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import co.com.ftails.be.dtos.ServiceDto;
@@ -34,5 +36,15 @@ public class ServicesController {
     @GetMapping("/api/getKindOfPets")
     public ResponseEntity<List<KindOfPetDto>> getKindOfPets() {
         return ResponseEntity.ok(ks.getKindOfPets());
+    }
+
+    @GetMapping("/api/getProviders")
+    public ResponseEntity<List<ProviderDto>> getProviders(
+            @RequestParam(defaultValue = "") String pets,
+            @RequestParam(defaultValue = "") String address,
+            @RequestParam(defaultValue = "") String service,
+            @RequestParam(defaultValue = "") String startDate,
+            @RequestParam(defaultValue = "") String endDate) {
+        return ResponseEntity.ok(ss.getProviders(pets, address, service, startDate, endDate));
     }
 }

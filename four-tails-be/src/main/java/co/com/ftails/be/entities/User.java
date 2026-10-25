@@ -39,6 +39,12 @@ public class User {
 	@Column(nullable = false)
 	private String lastName;
 
+	@Column
+	private String address;
+
+	@Column
+	private String phone;
+
 	@Column(nullable = false)
 	private String identityProvider;
 

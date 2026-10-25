@@ -9,4 +9,5 @@ public class KindOfPetDto {
 
     private Long id;
     private String name;
+    private Integer quantity;
 }

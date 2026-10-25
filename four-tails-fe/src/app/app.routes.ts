@@ -14,11 +14,12 @@ import { MyOrders } from './my-orders/my-orders';
 import { Notifications } from './notifications/notifications';
 import { authGuard } from './utils/auth-guard';
 import { findSitterResolver } from './find-sitter/find-sitter-resolver';
+import { searchSittersResolver } from './search-sitters/search-sitters-resolver';
 
 export const routes: Routes = [
     { path: '', component: MainServices  },
     { path: 'find-sitter', component: FindSitter, canActivate: [authGuard], resolve: { preload: findSitterResolver } },
-    { path: 'search-sitters', component: SearchSitters },
+    { path: 'search-sitters', component: SearchSitters, canActivate: [authGuard], resolve: { preload: searchSittersResolver }},
     { path: 'sitter-details', component: SitterDetails },
     { path: 'messages', component: Messages },
     { path: 'notifications', component: Notifications },
