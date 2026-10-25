@@ -6,10 +6,12 @@ import java.util.Map;
 import co.com.ftails.be.dtos.KindOfPetDto;
 import co.com.ftails.be.dtos.ProviderDto;
 import co.com.ftails.be.services.KindOfPetService;
+import jakarta.websocket.server.PathParam;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -46,5 +48,10 @@ public class ServicesController {
             @RequestParam(defaultValue = "") String startDate,
             @RequestParam(defaultValue = "") String endDate) {
         return ResponseEntity.ok(ss.getProviders(pets, address, service, startDate, endDate));
+    }
+
+    @GetMapping("/api/getProvider/{id}")
+    public ResponseEntity<ProviderDto> getProvider(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(ss.getProvider(id));
     }
 }

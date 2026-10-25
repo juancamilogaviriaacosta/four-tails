@@ -358,4 +358,9 @@ public class ServiceService {
         }
         return response;
     }
+
+    public ProviderDto getProvider(Long id) {
+        ProviderDto dto = new ProviderDto();
+        return dto;
+    }
 }

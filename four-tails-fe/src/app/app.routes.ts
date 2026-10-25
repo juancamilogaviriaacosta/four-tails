@@ -15,12 +15,13 @@ import { Notifications } from './notifications/notifications';
 import { authGuard } from './utils/auth-guard';
 import { findSitterResolver } from './find-sitter/find-sitter-resolver';
 import { searchSittersResolver } from './search-sitters/search-sitters-resolver';
+import { sitterDetailResolver } from './sitter-details/sitter-detail-resolver';
 
 export const routes: Routes = [
     { path: '', component: MainServices  },
     { path: 'find-sitter', component: FindSitter, canActivate: [authGuard], resolve: { preload: findSitterResolver } },
-    { path: 'search-sitters', component: SearchSitters, canActivate: [authGuard], resolve: { preload: searchSittersResolver }},
-    { path: 'sitter-details', component: SitterDetails },
+    { path: 'search-sitters', component: SearchSitters, canActivate: [authGuard], resolve: { preload: searchSittersResolver } },
+    { path: 'sitter-details/:id', component: SitterDetails, canActivate: [authGuard], resolve: { preload: sitterDetailResolver } },
     { path: 'messages', component: Messages },
     { path: 'notifications', component: Notifications },
     { path: 'edit-profile', component: EditProfile },
