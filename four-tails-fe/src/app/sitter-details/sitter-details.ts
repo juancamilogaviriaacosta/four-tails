@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Utils } from '../utils/utils';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-sitter-details',
@@ -13,8 +14,10 @@ export class SitterDetails {
   endDate = '';
   bookingConfirmationOpen = false;
   bookingRequested = false;
+  sitter: any;
 
-  constructor() {
+  constructor(private ar: ActivatedRoute) {
+    this.sitter = this.ar.snapshot.data['preload'].sitter;
     const today = new Date();
     this.startDate = Utils.toDateInputValue(today);
 
@@ -23,7 +26,7 @@ export class SitterDetails {
     this.endDate = Utils.toDateInputValue(checkout);
   }
 
-  readonly sitter = {
+  /*readonly sitter = {
     name: 'Maya Watson',
     rating: '4.98',
     reviews: 42,
@@ -51,6 +54,7 @@ export class SitterDetails {
       alt: 'A dog relaxing in a sunny room',
     },
   ];
+  */
 
   requestBooking(): void {
     this.bookingConfirmationOpen = true;

@@ -1,11 +1,9 @@
 package co.com.ftails.be.services;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import co.com.ftails.be.entities.*;
 import co.com.ftails.be.repositories.*;
@@ -99,8 +97,10 @@ public class ServiceService {
         user0.setIdentityProvider(IdentityProvider.LOCAL.name());
         user0.setIdentityProviderId(null);
         user0.setEnabled(true);
-        user0.setImageUrl("https://img.magnific.com/foto-gratis/joven-bella-mujer-caminando-su-perro-parque_1301-3557.jpg");
         user0.setRoles(Arrays.asList(roleAdmin));
+        user0.setPhotos(createPhotos(user0,
+            "https://img.magnific.com/foto-gratis/joven-bella-mujer-caminando-su-perro-parque_1301-3557.jpg"
+        ));
         ur.save(user0);
 
         User user1 = new User();
@@ -115,8 +115,15 @@ public class ServiceService {
         user1.setIdentityProvider(IdentityProvider.LOCAL.name());
         user1.setIdentityProviderId(null);
         user1.setEnabled(true);
-        user1.setImageUrl("https://img.magnific.com/foto-gratis/vista-frontal-hermosa-mujer-abrazando-su-gato-atigrado-parque_23-2148045835.jpg");
         user1.setRoles(Arrays.asList(roleProvider));
+        user1.setLastSeen(now);
+        user1.setPhotos(createPhotos(user1,
+            "https://img.magnific.com/foto-gratis/vista-frontal-hermosa-mujer-abrazando-su-gato-atigrado-parque_23-2148045835.jpg",
+            "https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=1400&q=85",
+            "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=700&q=85",
+            "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=700&q=85",
+            "https://images.unsplash.com/photo-1545249390-6bdfa286032f?auto=format&fit=crop&w=700&q=85"
+        ));
         ur.save(user1);
 
         User user2 = new User();
@@ -131,8 +138,15 @@ public class ServiceService {
         user2.setIdentityProvider(IdentityProvider.LOCAL.name());
         user2.setIdentityProviderId(null);
         user2.setEnabled(true);
-        user2.setImageUrl("https://img.magnific.com/foto-gratis/joven-bella-mujer-caminando-su-perro-parque_1301-3557.jpg");
         user2.setRoles(Arrays.asList(roleProvider));
+        user2.setLastSeen(now);
+        user2.setPhotos(createPhotos(user2,
+                "https://img.magnific.com/foto-gratis/joven-bella-mujer-caminando-su-perro-parque_1301-3557.jpg",
+                "https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=1400&q=85",
+                "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=700&q=85",
+                "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=700&q=85",
+                "https://images.unsplash.com/photo-1545249390-6bdfa286032f?auto=format&fit=crop&w=700&q=85"
+        ));
         ur.save(user2);
 
         User user3 = new User();
@@ -147,8 +161,15 @@ public class ServiceService {
         user3.setIdentityProvider(IdentityProvider.LOCAL.name());
         user3.setIdentityProviderId(null);
         user3.setEnabled(true);
-        user3.setImageUrl("https://img.magnific.com/foto-gratis/paseo-matutino-perro_158595-4280.jpg");
         user3.setRoles(Arrays.asList(roleProvider));
+        user3.setLastSeen(now);
+        user3.setPhotos(createPhotos(user3,
+                "https://img.magnific.com/foto-gratis/paseo-matutino-perro_158595-4280.jpg",
+                "https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=1400&q=85",
+                "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=700&q=85",
+                "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=700&q=85",
+                "https://images.unsplash.com/photo-1545249390-6bdfa286032f?auto=format&fit=crop&w=700&q=85"
+        ));
         ur.save(user3);
 
         User user4 = new User();
@@ -163,8 +184,15 @@ public class ServiceService {
         user4.setIdentityProvider(IdentityProvider.LOCAL.name());
         user4.setIdentityProviderId(null);
         user4.setEnabled(true);
-        user4.setImageUrl("https://img.magnific.com/foto-gratis/vista-joven-mujer-caucasica-jugando-entrenando-su-perro-dalmata_158595-7698.jpg");
         user4.setRoles(Arrays.asList(roleProvider));
+        user4.setLastSeen(now);
+        user4.setPhotos(createPhotos(user4,
+                "https://img.magnific.com/foto-gratis/vista-joven-mujer-caucasica-jugando-entrenando-su-perro-dalmata_158595-7698.jpg",
+                "https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=1400&q=85",
+                "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=700&q=85",
+                "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=700&q=85",
+                "https://images.unsplash.com/photo-1545249390-6bdfa286032f?auto=format&fit=crop&w=700&q=85"
+        ));
         ur.save(user4);
 
         User user5 = new User();
@@ -179,8 +207,15 @@ public class ServiceService {
         user5.setIdentityProvider(IdentityProvider.LOCAL.name());
         user5.setIdentityProviderId(null);
         user5.setEnabled(true);
-        user5.setImageUrl("https://img.magnific.com/foto-gratis/retrato-joven-atractivo-caminando-calle-mochila-sobre-hombros-concepto-urbano_58466-11938.jpg");
         user5.setRoles(Arrays.asList(roleProvider));
+        user5.setLastSeen(now);
+        user5.setPhotos(createPhotos(user5,
+                "https://img.magnific.com/foto-gratis/retrato-joven-atractivo-caminando-calle-mochila-sobre-hombros-concepto-urbano_58466-11938.jpg",
+                "https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=1400&q=85",
+                "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=700&q=85",
+                "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=700&q=85",
+                "https://images.unsplash.com/photo-1545249390-6bdfa286032f?auto=format&fit=crop&w=700&q=85"
+        ));
         ur.save(user5);
 
         User user6 = new User();
@@ -195,8 +230,15 @@ public class ServiceService {
         user6.setIdentityProvider(IdentityProvider.LOCAL.name());
         user6.setIdentityProviderId(null);
         user6.setEnabled(true);
-        user6.setImageUrl("https://img.magnific.com/foto-gratis/mujer-asiatica-paseando-su-perro-husky-al-aire-libre_23-2150764844.jpg");
         user6.setRoles(Arrays.asList(roleProvider));
+        user6.setLastSeen(now);
+        user6.setPhotos(createPhotos(user6,
+                "https://img.magnific.com/foto-gratis/mujer-asiatica-paseando-su-perro-husky-al-aire-libre_23-2150764844.jpg",
+                "https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=1400&q=85",
+                "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=700&q=85",
+                "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=700&q=85",
+                "https://images.unsplash.com/photo-1545249390-6bdfa286032f?auto=format&fit=crop&w=700&q=85"
+        ));
         ur.save(user6);
 
         User user7 = new User();
@@ -211,8 +253,15 @@ public class ServiceService {
         user7.setIdentityProvider(IdentityProvider.LOCAL.name());
         user7.setIdentityProviderId(null);
         user7.setEnabled(true);
-        user7.setImageUrl("https://img.magnific.com/foto-gratis/persona-que-trabaja-casa-perro-mascota_23-2149104714.jpg");
         user7.setRoles(Arrays.asList(roleProvider));
+        user7.setLastSeen(now);
+        user7.setPhotos(createPhotos(user7,
+                "https://img.magnific.com/foto-gratis/persona-que-trabaja-casa-perro-mascota_23-2149104714.jpg",
+                "https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=1400&q=85",
+                "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=700&q=85",
+                "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=700&q=85",
+                "https://images.unsplash.com/photo-1545249390-6bdfa286032f?auto=format&fit=crop&w=700&q=85"
+        ));
         ur.save(user7);
 		
 		Provider provider1 = new Provider();
@@ -319,7 +368,22 @@ public class ServiceService {
 		return Map.of("message","ok");
 	}
 
-	public List<ServiceDto> getServices() {
+    private List<UserPhoto> createPhotos(User user, String ... urls) {
+        Instant now = Instant.now();
+        List<UserPhoto> photos = new ArrayList<>();
+        for (int i = 0; i < urls.length ; i++) {
+            UserPhoto photo = new UserPhoto();
+            photo.setCreatedAt(now);
+            photo.setUpdatedAt(now);
+            photo.setUrl(urls[i]);
+            photo.setPrimary(i==0);
+            photo.setUser(user);
+            photos.add(photo);
+        }
+        return photos;
+    }
+
+    public List<ServiceDto> getServices() {
 		List<Service> services = sr.findAll();
 	    List<ServiceDto> response = new ArrayList<>();
 	    for (Service service : services) {
@@ -328,7 +392,6 @@ public class ServiceService {
 	            ProviderDto pDto = new ProviderDto();
 	            pDto.setId(provider.getId());
 	            pDto.setName(provider.getUser().getFirstName());
-	            pDto.setImage(provider.getUser().getImageUrl());
 	            providers.add(pDto);
 	        }
 	        ServiceDto sDto = new ServiceDto();
@@ -348,19 +411,30 @@ public class ServiceService {
             ProviderDto dto = new ProviderDto();
             dto.setId(provider.getId());
             dto.setName(provider.getUser().getFirstName() + " " + provider.getUser().getLastName());
-            dto.setImage(provider.getUser().getImageUrl());
             dto.setDescription(provider.getDescription());
             dto.setAddress(provider.getUser().getAddress());
             dto.setRating(provider.getRating() == null ? null : String.valueOf(provider.getRating()));
             dto.setReviews(provider.getReviews());
             dto.setFare(provider.getFare());
+            dto.setLastSeen(provider.getUser().getLastSeen());
+            dto.setPhotos(provider.getUser().getPhotos().stream().map(UserPhoto::getUrl).toList());
             response.add(dto);
         }
         return response;
     }
 
     public ProviderDto getProvider(Long id) {
+        Provider provider = pr.findById(id).get();
         ProviderDto dto = new ProviderDto();
+        dto.setId(provider.getId());
+        dto.setName(provider.getUser().getFirstName() + " " + provider.getUser().getLastName());
+        dto.setDescription(provider.getDescription());
+        dto.setAddress(provider.getUser().getAddress());
+        dto.setRating(provider.getRating() == null ? null : String.valueOf(provider.getRating()));
+        dto.setReviews(provider.getReviews());
+        dto.setFare(provider.getFare());
+        dto.setLastSeen(provider.getUser().getLastSeen());
+        dto.setPhotos(provider.getUser().getPhotos().stream().map(UserPhoto::getUrl).toList());
         return dto;
     }
 }

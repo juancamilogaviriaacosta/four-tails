@@ -51,14 +51,17 @@ public class User {
 	@Column
     private String identityProviderId;
 
-	@Column
-    private String imageUrl;
-
 	@Column(nullable = false)
     private Boolean enabled;
 
 	@Column(nullable = false)
     private Boolean emailVerified;
+
+	@Column
+	private Instant lastSeen;
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<UserPhoto> photos;
     
     @ManyToMany
     @JoinTable(
