@@ -71,6 +71,20 @@ export class AuthService {
     }
   }
 
+  getUserEmail() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      return '';
+    }
+    try {
+      const payload = JSON.parse(token);
+      return payload.email;
+    } catch (error) {
+      console.error('Error parsing token:', error);
+      return '';
+    }
+  }
+
   logout() {    
     localStorage.clear();
     this.router.navigate(['/']);

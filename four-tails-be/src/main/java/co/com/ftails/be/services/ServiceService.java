@@ -473,7 +473,7 @@ public class ServiceService {
         Booking booking = new Booking();
         booking.setCreatedAt(now);
         booking.setUpdatedAt(now);
-        booking.setClient(cr.getReferenceById(bookingRequestDto.getClientId()));
+        booking.setClient(cr.finByUserEmail(bookingRequestDto.getClientEmail()));
         booking.setProvider(pr.getReferenceById(bookingRequestDto.getProviderId()));
         booking.setService(sr.getReferenceById(bookingRequestDto.getServiceId()));
         booking.setStartDate(bookingRequestDto.getStartDate());

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Utils } from '../utils/utils';
 import { ActivatedRoute } from '@angular/router';
 import { TimeAgoPipe } from '../utils/time-ago.pipe';
+import { AuthService } from '../utils/auth-service';
 
 @Component({
   selector: 'app-sitter-details',
@@ -18,15 +19,23 @@ export class SitterDetails {
   bookingRequested = false;
   bookingError = '';
   sitter: any;
+  pets = '';
+  address = '';
+  service = '';
 
-  constructor(private ar: ActivatedRoute, private http: HttpClient, private cd: ChangeDetectorRef) {
+  constructor(private ar: ActivatedRoute, private http: HttpClient, private cd: ChangeDetectorRef, private auth: AuthService) {
     this.sitter = this.ar.snapshot.data['preload'].sitter;
+    const queryParams = this.ar.snapshot.queryParamMap;
+    this.pets = queryParams.get('pets') ?? '';
+    this.address = queryParams.get('address') ?? '';
+    this.service = queryParams.get('service') ?? '';
+
     const today = new Date();
-    this.startDate = Utils.toDateInputValue(today);
+    this.startDate = queryParams.get('startDate') ?? Utils.toDateInputValue(today);
 
     const checkout = new Date(today);
     checkout.setDate(checkout.getDate() + 4);
-    this.endDate = Utils.toDateInputValue(checkout);
+    this.endDate = queryParams.get('endDate') ?? Utils.toDateInputValue(checkout);
   }
 
   requestBooking(): void {
@@ -39,11 +48,11 @@ export class SitterDetails {
   }
 
   confirmBooking(): void {
-    this.bookingError = '';
+
     this.http.post('/api/confirmBooking', {
-      clientId: 1,
+      clientEmail : this.auth.getUserEmail(),
       providerId: this.sitter.id,
-      serviceId: 1,
+      serviceId: this.service,
       startDate: `${this.startDate}T00:00:00Z`,
       endDate: `${this.endDate}T00:00:00Z`,
       fare: 150,

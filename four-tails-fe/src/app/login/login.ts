@@ -17,7 +17,7 @@ export class Login {
   @Output() closed = new EventEmitter<void>();
   
   model: any = {
-    username: '',
+    email: '',
     password: '',
     role: ''
   };
@@ -29,11 +29,11 @@ export class Login {
     this.loadingService.show();
     setTimeout(() => {
       //this.auth.login(this.model);
-      if (this.model.username === 'sitter') {
+      if (this.model.email === 'jenny.anderson@example.com') {
         this.model.role = 'sitter';
-      } else if (this.model.username === 'owner') {
+      } else if (this.model.email === 'abraham.simpson@example.com') {
         this.model.role = 'owner';
-      } else if(this.model.username === 'admin'){
+      } else if(this.model.email === 'admin.fourtails@example.com'){
         this.model.role = 'admin';
       }
       localStorage.setItem('token', JSON.stringify(this.model));

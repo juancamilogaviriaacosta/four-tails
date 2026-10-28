@@ -13,7 +13,17 @@
 
 		<div class="sitter-list" aria-label="Pet sitter results">
 			@for (sitter of sitters; track sitter.name) {
-				<a class="sitter-card" [routerLink]="['/sitter-details/' + sitter.id]">
+				<a
+					class="sitter-card"
+					[routerLink]="['/sitter-details/' + sitter.id]"
+					[queryParams]="{
+						pets: pets,
+						address: address,
+						service: service,
+						startDate: startDate,
+						endDate: endDate
+					}"
+				>
 					<img class="sitter-photo" [src]="sitter.photos[0]"/>
 					<div class="sitter-details">
 						<div class="sitter-name-row">

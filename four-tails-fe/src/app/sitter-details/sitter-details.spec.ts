@@ -11,6 +11,8 @@ describe('SitterDetails', () => {
   let httpTestingController: HttpTestingController;
 
   beforeEach(async () => {
+    localStorage.setItem('token', JSON.stringify({ id: 1 }));
+
     await TestBed.configureTestingModule({
       imports: [SitterDetails],
       providers: [
@@ -29,6 +31,9 @@ describe('SitterDetails', () => {
                   },
                 },
               },
+              queryParamMap: {
+                get: () => null,
+              },
             },
           },
         },
@@ -43,6 +48,7 @@ describe('SitterDetails', () => {
 
   afterEach(() => {
     httpTestingController.verify();
+    localStorage.removeItem('token');
   });
 
   it('should create', () => {
@@ -65,9 +71,9 @@ describe('SitterDetails', () => {
     const request = httpTestingController.expectOne('/api/confirmBooking');
     expect(request.request.method).toBe('POST');
     expect(request.request.body).toEqual({
-      clientId: 4,
+      clientId: 1,
       providerId: 17,
-      serviceId: 5,
+      serviceId: '',
       startDate: `${component.startDate}T00:00:00Z`,
       endDate: `${component.endDate}T00:00:00Z`,
       fare: 150,
