@@ -5,15 +5,12 @@ import java.util.Map;
 
 import co.com.ftails.be.dtos.KindOfPetDto;
 import co.com.ftails.be.dtos.ProviderDto;
+import co.com.ftails.be.dtos.BookingRequestDto;
 import co.com.ftails.be.services.KindOfPetService;
-import jakarta.websocket.server.PathParam;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import co.com.ftails.be.dtos.ServiceDto;
 import co.com.ftails.be.services.ServiceService;
@@ -53,5 +50,10 @@ public class ServicesController {
     @GetMapping("/api/getProvider/{id}")
     public ResponseEntity<ProviderDto> getProvider(@PathVariable("id") Long id) {
         return ResponseEntity.ok(ss.getProvider(id));
+    }
+
+    @PostMapping("/api/confirmBooking")
+    public ResponseEntity<Map<String, String>> confirmBooking(@RequestBody BookingRequestDto bookingRequestDto) {
+        return ResponseEntity.ok(ss.confirmBooking(bookingRequestDto));
     }
 }

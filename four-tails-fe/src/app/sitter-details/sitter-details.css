@@ -507,6 +507,16 @@
 	line-height: 1.5;
 }
 
+.booking-modal .booking-error {
+	margin-top: 13px;
+	padding: 10px;
+	border-radius: 4px;
+	background: #fde8e7;
+	color: #a4262c;
+	font-size: 11px;
+	line-height: 1.5;
+}
+
 .booking-divider {
 	height: 1px;
 	margin: 19px 0;

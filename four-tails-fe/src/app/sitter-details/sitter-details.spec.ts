@@ -1,19 +1,48 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
 
 import { SitterDetails } from './sitter-details';
 
 describe('SitterDetails', () => {
   let component: SitterDetails;
   let fixture: ComponentFixture<SitterDetails>;
+  let httpTestingController: HttpTestingController;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [SitterDetails],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              data: {
+                preload: {
+                  sitter: {
+                    id: 17,
+                    name: 'Maya Watson',
+                    photos: [],
+                  },
+                },
+              },
+            },
+          },
+        },
+      ],
     }).compileComponents();
 
+    httpTestingController = TestBed.inject(HttpTestingController);
     fixture = TestBed.createComponent(SitterDetails);
     component = fixture.componentInstance;
     await fixture.whenStable();
+  });
+
+  afterEach(() => {
+    httpTestingController.verify();
   });
 
   it('should create', () => {
@@ -29,9 +58,24 @@ describe('SitterDetails', () => {
     expect(component.bookingRequested).toBe(false);
   });
 
-  it('requests a booking only after confirmation', () => {
+  it('sends the booking details and confirms only after the API succeeds', () => {
     component.requestBooking();
     component.confirmBooking();
+
+    const request = httpTestingController.expectOne('/api/confirmBooking');
+    expect(request.request.method).toBe('POST');
+    expect(request.request.body).toEqual({
+      clientId: 4,
+      providerId: 17,
+      serviceId: 5,
+      startDate: `${component.startDate}T00:00:00Z`,
+      endDate: `${component.endDate}T00:00:00Z`,
+      fare: 150,
+      notes: '',
+    });
+    expect(component.bookingRequested).toBe(false);
+
+    request.flush({});
 
     expect(component.bookingConfirmationOpen).toBe(false);
     expect(component.bookingRequested).toBe(true);

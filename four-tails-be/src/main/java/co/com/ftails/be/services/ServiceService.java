@@ -5,9 +5,11 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
 
+import co.com.ftails.be.dtos.BookingRequestDto;
 import co.com.ftails.be.entities.*;
 import co.com.ftails.be.repositories.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,11 +23,13 @@ public class ServiceService {
 
 	private final ServiceRepository sr;
 	private final UserRepository ur;
+    private final ClientRepository cr;
 	private final ProviderRepository pr;
 	private final RoleRepository rr;
 	private final KindOfPetRepository kr;
+    private final BookingRepository br;
 
-	@Transactional
+    @Transactional
 	public Map<String, String> initDatabase() {
 		Instant now = Instant.now();
 
@@ -348,6 +352,31 @@ public class ServiceService {
         provider7.setServices(Arrays.asList(service2));
         pr.save(provider7);
 
+        User user8 = new User();
+        user8.setCreatedAt(now);
+        user8.setUpdatedAt(now);
+        user8.setFirstName("Abraham");
+        user8.setLastName("Simpson");
+        user8.setAddress("Evergreen AV 742");
+        user8.setEmailVerified(true);
+        user8.setEmail("abraham.simpson@example.com");
+        user8.setPassword("123456");
+        user8.setIdentityProvider(IdentityProvider.LOCAL.name());
+        user8.setIdentityProviderId(null);
+        user8.setEnabled(true);
+        user8.setRoles(Arrays.asList(roleClient));
+        user8.setLastSeen(now);
+        user8.setPhotos(createPhotos(user8,
+                "https://images.unsplash.com/photo-1545249390-6bdfa286032f?auto=format&fit=crop&w=700&q=85"
+        ));
+        ur.save(user8);
+
+        Client client1 = new Client();
+        client1.setCreatedAt(now);
+        client1.setUpdatedAt(now);
+        client1.setUser(user8);
+        cr.save(client1);
+
 		KindOfPet kp1 =  new KindOfPet();
 		kp1.setCreatedAt(now);
 		kp1.setUpdatedAt(now);
@@ -436,5 +465,23 @@ public class ServiceService {
         dto.setLastSeen(provider.getUser().getLastSeen());
         dto.setPhotos(provider.getUser().getPhotos().stream().map(UserPhoto::getUrl).toList());
         return dto;
+    }
+
+    public Map<String, String> confirmBooking(BookingRequestDto bookingRequestDto) {
+        Instant now = Instant.now();
+
+        Booking booking = new Booking();
+        booking.setCreatedAt(now);
+        booking.setUpdatedAt(now);
+        booking.setClient(cr.getReferenceById(bookingRequestDto.getClientId()));
+        booking.setProvider(pr.getReferenceById(bookingRequestDto.getProviderId()));
+        booking.setService(sr.getReferenceById(bookingRequestDto.getServiceId()));
+        booking.setStartDate(bookingRequestDto.getStartDate());
+        booking.setEndDate(bookingRequestDto.getEndDate());
+        booking.setFare(bookingRequestDto.getFare());
+        booking.setNotes(bookingRequestDto.getNotes());
+        booking.setStatus(BookingStatus.PENDING);
+        br.save(booking);
+        return Map.of("message","ok");
     }
 }

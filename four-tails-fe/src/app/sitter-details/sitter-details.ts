@@ -1,11 +1,13 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { Utils } from '../utils/utils';
 import { ActivatedRoute } from '@angular/router';
+import { TimeAgoPipe } from '../utils/time-ago.pipe';
 
 @Component({
   selector: 'app-sitter-details',
-  imports: [FormsModule],
+  imports: [FormsModule, TimeAgoPipe],
   templateUrl: './sitter-details.html',
   styleUrl: './sitter-details.css',
 })
@@ -14,9 +16,10 @@ export class SitterDetails {
   endDate = '';
   bookingConfirmationOpen = false;
   bookingRequested = false;
+  bookingError = '';
   sitter: any;
 
-  constructor(private ar: ActivatedRoute) {
+  constructor(private ar: ActivatedRoute, private http: HttpClient, private cd: ChangeDetectorRef) {
     this.sitter = this.ar.snapshot.data['preload'].sitter;
     const today = new Date();
     this.startDate = Utils.toDateInputValue(today);
@@ -26,37 +29,8 @@ export class SitterDetails {
     this.endDate = Utils.toDateInputValue(checkout);
   }
 
-  /*readonly sitter = {
-    name: 'Maya Watson',
-    rating: '4.98',
-    reviews: 42,
-    address: 'Williamsburg, Brooklyn, New York',
-    lastSeen: 'Active 12 minutes ago',
-    rate: 48,
-    image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=900&q=85',
-  };
-
-  readonly photos = [
-    {
-      url: 'https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=1400&q=85',
-      alt: 'A golden retriever enjoying a walk outdoors',
-    },
-    {
-      url: 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=700&q=85',
-      alt: 'A happy dog resting at home',
-    },
-    {
-      url: 'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=700&q=85',
-      alt: 'Two dogs playing together',
-    },
-    {
-      url: 'https://images.unsplash.com/photo-1545249390-6bdfa286032f?auto=format&fit=crop&w=700&q=85',
-      alt: 'A dog relaxing in a sunny room',
-    },
-  ];
-  */
-
   requestBooking(): void {
+    this.bookingError = '';
     this.bookingConfirmationOpen = true;
   }
 
@@ -65,7 +39,26 @@ export class SitterDetails {
   }
 
   confirmBooking(): void {
-    this.bookingConfirmationOpen = false;
-    this.bookingRequested = true;
+    this.bookingError = '';
+    this.http.post('/api/confirmBooking', {
+      clientId: 1,
+      providerId: this.sitter.id,
+      serviceId: 1,
+      startDate: `${this.startDate}T00:00:00Z`,
+      endDate: `${this.endDate}T00:00:00Z`,
+      fare: 150,
+      notes: '',
+    }).subscribe({
+      next: () => {
+        this.bookingConfirmationOpen = false;
+        this.bookingRequested = true;
+        this.cd.detectChanges();
+      },
+      error: (error) => {
+        console.error('Error confirming booking:', error);
+        this.bookingError = 'Could not submit the booking request. Please try again.';
+        this.cd.detectChanges();
+      },
+    });
   }
 }
