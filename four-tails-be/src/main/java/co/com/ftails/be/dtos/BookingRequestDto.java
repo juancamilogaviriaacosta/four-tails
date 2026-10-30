@@ -9,7 +9,7 @@ import java.time.Instant;
 @Getter
 @Setter
 public class BookingRequestDto {
-    private String clientEmail;
+    private Long userId;
     private Long providerId;
     private Long serviceId;
     private Instant startDate;

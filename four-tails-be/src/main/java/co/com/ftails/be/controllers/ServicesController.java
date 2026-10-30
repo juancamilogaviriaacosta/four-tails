@@ -1,18 +1,17 @@
 package co.com.ftails.be.controllers;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
-import co.com.ftails.be.dtos.KindOfPetDto;
-import co.com.ftails.be.dtos.ProviderDto;
-import co.com.ftails.be.dtos.BookingRequestDto;
+import co.com.ftails.be.dtos.*;
 import co.com.ftails.be.services.KindOfPetService;
 import lombok.AllArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import co.com.ftails.be.dtos.ServiceDto;
 import co.com.ftails.be.services.ServiceService;
 
 @RestController
@@ -55,5 +54,13 @@ public class ServicesController {
     @PostMapping("/api/confirmBooking")
     public ResponseEntity<Map<String, String>> confirmBooking(@RequestBody BookingRequestDto bookingRequestDto) {
         return ResponseEntity.ok(ss.confirmBooking(bookingRequestDto));
+    }
+
+    @GetMapping("/api/getBookings/{userId}")
+    public ResponseEntity<List<BookingDto>> getBookings(
+            @PathVariable("userId") Long userId,
+            @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        return ResponseEntity.ok(ss.getBookings(userId, startDate, endDate));
     }
 }

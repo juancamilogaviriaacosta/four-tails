@@ -17,6 +17,7 @@ export class Login {
   @Output() closed = new EventEmitter<void>();
   
   model: any = {
+    id: 0,
     email: '',
     password: '',
     role: ''
@@ -30,10 +31,13 @@ export class Login {
     setTimeout(() => {
       //this.auth.login(this.model);
       if (this.model.email === 'jenny.anderson@example.com') {
+        this.model.id = 2;
         this.model.role = 'sitter';
       } else if (this.model.email === 'abraham.simpson@example.com') {
+        this.model.id = 9;
         this.model.role = 'owner';
       } else if(this.model.email === 'admin.fourtails@example.com'){
+        this.model.id = 1;
         this.model.role = 'admin';
       }
       localStorage.setItem('token', JSON.stringify(this.model));

@@ -3,8 +3,10 @@ package co.com.ftails.be.services;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.*;
 
+import co.com.ftails.be.dtos.BookingDto;
 import co.com.ftails.be.dtos.BookingRequestDto;
 import co.com.ftails.be.entities.*;
 import co.com.ftails.be.repositories.*;
@@ -473,7 +475,7 @@ public class ServiceService {
         Booking booking = new Booking();
         booking.setCreatedAt(now);
         booking.setUpdatedAt(now);
-        booking.setClient(cr.finByUserEmail(bookingRequestDto.getClientEmail()));
+        booking.setClient(cr.finByUserId(bookingRequestDto.getUserId()));
         booking.setProvider(pr.getReferenceById(bookingRequestDto.getProviderId()));
         booking.setService(sr.getReferenceById(bookingRequestDto.getServiceId()));
         booking.setStartDate(bookingRequestDto.getStartDate());
@@ -483,5 +485,21 @@ public class ServiceService {
         booking.setStatus(BookingStatus.PENDING);
         br.save(booking);
         return Map.of("message","ok");
+    }
+
+    public List<BookingDto> getBookings(Long userId, LocalDate startDate, LocalDate endDate) {
+        List<BookingDto> response = new ArrayList<>();
+        List<Booking> bookings = br.findAll();
+        for (Booking booking : bookings) {
+            BookingDto dto = new BookingDto();
+            dto.setColor("green");
+            dto.setDate(booking.getStartDate());
+            dto.setOwner(booking.getClient().getUser().getFirstName() + " " + booking.getClient().getUser().getLastName());
+            dto.setPet("Bruno");
+            dto.setService(booking.getService().getName());
+            dto.setTime("10:00");
+            response.add(dto);
+        }
+        return response;
     }
 }

@@ -16,6 +16,7 @@ import { authGuard } from './utils/auth-guard';
 import { findSitterResolver } from './find-sitter/find-sitter-resolver';
 import { searchSittersResolver } from './search-sitters/search-sitters-resolver';
 import { sitterDetailResolver } from './sitter-details/sitter-detail-resolver';
+import { myBookingsResolver } from './my-bookings/my-bookings-resolver';
 
 export const routes: Routes = [
     { path: '', component: MainServices  },
@@ -27,7 +28,7 @@ export const routes: Routes = [
     { path: 'edit-profile', component: EditProfile },
     { path: 'become-sitter', component: BecomeSitter },
     { path: 'sitter-dashboard', component: SitterDashboard },
-    { path: 'my-bookings', component: MyBookings },
+    { path: 'my-bookings', component: MyBookings, canActivate: [authGuard], resolve: { preload: myBookingsResolver } },
     { path: 'pet-market', component: PetMarket },
     { path: 'my-orders', component: MyOrders },
 ];

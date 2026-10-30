@@ -15,8 +15,8 @@
 			</div>
 			<p class="heading-copy">Keep track of the pets and people counting on you.</p>
 		</div>
-		<div class="booking-total" aria-label="4 upcoming bookings">
-			<span class="total-number">{{ bookings.length }}</span>
+		<div class="booking-total" [attr.aria-label]="bookingsThisWeek + ' bookings this week'">
+			<span class="total-number">{{ bookingsThisWeek }}</span>
 			<span>this week</span>
 		</div>
 	</section>
@@ -55,7 +55,7 @@
 						<button class="month-cell" type="button" [class.outside-month]="!isCurrentMonth(date)" [class.today-cell]="isToday(date)" (click)="selectDate(date)" [attr.aria-label]="'View bookings for ' + (date | date:'fullDate')">
 							<span class="date-number">{{ date | date:'d' }}</span>
 							<span class="cell-bookings">
-								@for (booking of bookingsForDate(date); track booking.pet) {
+								@for (booking of bookingsForDate(date); track $index) {
 									<span class="month-event" [class]="'month-event ' + booking.color">
 										<strong>{{ booking.time }}</strong> {{ booking.pet }}
 									</span>
@@ -77,7 +77,7 @@
 								<strong>{{ date | date:'d' }}</strong>
 							</button>
 							<div class="week-events">
-								@for (booking of bookingsForDate(date); track booking.pet) {
+								@for (booking of bookingsForDate(date); track $index) {
 									<article class="booking-event" [class]="'booking-event ' + booking.color">
 										<time>{{ booking.time }}</time>
 										<strong>{{ booking.pet }}</strong>
@@ -99,7 +99,7 @@
 					<span class="agenda-day-number">{{ currentDate | date:'d' }}</span>
 					<span>{{ currentDate | date:'EEEE' }}</span>
 				</div>
-				@for (booking of bookingsForDate(currentDate); track booking.pet) {
+				@for (booking of bookingsForDate(currentDate); track $index) {
 					<article class="agenda-booking">
 						<time>{{ booking.time }}</time>
 						<span class="agenda-marker" [class]="'agenda-marker ' + booking.color" aria-hidden="true"></span>

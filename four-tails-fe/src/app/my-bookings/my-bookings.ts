@@ -1,15 +1,20 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 type CalendarView = 'Month' | 'Week' | 'Day';
 
-interface Booking {
-  date: Date;
+export interface BookingResponse {
+  date: Date | string;
   time: string;
   pet: string;
   service: string;
   owner: string;
   color: 'blue' | 'yellow' | 'green';
+}
+
+interface Booking extends Omit<BookingResponse, 'date'> {
+  date: Date;
 }
 
 interface PendingBooking {
@@ -34,9 +39,17 @@ export class MyBookings {
   activeView: CalendarView = 'Month';
   currentDate = new Date();
   readonly weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-  readonly bookings: Booking[] = this.createSampleBookings();
+  readonly bookings: Booking[];
   pendingRequests: PendingBooking[] = this.createSamplePendingRequests();
   isPendingModalOpen = false;
+
+  constructor(private readonly route: ActivatedRoute) {
+    const bookings = this.route.snapshot.data['preload'].bookings as BookingResponse[];
+    this.bookings = bookings.map((booking) => ({
+      ...booking,
+      date: this.parseBookingDate(booking.date),
+    }));
+  }
 
   get monthLabel(): string {
     return new Intl.DateTimeFormat('en', { month: 'long', year: 'numeric' }).format(this.currentDate);
@@ -53,6 +66,12 @@ export class MyBookings {
     const start = new Intl.DateTimeFormat('en', { month: 'short', day: 'numeric' }).format(week[0]);
     const end = new Intl.DateTimeFormat('en', { month: 'short', day: 'numeric', year: 'numeric' }).format(week[6]);
     return `${start} - ${end}`;
+  }
+
+  get bookingsThisWeek(): number {
+    return this.bookings.filter((booking) =>
+      this.weekDays.some((date) => this.isSameDate(booking.date, date)),
+    ).length;
   }
 
   openPendingModal(): void {
@@ -140,25 +159,6 @@ export class MyBookings {
     return date.getTime();
   }
 
-  private createSampleBookings(): Booking[] {
-    const monday = new Date();
-    monday.setDate(monday.getDate() - ((monday.getDay() + 6) % 7));
-    monday.setHours(0, 0, 0, 0);
-
-    const samples = [
-      { offset: 1, time: '09:00', pet: 'Milo', service: 'Morning walk', owner: 'Sophie L.', color: 'blue' as const },
-      { offset: 2, time: '11:30', pet: 'Luna', service: 'Day care', owner: 'James R.', color: 'yellow' as const },
-      { offset: 3, time: '14:00', pet: 'Biscuit', service: 'Home visit', owner: 'Ava M.', color: 'green' as const },
-      { offset: 5, time: '10:00', pet: 'Coco', service: 'Dog walking', owner: 'Noah K.', color: 'blue' as const },
-    ];
-
-    return samples.map((sample) => {
-      const date = new Date(monday);
-      date.setDate(monday.getDate() + sample.offset);
-      return { ...sample, date };
-    });
-  }
-
   private createSamplePendingRequests(): PendingBooking[] {
     const monday = new Date();
     monday.setDate(monday.getDate() - ((monday.getDay() + 6) % 7));
@@ -175,6 +175,22 @@ export class MyBookings {
       date.setDate(monday.getDate() + sample.offset);
       return { ...sample, date };
     });
+  }
+
+  private parseBookingDate(value: Date | string): Date {
+    let date: Date;
+    if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value)) {
+      const [year, month, day] = value.split('-').map(Number);
+      date = new Date(year, month - 1, day);
+    } else {
+      date = new Date(value);
+    }
+
+    if (Number.isNaN(date.getTime())) {
+      throw new Error(`Invalid booking date: ${value}`);
+    }
+
+    return date;
   }
 
   private isSameDate(first: Date, second: Date): boolean {
