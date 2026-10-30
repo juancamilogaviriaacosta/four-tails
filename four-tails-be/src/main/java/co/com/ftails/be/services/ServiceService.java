@@ -1,23 +1,20 @@
 package co.com.ftails.be.services;
 
-import java.math.BigDecimal;
-import java.time.Duration;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.util.*;
-
 import co.com.ftails.be.dtos.BookingDto;
-import co.com.ftails.be.dtos.BookingRequestDto;
+import co.com.ftails.be.dtos.ProviderDto;
+import co.com.ftails.be.dtos.ServiceDto;
 import co.com.ftails.be.entities.*;
 import co.com.ftails.be.repositories.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 
-import co.com.ftails.be.dtos.ProviderDto;
-import co.com.ftails.be.dtos.ServiceDto;
+import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 @org.springframework.stereotype.Service
 @AllArgsConstructor
@@ -34,43 +31,46 @@ public class ServiceService {
     @Transactional
 	public Map<String, String> initDatabase() {
 		Instant now = Instant.now();
-
 		Service service1 = new Service();
 		service1.setCreatedAt(now);
 		service1.setUpdatedAt(now);
 		service1.setName("Hosting");
-		service1.setPicture("https://img.magnific.com/fotos-premium/monton-juguetes-perros-sala-estar-muchos-perros-jugando-corriendo-creados-ia-generativa_124507-171711.jpg");
+        service1.setColor("#4a7144");
 		sr.save(service1);
 
 		Service service2 = new Service();
 		service2.setCreatedAt(now);
 		service2.setUpdatedAt(now);
 		service2.setName("Sitting");
+        service2.setColor("#c76b6b");
 		sr.save(service2);
 
 		Service service3 = new Service();
 		service3.setCreatedAt(now);
 		service3.setUpdatedAt(now);
 		service3.setName("Daycare");
+        service3.setColor("#8b6ca8");
 		sr.save(service3);
 
 		Service service4 = new Service();
 		service4.setCreatedAt(now);
 		service4.setUpdatedAt(now);
 		service4.setName("House visits");
+        service4.setColor("#668bb5");
 		sr.save(service4);
 
 		Service service5 = new Service();
 		service5.setCreatedAt(now);
 		service5.setUpdatedAt(now);
 		service5.setName("Walking");
-		service5.setPicture("https://img.magnific.com/fotos-premium/seccion-baja-paseador-perros-caminando-grupo-perros-su-correa-calle_629685-88059.jpg");
+        service5.setColor("#d69a55");
 		sr.save(service5);
 
 		Service service6 = new Service();
 		service6.setCreatedAt(now);
 		service6.setUpdatedAt(now);
 		service6.setName("Grooming");
+        service6.setColor("#b5a05c");
 		sr.save(service6);
 
 		Role roleAdmin = new Role();
@@ -469,9 +469,8 @@ public class ServiceService {
         return dto;
     }
 
-    public Map<String, String> confirmBooking(BookingRequestDto bookingRequestDto) {
+    public Map<String, String> confirmBooking(BookingDto bookingRequestDto) {
         Instant now = Instant.now();
-
         Booking booking = new Booking();
         booking.setCreatedAt(now);
         booking.setUpdatedAt(now);
@@ -483,6 +482,8 @@ public class ServiceService {
         booking.setFare(bookingRequestDto.getFare());
         booking.setNotes(bookingRequestDto.getNotes());
         booking.setStatus(BookingStatus.PENDING);
+        booking.setPets(bookingRequestDto.getPets());
+        booking.setAddress(bookingRequestDto.getAddress());
         br.save(booking);
         return Map.of("message","ok");
     }
@@ -492,12 +493,11 @@ public class ServiceService {
         List<Booking> bookings = br.findAll();
         for (Booking booking : bookings) {
             BookingDto dto = new BookingDto();
-            dto.setColor("green");
-            dto.setDate(booking.getStartDate());
-            dto.setOwner(booking.getClient().getUser().getFirstName() + " " + booking.getClient().getUser().getLastName());
-            dto.setPet("Bruno");
-            dto.setService(booking.getService().getName());
-            dto.setTime("10:00");
+            dto.setColor(booking.getService().getColor());
+            dto.setStartDate(booking.getStartDate());
+            dto.setUserName(booking.getClient().getUser().getFirstName() + " " + booking.getClient().getUser().getLastName());
+            dto.setPets("3 Dogs and 1 Cat");//booking.getPets());
+            dto.setServiceName(booking.getService().getName());
             response.add(dto);
         }
         return response;

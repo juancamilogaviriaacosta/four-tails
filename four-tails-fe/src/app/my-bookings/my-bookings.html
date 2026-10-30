@@ -56,8 +56,8 @@
 							<span class="date-number">{{ date | date:'d' }}</span>
 							<span class="cell-bookings">
 								@for (booking of bookingsForDate(date); track $index) {
-									<span class="month-event" [class]="'month-event ' + booking.color">
-										<strong>{{ booking.time }}</strong> {{ booking.pet }}
+									<span class="month-event" [style]="{ color:'#e6f2e3', background: booking.color }">
+										<strong>{{ booking.startDate | date:'HH:mm' }}</strong> {{ booking.pets }}
 									</span>
 								}
 							</span>
@@ -78,10 +78,10 @@
 							</button>
 							<div class="week-events">
 								@for (booking of bookingsForDate(date); track $index) {
-									<article class="booking-event" [class]="'booking-event ' + booking.color">
-										<time>{{ booking.time }}</time>
-										<strong>{{ booking.pet }}</strong>
-										<span>{{ booking.service }}</span>
+									<article class="booking-event" [style]="{ color:'#e6f2e3', background: booking.color }">
+										<time>{{ booking.startDate | date:'HH:mm' }}</time>
+										<strong>{{ booking.pets }}</strong>
+										<span>{{ booking.serviceName }}</span>
 									</article>
 								} @empty {
 									<span class="empty-day">No bookings</span>
@@ -101,11 +101,11 @@
 				</div>
 				@for (booking of bookingsForDate(currentDate); track $index) {
 					<article class="agenda-booking">
-						<time>{{ booking.time }}</time>
-						<span class="agenda-marker" [class]="'agenda-marker ' + booking.color" aria-hidden="true"></span>
+						<time>{{ booking.startDate | date:'HH:mm' }}</time>
+						<span class="agenda-marker" [style]="{ color:'#e6f2e3', background: booking.color }"></span>
 						<div class="agenda-details">
-							<h3>{{ booking.service }} with {{ booking.pet }}</h3>
-							<p>{{ booking.owner }} <span aria-hidden="true">·</span> {{ booking.pet }}</p>
+							<h3>{{ booking.serviceName }} with {{ booking.pets }}</h3>
+							<p>{{ booking.userName }} </p>
 						</div>
 						<span class="booking-status">Confirmed</span>
 					</article>
@@ -158,7 +158,7 @@
 						</div>
 						<div class="request-details">
 							<span>{{ request.service }}</span>
-							<time>{{ request.date | date:'EEE, MMM d' }} · {{ request.time }}</time>
+							<time>{{ request.startDate | date:'EEE, MMM d' }} · {{ request.time }}</time>
 						</div>
 						<p class="request-note">{{ request.note }}</p>
 						<div class="request-actions">

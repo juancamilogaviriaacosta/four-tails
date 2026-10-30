@@ -53,6 +53,12 @@ public class Booking {
     @Column(nullable = false, length = 30)
     private BookingStatus status;
 
+    @Column(length = 100)
+    private String pets;
+
+    @Column(length = 100)
+    private String address;
+
     @Column(length = 1000)
     private String notes;
 

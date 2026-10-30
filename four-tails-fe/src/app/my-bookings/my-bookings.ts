@@ -5,16 +5,29 @@ import { ActivatedRoute } from '@angular/router';
 type CalendarView = 'Month' | 'Week' | 'Day';
 
 export interface BookingResponse {
-  date: Date | string;
+  /*startDate: Date | string;
   time: string;
-  pet: string;
+  pets: string;
   service: string;
   owner: string;
-  color: 'blue' | 'yellow' | 'green';
+  color: 'blue' | 'yellow' | 'green';*/
+
+  userName: string
+  providerId: number;
+  providerName: string;
+  serviceId: number;
+  serviceName: string;
+  startDate: Date;
+  endDate: Date;
+  fare: number;
+  pets: string;
+  address: string;
+  color: string;
+  notes: string;
 }
 
-interface Booking extends Omit<BookingResponse, 'date'> {
-  date: Date;
+interface Booking extends Omit<BookingResponse, 'startDate'> {
+  startDate: Date;
 }
 
 interface PendingBooking {
@@ -23,7 +36,7 @@ interface PendingBooking {
   initials: string;
   pet: string;
   service: string;
-  date: Date;
+  startDate: Date;
   time: string;
   color: Booking['color'];
   note: string;
@@ -47,7 +60,7 @@ export class MyBookings {
     const bookings = this.route.snapshot.data['preload'].bookings as BookingResponse[];
     this.bookings = bookings.map((booking) => ({
       ...booking,
-      date: this.parseBookingDate(booking.date),
+      startDate: this.parseBookingDate(booking.startDate),
     }));
   }
 
@@ -70,7 +83,7 @@ export class MyBookings {
 
   get bookingsThisWeek(): number {
     return this.bookings.filter((booking) =>
-      this.weekDays.some((date) => this.isSameDate(booking.date, date)),
+      this.weekDays.some((date) => this.isSameDate(booking.startDate, date)),
     ).length;
   }
 
@@ -85,14 +98,14 @@ export class MyBookings {
   resolvePendingRequest(id: number, accepted = false): void {
     const request = this.pendingRequests.find((pending) => pending.id === id);
     if (accepted && request) {
-      this.bookings.push({
-        date: request.date,
-        time: request.time,
+      /*this.bookings.push({
+        startDate: request.startDate,
+        //time: request.time,
         pet: request.pet,
         service: request.service,
         owner: request.owner,
         color: request.color,
-      });
+      });*/
     }
     this.pendingRequests = this.pendingRequests.filter((request) => request.id !== id);
   }
@@ -144,7 +157,7 @@ export class MyBookings {
   }
 
   bookingsForDate(date: Date): Booking[] {
-    return this.bookings.filter((booking) => this.isSameDate(booking.date, date));
+    return this.bookings.filter((booking) => this.isSameDate(booking.startDate, date));
   }
 
   isToday(date: Date): boolean {
@@ -173,7 +186,7 @@ export class MyBookings {
     return samples.map((sample) => {
       const date = new Date(monday);
       date.setDate(monday.getDate() + sample.offset);
-      return { ...sample, date };
+      return { ...sample, startDate: date };
     });
   }
 

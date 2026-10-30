@@ -52,8 +52,8 @@ public class ServicesController {
     }
 
     @PostMapping("/api/confirmBooking")
-    public ResponseEntity<Map<String, String>> confirmBooking(@RequestBody BookingRequestDto bookingRequestDto) {
-        return ResponseEntity.ok(ss.confirmBooking(bookingRequestDto));
+    public ResponseEntity<Map<String, String>> confirmBooking(@RequestBody BookingDto bookingDto) {
+        return ResponseEntity.ok(ss.confirmBooking(bookingDto));
     }
 
     @GetMapping("/api/getBookings/{userId}")

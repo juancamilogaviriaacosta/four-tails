@@ -54,7 +54,9 @@ export class SitterDetails {
       serviceId: this.service,
       startDate: `${this.startDate}T00:00:00Z`,
       endDate: `${this.endDate}T00:00:00Z`,
-      fare: 150,
+      fare: this.sitter.fare,
+      pets: this.pets,
+      address: this.address,
       notes: '',
     }).subscribe({
       next: () => {

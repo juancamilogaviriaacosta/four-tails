@@ -32,6 +32,9 @@ public class Service {
 	
 	@Column
 	private String picture;
+
+	@Column(length = 7)
+	private String color;
 	
 	@ManyToMany(mappedBy = "services")
     private List<Provider> providers;
