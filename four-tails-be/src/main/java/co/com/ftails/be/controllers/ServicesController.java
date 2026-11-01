@@ -59,8 +59,9 @@ public class ServicesController {
     @GetMapping("/api/getBookings/{userId}")
     public ResponseEntity<List<BookingDto>> getBookings(
             @PathVariable("userId") Long userId,
+            @RequestParam("role") String role,
             @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
-        return ResponseEntity.ok(ss.getBookings(userId, startDate, endDate));
+        return ResponseEntity.ok(ss.getBookings(userId, role, startDate, endDate));
     }
 }

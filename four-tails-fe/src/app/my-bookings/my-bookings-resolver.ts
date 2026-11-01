@@ -9,6 +9,9 @@ export const myBookingsResolver: ResolveFn<{ bookings: BookingResponse[] }> = ()
     const http = inject(HttpClient);
     const auth = inject(AuthService);
     return forkJoin({
-        bookings: http.get<BookingResponse[]>(`/api/getBookings/${auth.getUserId()}`, { params: { startDate: '2026-10-01', endDate: '2026-10-31' }}),
+        bookings: http.get<BookingResponse[]>(`/api/getBookings/${auth.getUserId()}`,
+            {
+                params: { role: auth.getRole() + "", startDate: '2026-10-01', endDate: '2026-10-31' }
+            }),
     });
 };

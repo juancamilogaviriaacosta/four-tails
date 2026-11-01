@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -492,9 +493,13 @@ public class ServiceService {
         return Map.of("message","ok");
     }
 
-    public List<BookingDto> getBookings(Long userId, LocalDate startDate, LocalDate endDate) {
+    public List<BookingDto> getBookings(Long userId, String role, LocalDate startDate, LocalDate endDate) {
         List<BookingDto> response = new ArrayList<>();
-        List<Booking> bookings = br.findAll();//FIXME by id
+        Instant startInclusive = startDate.atStartOfDay(ZoneOffset.UTC).toInstant();
+        Instant endExclusive = endDate.plusDays(1).atStartOfDay(ZoneOffset.UTC).toInstant();
+        List<Booking> bookings = RoleType.CLIENT.name().equals(role) ?
+                        br.findBookingsForClient(userId) :
+                        br.findBookingsForProvider(userId);
         for (Booking booking : bookings) {
             BookingDto dto = new BookingDto();
             dto.setColor(booking.getService().getColor());

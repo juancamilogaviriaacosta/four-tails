@@ -5,13 +5,6 @@ import { ActivatedRoute } from '@angular/router';
 type CalendarView = 'Month' | 'Week' | 'Day';
 
 export interface BookingResponse {
-  /*startDate: Date | string;
-  time: string;
-  pets: string;
-  service: string;
-  owner: string;
-  color: 'blue' | 'yellow' | 'green';*/
-
   userName: string
   providerId: number;
   providerName: string;
