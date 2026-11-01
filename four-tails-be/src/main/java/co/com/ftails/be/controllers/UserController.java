@@ -17,8 +17,8 @@ public class UserController {
     private final UserService us;
 
     @PostMapping(path = "api/signUp", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> signUp(Authentication authentication, @RequestBody UserDto userDto) {
-        String response = us.signUp(authentication, userDto);
+    public ResponseEntity<UserDto> signUp(Authentication authentication, @RequestBody UserDto userDto) {
+        UserDto response = us.signUp(authentication, userDto);
         return ResponseEntity.ok(response);
     }
 }

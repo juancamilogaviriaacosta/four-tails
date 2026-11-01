@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { LoadingService } from '../utils/loading-service';
+import { AuthService } from '../utils/auth-service';
 
 @Component({
   selector: 'app-edit-profile',
@@ -14,16 +15,18 @@ export class EditProfile {
 
   profile = {
     profilePicture: '21-profile.png',
-    firstName: 'Maya',
-    lastName: 'Watson',
+    firstName: '',
+    lastName: '',
     dateOfBirth: '',
-    email: 'maya.watson@example.com',
+    email: '',
     phone: '',
     address: '',
   };
 
-  constructor(private loadingService: LoadingService) {
-
+  constructor(private loadingService: LoadingService, private auth: AuthService) {
+    this.profile.firstName = auth.getUserFirstName();
+    this.profile.lastName = auth.getUserFLastName();
+    this.profile.email = auth.getUserEmail();
   }
 
   onFileSelected(event: Event): void {

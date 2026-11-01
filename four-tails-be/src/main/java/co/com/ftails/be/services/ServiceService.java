@@ -6,6 +6,7 @@ import co.com.ftails.be.dtos.ServiceDto;
 import co.com.ftails.be.entities.*;
 import co.com.ftails.be.repositories.*;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -27,6 +28,8 @@ public class ServiceService {
 	private final RoleRepository rr;
 	private final KindOfPetRepository kr;
     private final BookingRepository br;
+    private final PasswordEncoder passwordEncoder;
+
 
     @Transactional
 	public Map<String, String> initDatabase() {
@@ -91,6 +94,7 @@ public class ServiceService {
 		roleClient.setName(RoleType.CLIENT.name());
 		rr.save(roleClient);
 
+        String password = passwordEncoder.encode("123456");
         User user0 = new User();
         user0.setCreatedAt(now);
         user0.setUpdatedAt(now);
@@ -99,7 +103,7 @@ public class ServiceService {
         user0.setAddress("Williamsburg, Brooklyn, NY");
         user0.setEmailVerified(true);
         user0.setEmail("admin.fourtails@example.com");
-        user0.setPassword("123456");
+        user0.setPassword(password);
         user0.setIdentityProvider(IdentityProvider.LOCAL.name());
         user0.setIdentityProviderId(null);
         user0.setEnabled(true);
@@ -117,7 +121,7 @@ public class ServiceService {
         user1.setAddress("Williamsburg, Brooklyn, NY");
         user1.setEmailVerified(true);
         user1.setEmail("Ashley.dombrowsky@example.com");
-        user1.setPassword("123456");
+        user1.setPassword(password);
         user1.setIdentityProvider(IdentityProvider.LOCAL.name());
         user1.setIdentityProviderId(null);
         user1.setEnabled(true);
@@ -140,7 +144,7 @@ public class ServiceService {
         user2.setAddress("Williamsburg, Brooklyn, NY");
         user2.setEmailVerified(true);
         user2.setEmail("maya.watson@example.com");
-        user2.setPassword("123456");
+        user2.setPassword(password);
         user2.setIdentityProvider(IdentityProvider.LOCAL.name());
         user2.setIdentityProviderId(null);
         user2.setEnabled(true);
@@ -163,7 +167,7 @@ public class ServiceService {
         user3.setAddress("Williamsburg, Brooklyn, NY");
         user3.setEmailVerified(true);
         user3.setEmail("liam.parker@example.com");
-        user3.setPassword("123456");
+        user3.setPassword(password);
         user3.setIdentityProvider(IdentityProvider.LOCAL.name());
         user3.setIdentityProviderId(null);
         user3.setEnabled(true);
@@ -186,7 +190,7 @@ public class ServiceService {
         user4.setAddress("Williamsburg, Brooklyn, NY");
         user4.setEmailVerified(true);
         user4.setEmail("jenny.anderson@example.com");
-        user4.setPassword("123456");
+        user4.setPassword(password);
         user4.setIdentityProvider(IdentityProvider.LOCAL.name());
         user4.setIdentityProviderId(null);
         user4.setEnabled(true);
@@ -209,7 +213,7 @@ public class ServiceService {
         user5.setAddress("Williamsburg, Brooklyn, NY");
         user5.setEmailVerified(true);
         user5.setEmail("martin.dawson@example.com");
-        user5.setPassword("123456");
+        user5.setPassword(password);
         user5.setIdentityProvider(IdentityProvider.LOCAL.name());
         user5.setIdentityProviderId(null);
         user5.setEnabled(true);
@@ -232,7 +236,7 @@ public class ServiceService {
         user6.setAddress("Williamsburg, Brooklyn, NY");
         user6.setEmailVerified(true);
         user6.setEmail("sarah.chen@example.com");
-        user6.setPassword("123456");
+        user6.setPassword(password);
         user6.setIdentityProvider(IdentityProvider.LOCAL.name());
         user6.setIdentityProviderId(null);
         user6.setEnabled(true);
@@ -255,7 +259,7 @@ public class ServiceService {
         user7.setAddress("Williamsburg, Brooklyn, NY");
         user7.setEmailVerified(true);
         user7.setEmail("lilian.alper@example.com");
-        user7.setPassword("123456");
+        user7.setPassword(password);
         user7.setIdentityProvider(IdentityProvider.LOCAL.name());
         user7.setIdentityProviderId(null);
         user7.setEnabled(true);
@@ -362,7 +366,7 @@ public class ServiceService {
         user8.setAddress("Evergreen AV 742");
         user8.setEmailVerified(true);
         user8.setEmail("abraham.simpson@example.com");
-        user8.setPassword("123456");
+        user8.setPassword(password);
         user8.setIdentityProvider(IdentityProvider.LOCAL.name());
         user8.setIdentityProviderId(null);
         user8.setEnabled(true);
@@ -490,7 +494,7 @@ public class ServiceService {
 
     public List<BookingDto> getBookings(Long userId, LocalDate startDate, LocalDate endDate) {
         List<BookingDto> response = new ArrayList<>();
-        List<Booking> bookings = br.findAll();
+        List<Booking> bookings = br.findAll();//FIXME by id
         for (Booking booking : bookings) {
             BookingDto dto = new BookingDto();
             dto.setColor(booking.getService().getColor());

@@ -3,6 +3,15 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoadingService } from './loading-service';
 
+interface JwtPayload {
+  role?: unknown;
+  email?: unknown;
+  id?: unknown;
+  username?: unknown;
+  firstName?: unknown;
+  lastName?: unknown;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -19,83 +28,70 @@ export class AuthService {
     return !!localStorage.getItem('token');
   }
 
-  login(form: any) {
-    this.loadingService.show();
-    this.http.post('/api/auth', form).subscribe({
-      next: (response:any) => {
-        if(response && response.token) {
-          localStorage.setItem('token', response.token);
-          this.router.navigate(['/']);
-          this.loadingService.hide();
-        } else {
-          alert('Error en usuario o contraseña');
-          this.loadingService.hide();
-        }
-      },
-      error: (error) => {
-        alert('Error en usuario o contraseña');
-        this.loadingService.hide();
-      }
-    });
-  }
-
   signUp(form: any) {
     return this.http.post('/api/signUp', form);
   }
 
-  getRole() {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      return null;
-    }
-    try {
-      const payload = JSON.parse(token);
-      return payload.role;
-    } catch (error) {
-      console.error('Error parsing token:', error);
-      return null;
-    }
+  getRole(): string | null {
+    const role = this.getTokenPayload()?.role;
+    return typeof role === 'string' ? role : null;
   }
 
-  getUserName() {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      return '';
-    }
-    try {
-      const payload = JSON.parse(token);
+  /*getUserName(): string {
+    const payload = this.getTokenPayload();
+    if (typeof payload?.username === 'string') {
       return payload.username;
-    } catch (error) {
-      console.error('Error parsing token:', error);
-      return '';
     }
+
+    return [payload?.firstName, payload?.lastName]
+      .filter((name): name is string => typeof name === 'string')
+      .join(' ');
+  }*/
+
+  getUserEmail(): string {
+    const response = this.getTokenPayload()?.email;
+    return typeof response === 'string' ? response : '';
   }
 
-  getUserEmail() {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      return '';
-    }
-    try {
-      const payload = JSON.parse(token);
-      return payload.email;
-    } catch (error) {
-      console.error('Error parsing token:', error);
-      return '';
-    }
+  getUserFirstName(): string {
+    const response = this.getTokenPayload()?.firstName;
+    return typeof response === 'string' ? response : '';
   }
 
-  getUserId() {
+  getUserFLastName(): string {
+    const response = this.getTokenPayload()?.lastName;
+    return typeof response === 'string' ? response : '';
+  }
+
+  getUserId(): number | '' {
+    const response = this.getTokenPayload()?.id;
+    return typeof response === 'number' && Number.isFinite(response) ? response : '';
+  }
+
+  private getTokenPayload(): JwtPayload | null {
     const token = localStorage.getItem('token');
     if (!token) {
-      return '';
+      return null;
     }
+
     try {
-      const payload = JSON.parse(token);
-      return payload.id;
+      const parts = token.split('.');
+      if (parts.length !== 3 || !parts[1]) {
+        throw new Error('Invalid JWT format');
+      }
+
+      const base64Payload = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+      const paddedPayload = base64Payload.padEnd(Math.ceil(base64Payload.length / 4) * 4, '=');
+      const bytes = Uint8Array.from(atob(paddedPayload), character => character.charCodeAt(0));
+      const payload: unknown = JSON.parse(new TextDecoder().decode(bytes));
+      if (payload === null || typeof payload !== 'object' || Array.isArray(payload)) {
+        throw new Error('JWT payload must be a JSON object');
+      }
+
+      return payload as JwtPayload;
     } catch (error) {
-      console.error('Error parsing token:', error);
-      return '';
+      console.error('Error parsing JWT:', error);
+      return null;
     }
   }
 

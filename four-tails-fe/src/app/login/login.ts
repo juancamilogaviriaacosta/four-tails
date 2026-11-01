@@ -2,8 +2,8 @@ import { ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angu
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../utils/auth-service';
 import { LoadingService } from '../utils/loading-service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -23,29 +23,32 @@ export class Login {
     role: ''
   };
 
-  constructor(public router: Router, public auth: AuthService, public loadingService: LoadingService) {
+  constructor(public router: Router, private http: HttpClient, public loadingService: LoadingService) {
   }
 
   login() {
     this.loadingService.show();
-    setTimeout(() => {
-      //this.auth.login(this.model);
-      if (this.model.email === 'jenny.anderson@example.com') {
-        this.model.id = 2;
-        this.model.role = 'sitter';
-      } else if (this.model.email === 'abraham.simpson@example.com') {
-        this.model.id = 9;
-        this.model.role = 'owner';
-      } else if(this.model.email === 'admin.fourtails@example.com'){
-        this.model.id = 1;
-        this.model.role = 'admin';
+    this.http.post('/api/auth', this.model).subscribe({
+      next: (response:any) => {
+        if(response && response.token) {
+          localStorage.setItem('token', response.token);
+          this.router.navigate(['/']);
+          this.closeLogin()
+          this.loadingService.hide();
+        } else {
+          alert('Error en usuario o contraseña');
+          this.closeLogin()
+          this.loadingService.hide();
+        }
+      },
+      error: (error) => {
+        alert('Error en usuario o contraseña');
+        this.closeLogin()
+        this.loadingService.hide();
       }
-      localStorage.setItem('token', JSON.stringify(this.model));
-      this.loadingService.hide();
-      this.closeLogin();
-    }, 1000);
-    
+    });
   }
+  
 
   closeLogin() {
     if (this.modalMode) {

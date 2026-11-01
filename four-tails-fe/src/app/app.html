@@ -43,7 +43,7 @@
           <circle cx="12" cy="8" r="4"></circle>
           <path d="M4 21a8 8 0 0 1 16 0"></path>
         </svg>
-        <span>{{ authService.getUserName() }}</span>
+        <span>{{ authService.getUserFirstName() + ' ' +  authService.getUserFLastName() }}</span>
       </button>
       @if (showUserMenu) {
         <div id="user-dropdown" class="user-dropdown" role="menu" aria-label="Profile menu">
