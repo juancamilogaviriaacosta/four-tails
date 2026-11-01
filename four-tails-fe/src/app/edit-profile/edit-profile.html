@@ -7,7 +7,7 @@
       </div>
     </div>
 
-    <form class="profile-form" #profileForm="ngForm" (ngSubmit)="saveProfile()">
+    <form class="profile-form" #profileForm="ngForm" (ngSubmit)="setProfile()">
       <div class="profile-picture-block">
         <img
           class="profile-image"
@@ -34,7 +34,7 @@
 
         <div class="field-group">
           <label for="dateOfBirth">Date of birth</label>
-          <input id="dateOfBirth" class="text-input" type="date" name="dateOfBirth" [(ngModel)]="profile.dateOfBirth" />
+          <input id="dateOfBirth" class="text-input" type="date" name="dateOfBirth" [(ngModel)]="profile.birthDate" />
         </div>
 
         <div class="field-group">

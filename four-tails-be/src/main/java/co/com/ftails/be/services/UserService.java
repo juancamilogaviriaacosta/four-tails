@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -46,15 +47,7 @@ public class UserService {
         client.setUpdatedAt(now);
         client.setUser(user);
         cr.save(client);
-
-        UserDto response = new UserDto();
-        response.setId(savedUser.getId());
-        response.setEmail(savedUser.getEmail());
-        response.setFirstName(savedUser.getFirstName());
-        response.setLastName(savedUser.getLastName());
-        response.setRole(savedUser.getRoles().getFirst().getName());
-        response.setToken(jwtService.generateToken(savedUser));
-        return response;
+        return userToDto(savedUser);
     }
 
     public String authenticate(String email, String password) {
@@ -67,5 +60,37 @@ public class UserService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid email or password"));
 
         return jwtService.generateToken(user);
+    }
+
+    private UserDto userToDto(User user) {
+        UserDto response = new UserDto();
+        response.setId(user.getId());
+        response.setEmail(user.getEmail());
+        response.setFirstName(user.getFirstName());
+        response.setLastName(user.getLastName());
+        response.setRole(user.getRoles().getFirst().getName());
+        response.setBirthDate(user.getBirthDate());
+        response.setAddress(user.getAddress());
+        response.setPhone(user.getPhone());
+        response.setToken(jwtService.generateToken(user));
+        return response;
+    }
+
+    public UserDto getProfile(Long id) {
+        User user = ur.findById(id).get();
+        return userToDto(user);
+    }
+
+    public UserDto setProfile(UserDto userDto) {
+        User user = ur.findById(userDto.getId()).get();
+        user.setEmail(userDto.getEmail());
+        user.setFirstName(userDto.getFirstName());
+        user.setLastName(userDto.getLastName());
+        user.setBirthDate(userDto.getBirthDate());
+        user.setAddress(userDto.getAddress());
+        user.setPhone(userDto.getPhone());
+        user.setUpdatedAt(Instant.now());
+        User savedUser = ur.save(user);
+        return userToDto(savedUser);
     }
 }

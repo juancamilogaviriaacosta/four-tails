@@ -1,6 +1,7 @@
 package co.com.ftails.be.entities;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.persistence.*;
@@ -38,6 +39,9 @@ public class User {
 	
 	@Column(nullable = false)
 	private String lastName;
+
+	@Column
+	private LocalDate birthDate;
 
 	@Column
 	private String address;

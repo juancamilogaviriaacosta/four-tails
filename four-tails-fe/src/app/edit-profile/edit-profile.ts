@@ -3,6 +3,8 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { LoadingService } from '../utils/loading-service';
 import { AuthService } from '../utils/auth-service';
+import { HttpClient } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-edit-profile',
@@ -17,16 +19,17 @@ export class EditProfile {
     profilePicture: '21-profile.png',
     firstName: '',
     lastName: '',
-    dateOfBirth: '',
+    birthDate: '',
     email: '',
     phone: '',
     address: '',
   };
 
-  constructor(private loadingService: LoadingService, private auth: AuthService) {
-    this.profile.firstName = auth.getUserFirstName();
-    this.profile.lastName = auth.getUserFLastName();
-    this.profile.email = auth.getUserEmail();
+  constructor(private loadingService: LoadingService, private auth: AuthService, private http: HttpClient, private ar: ActivatedRoute) {
+    this.profile = this.ar.snapshot.data['preload'].profile;
+    if (!this.profile.profilePicture) {
+      this.profile.profilePicture = '21-profile.png';
+    }
   }
 
   onFileSelected(event: Event): void {
@@ -44,11 +47,17 @@ export class EditProfile {
     reader.readAsDataURL(file);
   }
 
-  saveProfile(): void {
-    this.loadingService.show();
-    setTimeout(() => {
-      this.saved = true;
-      this.loadingService.hide();
-    }, 1000);
+  setProfile(): void {
+    this.http.post('/api/setProfile', { id: this.auth.getUserId() , ...this.profile}).subscribe({
+      next: (response:any) => {
+        localStorage.setItem('token', response.token);
+        this.saved = true;
+        this.loadingService.hide();
+      },
+      error: (error) => {
+        alert('Unexpected error');
+        this.loadingService.hide();
+      }
+    });
   }
 }

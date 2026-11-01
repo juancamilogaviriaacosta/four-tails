@@ -17,6 +17,7 @@ import { findSitterResolver } from './find-sitter/find-sitter-resolver';
 import { searchSittersResolver } from './search-sitters/search-sitters-resolver';
 import { sitterDetailResolver } from './sitter-details/sitter-detail-resolver';
 import { myBookingsResolver } from './my-bookings/my-bookings-resolver';
+import { editProfileResolver } from './edit-profile/edit-profile-resolver';
 
 export const routes: Routes = [
     { path: '', component: MainServices  },
@@ -25,7 +26,7 @@ export const routes: Routes = [
     { path: 'sitter-details/:id', component: SitterDetails, canActivate: [authGuard], resolve: { preload: sitterDetailResolver } },
     { path: 'messages', component: Messages },
     { path: 'notifications', component: Notifications },
-    { path: 'edit-profile', component: EditProfile },
+    { path: 'edit-profile', component: EditProfile, canActivate: [authGuard], resolve: { preload: editProfileResolver }},
     { path: 'become-sitter', component: BecomeSitter },
     { path: 'sitter-dashboard', component: SitterDashboard },
     { path: 'my-bookings', component: MyBookings, canActivate: [authGuard], resolve: { preload: myBookingsResolver } },
