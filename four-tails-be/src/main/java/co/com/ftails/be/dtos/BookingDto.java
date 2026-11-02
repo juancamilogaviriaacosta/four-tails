@@ -9,8 +9,8 @@ import java.time.Instant;
 @Getter
 @Setter
 public class BookingDto {
-    private Long userId;
-    private String userName;
+    private Long clientId;
+    private String clientName;
     private Long providerId;
     private String providerName;
     private Long serviceId;

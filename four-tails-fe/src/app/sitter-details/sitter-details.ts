@@ -49,7 +49,7 @@ export class SitterDetails {
 
   confirmBooking(): void {
     this.http.post('/api/confirmBooking', {
-      userId : this.auth.getUserId(),
+      clientId : this.auth.getUserId(),
       providerId: this.sitter.id,
       serviceId: this.service,
       startDate: `${this.startDate}T00:00:00Z`,

@@ -1,11 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { AuthService } from '../utils/auth-service';
 
 type CalendarView = 'Month' | 'Week' | 'Day';
 
 export interface BookingResponse {
-  userName: string
+  clientId: number;
+  clientName: string
   providerId: number;
   providerName: string;
   serviceId: number;
@@ -49,7 +51,7 @@ export class MyBookings {
   pendingRequests: PendingBooking[] = this.createSamplePendingRequests();
   isPendingModalOpen = false;
 
-  constructor(private readonly route: ActivatedRoute) {
+  constructor(private readonly route: ActivatedRoute, public auth: AuthService) {
     const bookings = this.route.snapshot.data['preload'].bookings as BookingResponse[];
     this.bookings = bookings.map((booking) => ({
       ...booking,

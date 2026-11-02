@@ -474,37 +474,38 @@ public class ServiceService {
         return dto;
     }
 
-    public Map<String, String> confirmBooking(BookingDto bookingRequestDto) {
+    public Map<String, String> confirmBooking(BookingDto bookingDto) {
         Instant now = Instant.now();
         Booking booking = new Booking();
         booking.setCreatedAt(now);
         booking.setUpdatedAt(now);
-        booking.setClient(cr.finByUserId(bookingRequestDto.getUserId()));
-        booking.setProvider(pr.getReferenceById(bookingRequestDto.getProviderId()));
-        booking.setService(sr.getReferenceById(bookingRequestDto.getServiceId()));
-        booking.setStartDate(bookingRequestDto.getStartDate());
-        booking.setEndDate(bookingRequestDto.getEndDate());
-        booking.setFare(bookingRequestDto.getFare());
-        booking.setNotes(bookingRequestDto.getNotes());
+        booking.setClient(cr.finByUserId(bookingDto.getClientId()));
+        booking.setProvider(pr.getReferenceById(bookingDto.getProviderId()));
+        booking.setService(sr.getReferenceById(bookingDto.getServiceId()));
+        booking.setStartDate(bookingDto.getStartDate());
+        booking.setEndDate(bookingDto.getEndDate());
+        booking.setFare(bookingDto.getFare());
+        booking.setNotes(bookingDto.getNotes());
         booking.setStatus(BookingStatus.PENDING);
-        booking.setPets(bookingRequestDto.getPets());
-        booking.setAddress(bookingRequestDto.getAddress());
+        booking.setPets(bookingDto.getPets());
+        booking.setAddress(bookingDto.getAddress());
         br.save(booking);
         return Map.of("message","ok");
     }
 
-    public List<BookingDto> getBookings(Long userId, String role, LocalDate startDate, LocalDate endDate) {
+    public List<BookingDto> getBookings(Long userId, String role, LocalDate startLocalDate, LocalDate endLocalDate) {
         List<BookingDto> response = new ArrayList<>();
-        Instant startInclusive = startDate.atStartOfDay(ZoneOffset.UTC).toInstant();
-        Instant endExclusive = endDate.plusDays(1).atStartOfDay(ZoneOffset.UTC).toInstant();
+        Instant startDate = startLocalDate.atStartOfDay(ZoneOffset.UTC).toInstant();
+        Instant endDate = endLocalDate.plusDays(1).atStartOfDay(ZoneOffset.UTC).toInstant();
         List<Booking> bookings = RoleType.CLIENT.name().equals(role) ?
-                        br.findBookingsForClient(userId) :
-                        br.findBookingsForProvider(userId);
+                        br.findBookingsForClient(userId, startDate, endDate) :
+                        br.findBookingsForProvider(userId, startDate, endDate);
         for (Booking booking : bookings) {
             BookingDto dto = new BookingDto();
             dto.setColor(booking.getService().getColor());
             dto.setStartDate(booking.getStartDate());
-            dto.setUserName(booking.getClient().getUser().getFirstName() + " " + booking.getClient().getUser().getLastName());
+            dto.setClientName(booking.getClient().getUser().getFirstName() + " " + booking.getClient().getUser().getLastName());
+            dto.setProviderName(booking.getProvider().getUser().getFirstName() + " " + booking.getProvider().getUser().getLastName());
             dto.setPets("3 Dogs and 1 Cat");//booking.getPets());
             dto.setServiceName(booking.getService().getName());
             response.add(dto);

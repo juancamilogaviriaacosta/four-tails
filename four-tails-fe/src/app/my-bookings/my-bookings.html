@@ -105,7 +105,7 @@
 						<span class="agenda-marker" [style]="{ color:'#e6f2e3', background: booking.color }"></span>
 						<div class="agenda-details">
 							<h3>{{ booking.serviceName }} with {{ booking.pets }}</h3>
-							<p>{{ booking.userName }} </p>
+							<p>{{ auth.getRole() === 'CLIENT' ? booking.providerName : booking.clientName }} </p>
 						</div>
 						<span class="booking-status">Confirmed</span>
 					</article>

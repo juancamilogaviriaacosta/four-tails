@@ -10,9 +10,9 @@ import java.util.List;
 
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
-    @Query("select b from Booking b where b.client.user.id = :userId")
-    List<Booking> findBookingsForClient(@Param("userId") Long userId);
+    @Query("select b from Booking b where b.client.user.id = :userId and b.startDate >= :startDate and b.endDate <= endDate")
+    List<Booking> findBookingsForClient(Long userId, Instant startDate, Instant endDate);
 
-    @Query("select b from Booking b where b.provider.user.id = :userId")
-    List<Booking> findBookingsForProvider(@Param("userId") Long userId);
+    @Query("select b from Booking b where b.provider.user.id = :userId and b.startDate >= :startDate and b.endDate <= endDate")
+    List<Booking> findBookingsForProvider(Long userId, Instant startDate, Instant endDate);
 }
