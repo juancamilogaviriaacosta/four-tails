@@ -105,6 +105,15 @@ describe('MyBookings', () => {
     expect(component.isBookingCancelled(booking)).toBe(true);
   });
 
+  it('maps each booking status to its badge class and readable label', () => {
+    const statuses = ['PENDING', 'CONFIRMED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED', 'REJECTED'];
+
+    for (const status of statuses) {
+      expect(component.bookingStatusClass(status)).toBe(`booking-status-${status.toLowerCase().replaceAll('_', '-')}`);
+      expect(component.bookingStatusLabel(status)).toBe(status.replaceAll('_', ' '));
+    }
+  });
+
   it('requires a cancellation reason before submitting a cancellation', () => {
     const booking = component.bookings[0];
     component.openCancellationModal(booking);

@@ -450,19 +450,38 @@
 .booking-status {
 	padding: 6px 9px;
 	border-radius: 4px;
-	background: #eaf5ed;
-	color: #477654;
 	font-size: 11px;
 	font-weight: 700;
 }
 
+.booking-status-pending {
+	background: #fff3d6;
+	color: #805a00;
+}
+
+.booking-status-confirmed {
+	background: #eaf5ed;
+	color: #477654;
+}
+
+.booking-status-in-progress {
+	background: #e6f0ff;
+	color: #285b9a;
+}
+
+.booking-status-completed {
+	background: #eee8ff;
+	color: #59419a;
+}
+
 .booking-status-cancelled {
-	padding: 6px 9px;
-	border-radius: 4px;
 	background: #fbe9e7;
 	color: #a33a32;
-	font-size: 11px;
-	font-weight: 700;
+}
+
+.booking-status-rejected {
+	background: #fde8e8;
+	color: #a12c2c;
 }
 
 .agenda-actions {

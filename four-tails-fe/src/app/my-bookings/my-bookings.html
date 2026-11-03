@@ -108,14 +108,10 @@
 							<p>{{ auth.getRole() === 'CLIENT' ? booking.providerName : booking.clientName }} </p>
 						</div>
 						<div class="agenda-actions">
-							@if (isBookingCancelled(booking)) {
-								<span class="booking-status-cancelled">
-									Cancelled
-								</span>
-							} @else {
-								<span class="booking-status">
-									Confirmed
-								</span>
+							<span class="booking-status" [ngClass]="bookingStatusClass(booking.status)">
+								{{ bookingStatusLabel(booking.status) }}
+							</span>
+							@if (booking.status !== 'CANCELLED') {
 								<button class="cancel-booking-button" type="button" (click)="openCancellationModal(booking)">
 									Cancel
 								</button>

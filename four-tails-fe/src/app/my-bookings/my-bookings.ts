@@ -207,6 +207,14 @@ export class MyBookings {
     return this.bookings.filter((booking) => this.isSameDate(booking.startDate, date));
   }
 
+  bookingStatusClass(status: string): string {
+    return `booking-status-${status.toLowerCase().replaceAll('_', '-')}`;
+  }
+
+  bookingStatusLabel(status: string): string {
+    return status.replaceAll('_', ' ');
+  }
+
   isBookingCancelled(booking: Booking): boolean {
     return booking.status === 'CANCELED' || booking.status === 'CANCELLED';
   }
