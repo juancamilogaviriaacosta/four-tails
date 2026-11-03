@@ -56,7 +56,7 @@
 							<span class="date-number">{{ date | date:'d' }}</span>
 							<span class="cell-bookings">
 								@for (booking of bookingsForDate(date); track $index) {
-									<span class="month-event" [style]="{ color:'#e6f2e3', background: booking.color }">
+									<span class="month-event" [style]="{ background: booking.color }">
 										<strong>{{ booking.startDate | date:'HH:mm' }}</strong> {{ booking.pets }}
 									</span>
 								}
@@ -78,7 +78,7 @@
 							</button>
 							<div class="week-events">
 								@for (booking of bookingsForDate(date); track $index) {
-									<article class="booking-event" [style]="{ color:'#e6f2e3', background: booking.color }">
+									<article class="booking-event" [style]="{ background: booking.color }">
 										<time>{{ booking.startDate | date:'HH:mm' }}</time>
 										<strong>{{ booking.pets }}</strong>
 										<span>{{ booking.serviceName }}</span>
@@ -121,9 +121,9 @@
 	</section>
 
 	<footer class="calendar-footer">
-		<span class="legend-dot blue"></span><span>Walk</span>
-		<span class="legend-dot yellow"></span><span>Day care</span>
-		<span class="legend-dot green"></span><span>Home visit</span>
+		@for(tmp of allServices; track $index) {
+			<span class="legend-dot" [style]="{ background: tmp.color }"></span><span style=>{{ tmp.name }}</span>
+		}
 	</footer>
 </main>
 

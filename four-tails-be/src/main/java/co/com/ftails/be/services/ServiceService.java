@@ -507,7 +507,9 @@ public class ServiceService {
             dto.setClientName(booking.getClient().getUser().getFirstName() + " " + booking.getClient().getUser().getLastName());
             dto.setProviderName(booking.getProvider().getUser().getFirstName() + " " + booking.getProvider().getUser().getLastName());
             dto.setPets("3 Dogs and 1 Cat");//booking.getPets());
+            dto.setServiceId(booking.getService().getId());
             dto.setServiceName(booking.getService().getName());
+            dto.setServiceColor(booking.getService().getColor());
             response.add(dto);
         }
         return response;

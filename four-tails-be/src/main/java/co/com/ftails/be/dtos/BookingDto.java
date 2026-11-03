@@ -15,6 +15,7 @@ public class BookingDto {
     private String providerName;
     private Long serviceId;
     private String serviceName;
+    private String serviceColor;
     private Instant startDate;
     private Instant endDate;
     private BigDecimal fare;

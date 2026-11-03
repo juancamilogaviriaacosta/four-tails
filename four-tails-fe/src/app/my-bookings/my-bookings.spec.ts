@@ -45,6 +45,20 @@ describe('MyBookings', () => {
                     address: 'Home',
                     notes: '',
                   },
+                  {
+                    userName: 'Alex M.',
+                    providerId: 3,
+                    providerName: 'Alex M.',
+                    serviceId: 3,
+                    serviceName: 'Home visit',
+                    startDate: '2026-11-20T00:00:00Z',
+                    endDate: '2026-11-20T01:00:00Z',
+                    fare: 35,
+                    color: 'green',
+                    pets: 'Oliver',
+                    address: 'Home',
+                    notes: '',
+                  },
                 ],
               },
             },
@@ -63,9 +77,10 @@ describe('MyBookings', () => {
   });
 
   it('should use bookings from route data and normalize their start dates', () => {
-    expect(component.bookings).toHaveLength(2);
+    expect(component.bookings).toHaveLength(3);
     expect(component.bookings[0].pets).toBe('Milo');
     expect(component.bookings[0].startDate).toEqual(new Date('2026-10-28T09:00:00'));
+    expect(component.bookings[2].startDate).toEqual(new Date(2026, 10, 20));
   });
 
   it('should display the start date as an hour in the calendar', () => {

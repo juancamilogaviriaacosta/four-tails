@@ -12,6 +12,7 @@ export interface BookingResponse {
   providerName: string;
   serviceId: number;
   serviceName: string;
+  serviceColor: string;
   startDate: Date;
   endDate: Date;
   fare: number;
@@ -50,14 +51,28 @@ export class MyBookings {
   readonly bookings: Booking[];
   pendingRequests: PendingBooking[] = this.createSamplePendingRequests();
   isPendingModalOpen = false;
+  allServices:any = [];
 
   constructor(private readonly route: ActivatedRoute, public auth: AuthService) {
     const bookings = this.route.snapshot.data['preload'].bookings as BookingResponse[];
+    this.allServices = this.extractAndSortAllServices(bookings);
     this.bookings = bookings.map((booking) => ({
       ...booking,
       startDate: this.parseBookingDate(booking.startDate),
     }));
   }
+
+  extractAndSortAllServices(bookings: BookingResponse[]) {
+  const services = new Map<number, { id: number; name: string; color: string; }>();
+  for (const booking of bookings) {
+    if (!services.has(booking.serviceId)) {
+      services.set(booking.serviceId, { id: booking.serviceId, name: booking.serviceName, color: booking.color });
+    }
+  }
+
+  return Array.from(services.values())
+    .sort((a, b) => a.name.localeCompare(b.name));
+}
 
   get monthLabel(): string {
     return new Intl.DateTimeFormat('en', { month: 'long', year: 'numeric' }).format(this.currentDate);
@@ -187,8 +202,11 @@ export class MyBookings {
 
   private parseBookingDate(value: Date | string): Date {
     let date: Date;
-    if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value)) {
-      const [year, month, day] = value.split('-').map(Number);
+    const calendarDate = typeof value === 'string'
+      ? /^(\d{4})-(\d{2})-(\d{2})(?:T00:00:00(?:\.0+)?Z)?$/.exec(value)
+      : null;
+    if (calendarDate) {
+      const [year, month, day] = calendarDate.slice(1).map(Number);
       date = new Date(year, month - 1, day);
     } else {
       date = new Date(value);
