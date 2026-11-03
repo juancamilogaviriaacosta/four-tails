@@ -9,6 +9,7 @@ import java.time.Instant;
 @Getter
 @Setter
 public class BookingDto {
+    private Long bookingId;
     private Long clientId;
     private String clientName;
     private Long providerId;
@@ -21,6 +22,7 @@ public class BookingDto {
     private BigDecimal fare;
     private String pets;
     private String address;
-    private String color;
     private String notes;
+    private String status;
+    private String cancellationReason;
 }

@@ -502,7 +502,7 @@ public class ServiceService {
                         br.findBookingsForProvider(userId, startDate, endDate);
         for (Booking booking : bookings) {
             BookingDto dto = new BookingDto();
-            dto.setColor(booking.getService().getColor());
+            dto.setBookingId(booking.getId());
             dto.setStartDate(booking.getStartDate());
             dto.setClientName(booking.getClient().getUser().getFirstName() + " " + booking.getClient().getUser().getLastName());
             dto.setProviderName(booking.getProvider().getUser().getFirstName() + " " + booking.getProvider().getUser().getLastName());
@@ -510,8 +510,18 @@ public class ServiceService {
             dto.setServiceId(booking.getService().getId());
             dto.setServiceName(booking.getService().getName());
             dto.setServiceColor(booking.getService().getColor());
+            dto.setStatus(booking.getStatus().name());
             response.add(dto);
         }
         return response;
+    }
+
+    public Map<String, String> cancelBooking(BookingDto bookingDto) {
+        Booking booking = br.findById(bookingDto.getBookingId()).get();
+        booking.setStatus(BookingStatus.CANCELLED);
+        booking.setCancellationReason(bookingDto.getCancellationReason());
+        booking.setUpdatedAt(Instant.now());
+        br.save(booking);
+        return Map.of("message","ok");
     }
 }

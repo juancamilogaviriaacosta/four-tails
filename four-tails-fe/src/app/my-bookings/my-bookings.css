@@ -451,6 +451,42 @@
 	font-weight: 700;
 }
 
+.booking-status-cancelled {
+	padding: 6px 9px;
+	border-radius: 4px;
+	background: #fbe9e7;
+	color: #a33a32;
+	font-size: 11px;
+	font-weight: 700;
+}
+
+.agenda-actions {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.cancel-booking-button {
+	padding: 6px 10px;
+	border: 1px solid #e1b9b5;
+	border-radius: 4px;
+	background: #fff;
+	color: #a33a32;
+	font-size: 12px;
+	font-weight: 700;
+	cursor: pointer;
+}
+
+.cancel-booking-button:hover {
+	background: #fff4f2;
+}
+
+.cancel-booking-button:focus-visible,
+.cancellation-actions button:focus-visible {
+	outline: 3px solid #8eb7aa;
+	outline-offset: 3px;
+}
+
 .empty-agenda {
 	padding: 32px 12px 22px;
 	border-top: 1px solid var(--line);
@@ -580,6 +616,97 @@
 	min-height: 0;
 	padding: 4px 22px 20px;
 	overflow-y: auto;
+}
+
+.cancellation-backdrop {
+	position: fixed;
+	inset: 0;
+	z-index: 1001;
+	display: grid;
+	place-items: center;
+	padding: 24px;
+	background: rgb(20 33 31 / 48%);
+}
+
+.cancellation-modal {
+	width: min(100%, 460px);
+	padding: 26px;
+	border: 1px solid #e2e9e5;
+	border-radius: 8px;
+	background: #fff;
+	box-shadow: 0 24px 70px rgb(16 36 31 / 24%);
+}
+
+.cancellation-modal h2 {
+	font-size: 21px;
+}
+
+.cancellation-modal > p {
+	margin-top: 9px;
+	color: var(--muted);
+	font-size: 14px;
+	line-height: 1.5;
+}
+
+.cancellation-modal label {
+	display: block;
+	margin: 20px 0 7px;
+	font-size: 13px;
+	font-weight: 700;
+}
+
+.cancellation-modal textarea {
+	display: block;
+	width: 100%;
+	min-height: 104px;
+	padding: 10px 12px;
+	border: 1px solid #cfd8d4;
+	border-radius: 5px;
+	font: inherit;
+	font-size: 14px;
+	resize: vertical;
+}
+
+.cancellation-modal textarea:focus {
+	border-color: var(--teal);
+	outline: 3px solid rgb(8 126 120 / 15%);
+}
+
+.cancellation-error {
+	color: #a33a32 !important;
+	font-size: 13px !important;
+}
+
+.cancellation-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 10px;
+	margin-top: 20px;
+}
+
+.cancellation-actions button {
+	min-width: 90px;
+	padding: 9px 14px;
+	border: 1px solid transparent;
+	border-radius: 5px;
+	font-size: 13px;
+	font-weight: 700;
+	cursor: pointer;
+}
+
+.cancellation-dismiss {
+	border-color: var(--line) !important;
+	background: #fff;
+	color: #59656a;
+}
+
+.cancellation-confirm {
+	background: #a33a32;
+	color: #fff;
+}
+
+.cancellation-confirm:hover {
+	background: #872f29;
 }
 
 .pending-request {
@@ -775,7 +902,7 @@
 		padding: 10px 0;
 	}
 
-	.booking-status {
+	.agenda-actions {
 		grid-column: 3;
 		justify-self: start;
 	}

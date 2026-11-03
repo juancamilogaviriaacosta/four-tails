@@ -64,4 +64,9 @@ public class ServicesController {
             @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
         return ResponseEntity.ok(ss.getBookings(userId, role, startDate, endDate));
     }
+
+    @PostMapping("/api/cancelBooking")
+    public ResponseEntity<Map<String, String>> cancelBooking(@RequestBody BookingDto bookingDto) {
+        return ResponseEntity.ok(ss.cancelBooking(bookingDto));
+    }
 }

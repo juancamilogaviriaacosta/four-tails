@@ -95,4 +95,17 @@ describe('MyBookings', () => {
 
     expect(component.bookingsThisWeek).toBe(1);
   });
+
+  it('requires a cancellation reason and marks the booking cancelled after confirmation', () => {
+    const booking = component.bookings[0];
+    component.openCancellationModal(booking);
+
+    component.confirmCancellation('   ');
+    expect(component.cancellationError).toBeTruthy();
+    expect(component.cancellationReasons.has(booking)).toBe(false);
+
+    component.confirmCancellation('Schedule changed');
+    expect(component.cancellationReasons.get(booking)).toBe('Schedule changed');
+    expect(component.selectedBookingForCancellation).toBeNull();
+  });
 });

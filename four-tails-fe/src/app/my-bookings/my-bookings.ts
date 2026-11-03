@@ -2,10 +2,13 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../utils/auth-service';
+import { HttpClient } from '@angular/common/http';
+import { LoadingService } from '../utils/loading-service';
 
 type CalendarView = 'Month' | 'Week' | 'Day';
 
 export interface BookingResponse {
+  bookingId: number;
   clientId: number;
   clientName: string
   providerId: number;
@@ -18,8 +21,9 @@ export interface BookingResponse {
   fare: number;
   pets: string;
   address: string;
-  color: string;
   notes: string;
+  status: string;
+  cancellationReason: string;
 }
 
 interface Booking extends Omit<BookingResponse, 'startDate'> {
@@ -34,7 +38,7 @@ interface PendingBooking {
   service: string;
   startDate: Date;
   time: string;
-  color: Booking['color'];
+  serviceColor: Booking['serviceColor'];
   note: string;
 }
 
@@ -44,6 +48,7 @@ interface PendingBooking {
   templateUrl: './my-bookings.html',
   styleUrl: './my-bookings.css',
 })
+
 export class MyBookings {
   activeView: CalendarView = 'Month';
   currentDate = new Date();
@@ -51,9 +56,11 @@ export class MyBookings {
   readonly bookings: Booking[];
   pendingRequests: PendingBooking[] = this.createSamplePendingRequests();
   isPendingModalOpen = false;
-  allServices:any = [];
+  selectedBookingForCancellation: Booking | null = null;
+  cancellationError = '';
+  allServices: any = [];
 
-  constructor(private readonly route: ActivatedRoute, public auth: AuthService) {
+  constructor(private readonly route: ActivatedRoute, public auth: AuthService, private http: HttpClient, private loadingService: LoadingService) {
     const bookings = this.route.snapshot.data['preload'].bookings as BookingResponse[];
     this.allServices = this.extractAndSortAllServices(bookings);
     this.bookings = bookings.map((booking) => ({
@@ -63,16 +70,16 @@ export class MyBookings {
   }
 
   extractAndSortAllServices(bookings: BookingResponse[]) {
-  const services = new Map<number, { id: number; name: string; color: string; }>();
-  for (const booking of bookings) {
-    if (!services.has(booking.serviceId)) {
-      services.set(booking.serviceId, { id: booking.serviceId, name: booking.serviceName, color: booking.color });
+    const services = new Map<number, { id: number; name: string; serviceColor: string; }>();
+    for (const booking of bookings) {
+      if (!services.has(booking.serviceId)) {
+        services.set(booking.serviceId, { id: booking.serviceId, name: booking.serviceName, serviceColor: booking.serviceColor });
+      }
     }
-  }
 
-  return Array.from(services.values())
-    .sort((a, b) => a.name.localeCompare(b.name));
-}
+    return Array.from(services.values())
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }
 
   get monthLabel(): string {
     return new Intl.DateTimeFormat('en', { month: 'long', year: 'numeric' }).format(this.currentDate);
@@ -105,6 +112,36 @@ export class MyBookings {
     this.isPendingModalOpen = false;
   }
 
+  openCancellationModal(booking: Booking): void {
+    this.selectedBookingForCancellation = booking;
+    this.cancellationError = '';
+  }
+
+  closeCancellationModal(): void {
+    this.selectedBookingForCancellation = null;
+    this.cancellationError = '';
+  }
+
+  confirmCancellation(reason: string): void {
+    if (!this.selectedBookingForCancellation) return;
+    if (!reason.trim()) {
+      this.cancellationError = 'Please provide a reason for cancelling this booking.';
+      return;
+    }
+
+    this.http.post('/api/cancelBooking', { bookingId: this.selectedBookingForCancellation.bookingId, cancellationReason: reason }).subscribe({
+      next: (response: any) => {
+        localStorage.setItem('token', response.token);
+        this.loadingService.hide();
+      },
+      error: (error) => {
+        alert('Unexpected error');
+        this.loadingService.hide();
+      }
+    });
+    this.closeCancellationModal();
+  }
+
   resolvePendingRequest(id: number, accepted = false): void {
     const request = this.pendingRequests.find((pending) => pending.id === id);
     if (accepted && request) {
@@ -114,7 +151,7 @@ export class MyBookings {
         pet: request.pet,
         service: request.service,
         owner: request.owner,
-        color: request.color,
+        serviceColor: request.serviceColor,
       });*/
     }
     this.pendingRequests = this.pendingRequests.filter((request) => request.id !== id);
@@ -188,9 +225,9 @@ export class MyBookings {
     monday.setHours(0, 0, 0, 0);
 
     const samples = [
-      { id: 1, owner: 'Olivia Bennett', initials: 'OB', pet: 'Milo', service: 'Dog walking', offset: 2, time: '09:30', color: 'blue' as const, note: 'Milo loves a long walk in the park. His leash and treats will be ready by the door.' },
-      { id: 2, owner: 'Ethan Parker', initials: 'EP', pet: 'Daisy', service: 'Day care', offset: 4, time: '08:00', color: 'yellow' as const, note: 'Daisy is friendly and gets along well with other dogs. She takes medication with lunch.' },
-      { id: 3, owner: 'Amelia Brooks', initials: 'AB', pet: 'Oliver', service: 'Home visit', offset: 5, time: '12:00', color: 'green' as const, note: 'Oliver needs a quick lunch visit and some company while I am away.' },
+      { id: 1, owner: 'Olivia Bennett', initials: 'OB', pet: 'Milo', service: 'Dog walking', offset: 2, time: '09:30', serviceColor: 'blue' as const, note: 'Milo loves a long walk in the park. His leash and treats will be ready by the door.' },
+      { id: 2, owner: 'Ethan Parker', initials: 'EP', pet: 'Daisy', service: 'Day care', offset: 4, time: '08:00', serviceColor: 'yellow' as const, note: 'Daisy is friendly and gets along well with other dogs. She takes medication with lunch.' },
+      { id: 3, owner: 'Amelia Brooks', initials: 'AB', pet: 'Oliver', service: 'Home visit', offset: 5, time: '12:00', serviceColor: 'green' as const, note: 'Oliver needs a quick lunch visit and some company while I am away.' },
     ];
 
     return samples.map((sample) => {

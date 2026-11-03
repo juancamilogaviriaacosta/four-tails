@@ -56,7 +56,7 @@
 							<span class="date-number">{{ date | date:'d' }}</span>
 							<span class="cell-bookings">
 								@for (booking of bookingsForDate(date); track $index) {
-									<span class="month-event" [style]="{ background: booking.color }">
+									<span class="month-event" [style]="{ background: booking.serviceColor }">
 										<strong>{{ booking.startDate | date:'HH:mm' }}</strong> {{ booking.pets }}
 									</span>
 								}
@@ -78,7 +78,7 @@
 							</button>
 							<div class="week-events">
 								@for (booking of bookingsForDate(date); track $index) {
-									<article class="booking-event" [style]="{ background: booking.color }">
+									<article class="booking-event" [style]="{ background: booking.serviceColor }">
 										<time>{{ booking.startDate | date:'HH:mm' }}</time>
 										<strong>{{ booking.pets }}</strong>
 										<span>{{ booking.serviceName }}</span>
@@ -102,12 +102,25 @@
 				@for (booking of bookingsForDate(currentDate); track $index) {
 					<article class="agenda-booking">
 						<time>{{ booking.startDate | date:'HH:mm' }}</time>
-						<span class="agenda-marker" [style]="{ color:'#e6f2e3', background: booking.color }"></span>
+						<span class="agenda-marker" [style]="{ background: booking.serviceColor }"></span>
 						<div class="agenda-details">
 							<h3>{{ booking.serviceName }} with {{ booking.pets }}</h3>
 							<p>{{ auth.getRole() === 'CLIENT' ? booking.providerName : booking.clientName }} </p>
 						</div>
-						<span class="booking-status">Confirmed</span>
+						<div class="agenda-actions">
+							@if (booking.status === 'CANCELLED') {
+								<span class="booking-status-cancelled">
+									Cancelled
+								</span>
+							} @else {
+								<span class="booking-status">
+									Confirmed
+								</span>
+								<button class="cancel-booking-button" type="button" (click)="openCancellationModal(booking)">
+									Cancel
+								</button>
+							}
+						</div>
 					</article>
 				} @empty {
 					<div class="empty-agenda">
@@ -116,13 +129,44 @@
 						<p>No bookings scheduled for this day.</p>
 					</div>
 				}
+
+				@if (selectedBookingForCancellation; as booking) {
+					<div class="cancellation-backdrop" (click)="closeCancellationModal()" (document:keydown.escape)="closeCancellationModal()">
+						<section
+							class="cancellation-modal"
+							role="dialog"
+							aria-modal="true"
+							aria-labelledby="cancellation-title"
+							(click)="$event.stopPropagation()"
+						>
+							<h2 id="cancellation-title">Cancel booking</h2>
+							<p>Tell us why you need to cancel {{ booking.serviceName }} with {{ booking.pets }}.</p>
+							<label for="cancellation-reason">Reason for cancellation</label>
+							<textarea
+								#cancellationReason
+								id="cancellation-reason"
+								rows="4"
+								maxlength="500"
+								placeholder="Write your justification"
+								[attr.aria-describedby]="cancellationError ? 'cancellation-error' : null"
+							></textarea>
+							@if (cancellationError) {
+								<p id="cancellation-error" class="cancellation-error" role="alert">{{ cancellationError }}</p>
+							}
+							<div class="cancellation-actions">
+								<button class="cancellation-dismiss" type="button" (click)="closeCancellationModal()">Cancel</button>
+								<button class="cancellation-confirm" type="button" (click)="confirmCancellation(cancellationReason.value)">Accept</button>
+							</div>
+						</section>
+					</div>
+				}
 			</section>
 		}
 	</section>
 
 	<footer class="calendar-footer">
 		@for(tmp of allServices; track $index) {
-			<span class="legend-dot" [style]="{ background: tmp.color }"></span><span style=>{{ tmp.name }}</span>
+			<span class="legend-dot" [style]="{ background: tmp.serviceColor }"></span><span style=>{{ tmp.name }}</span>
 		}
 	</footer>
 </main>
