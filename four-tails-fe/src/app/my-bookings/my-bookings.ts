@@ -207,6 +207,10 @@ export class MyBookings {
     return this.bookings.filter((booking) => this.isSameDate(booking.startDate, date));
   }
 
+  isBookingCancelled(booking: Booking): boolean {
+    return booking.status === 'CANCELED' || booking.status === 'CANCELLED';
+  }
+
   isToday(date: Date): boolean {
     return this.isSameDate(date, new Date());
   }

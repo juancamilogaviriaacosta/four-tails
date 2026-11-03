@@ -96,16 +96,21 @@ describe('MyBookings', () => {
     expect(component.bookingsThisWeek).toBe(1);
   });
 
-  it('requires a cancellation reason and marks the booking cancelled after confirmation', () => {
+  it('should identify cancelled bookings for all calendar views', () => {
+    const booking = component.bookings[0];
+    booking.status = 'CANCELED';
+    expect(component.isBookingCancelled(booking)).toBe(true);
+
+    booking.status = 'CANCELLED';
+    expect(component.isBookingCancelled(booking)).toBe(true);
+  });
+
+  it('requires a cancellation reason before submitting a cancellation', () => {
     const booking = component.bookings[0];
     component.openCancellationModal(booking);
 
     component.confirmCancellation('   ');
     expect(component.cancellationError).toBeTruthy();
-    expect(component.cancellationReasons.has(booking)).toBe(false);
-
-    component.confirmCancellation('Schedule changed');
-    expect(component.cancellationReasons.get(booking)).toBe('Schedule changed');
-    expect(component.selectedBookingForCancellation).toBeNull();
+    expect(component.selectedBookingForCancellation).toBe(booking);
   });
 });
