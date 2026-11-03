@@ -1,13 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ChangeDetectorRef, Component } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../utils/auth-service';
 import { HttpClient } from '@angular/common/http';
 import { LoadingService } from '../utils/loading-service';
 
 type CalendarView = 'Month' | 'Week' | 'Day';
 
-export interface BookingResponse {
+export interface BookingDto {
   bookingId: number;
   clientId: number;
   clientName: string
@@ -24,9 +24,10 @@ export interface BookingResponse {
   notes: string;
   status: string;
   cancellationReason: string;
+  currentRole: String;
 }
 
-interface Booking extends Omit<BookingResponse, 'startDate'> {
+interface Booking extends Omit<BookingDto, 'startDate'> {
   startDate: Date;
 }
 
@@ -52,24 +53,26 @@ interface PendingBooking {
 export class MyBookings {
   activeView: CalendarView = 'Month';
   currentDate = new Date();
-  readonly weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-  readonly bookings: Booking[];
+  weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  bookings: Booking[];
   pendingRequests: PendingBooking[] = this.createSamplePendingRequests();
   isPendingModalOpen = false;
   selectedBookingForCancellation: Booking | null = null;
   cancellationError = '';
   allServices: any = [];
 
-  constructor(private readonly route: ActivatedRoute, public auth: AuthService, private http: HttpClient, private loadingService: LoadingService) {
-    const bookings = this.route.snapshot.data['preload'].bookings as BookingResponse[];
+  constructor (
+      private readonly route: ActivatedRoute,
+      public auth: AuthService,
+      private http: HttpClient,
+      private loadingService: LoadingService,
+      private cd: ChangeDetectorRef) {
+    const bookings = this.route.snapshot.data['preload'].bookings as BookingDto[];
     this.allServices = this.extractAndSortAllServices(bookings);
-    this.bookings = bookings.map((booking) => ({
-      ...booking,
-      startDate: this.parseBookingDate(booking.startDate),
-    }));
+    this.bookings = bookings.map((booking) => ( { ...booking, startDate: this.parseBookingDate(booking.startDate) }));
   }
 
-  extractAndSortAllServices(bookings: BookingResponse[]) {
+  extractAndSortAllServices(bookings: BookingDto[]) {
     const services = new Map<number, { id: number; name: string; serviceColor: string; }>();
     for (const booking of bookings) {
       if (!services.has(booking.serviceId)) {
@@ -129,10 +132,11 @@ export class MyBookings {
       return;
     }
 
-    this.http.post('/api/cancelBooking', { bookingId: this.selectedBookingForCancellation.bookingId, cancellationReason: reason }).subscribe({
+    this.http.post('/api/cancelBooking', { ...this.selectedBookingForCancellation, cancellationReason: reason, currentRole: this.auth.getRole() }).subscribe({
       next: (response: any) => {
-        localStorage.setItem('token', response.token);
         this.loadingService.hide();
+        this.bookings = response.map((booking:any) => ( { ...booking, startDate: this.parseBookingDate(booking.startDate) }));
+        this.cd.detectChanges();
       },
       error: (error) => {
         alert('Unexpected error');

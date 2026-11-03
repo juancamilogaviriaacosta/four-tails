@@ -25,4 +25,5 @@ public class BookingDto {
     private String notes;
     private String status;
     private String cancellationReason;
+    private String currentRole;
 }

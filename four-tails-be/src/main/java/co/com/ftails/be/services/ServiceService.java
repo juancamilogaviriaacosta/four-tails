@@ -504,7 +504,9 @@ public class ServiceService {
             BookingDto dto = new BookingDto();
             dto.setBookingId(booking.getId());
             dto.setStartDate(booking.getStartDate());
+            dto.setClientId(booking.getClient().getUser().getId());
             dto.setClientName(booking.getClient().getUser().getFirstName() + " " + booking.getClient().getUser().getLastName());
+            dto.setProviderId(booking.getProvider().getUser().getId());
             dto.setProviderName(booking.getProvider().getUser().getFirstName() + " " + booking.getProvider().getUser().getLastName());
             dto.setPets("3 Dogs and 1 Cat");//booking.getPets());
             dto.setServiceId(booking.getService().getId());
@@ -516,12 +518,19 @@ public class ServiceService {
         return response;
     }
 
-    public Map<String, String> cancelBooking(BookingDto bookingDto) {
+    public List<BookingDto> cancelBooking(BookingDto bookingDto) {
         Booking booking = br.findById(bookingDto.getBookingId()).get();
         booking.setStatus(BookingStatus.CANCELLED);
         booking.setCancellationReason(bookingDto.getCancellationReason());
         booking.setUpdatedAt(Instant.now());
         br.save(booking);
-        return Map.of("message","ok");
+
+        Long id = RoleType.CLIENT.name().equals(bookingDto.getCurrentRole()) ? bookingDto.getClientId() : bookingDto.getProviderId();
+        LocalDate date = booking.getStartDate().atZone(ZoneOffset.UTC).toLocalDate();
+        LocalDate firstDayOfMonth = date.withDayOfMonth(1);
+        LocalDate lastDayOfMonth = date.withDayOfMonth(date.lengthOfMonth());
+        List<BookingDto> bookings = getBookings(id, bookingDto.getCurrentRole(), firstDayOfMonth, lastDayOfMonth);
+
+        return bookings;
     }
 }

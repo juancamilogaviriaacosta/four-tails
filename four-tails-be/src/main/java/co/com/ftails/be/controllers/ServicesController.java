@@ -66,7 +66,7 @@ public class ServicesController {
     }
 
     @PostMapping("/api/cancelBooking")
-    public ResponseEntity<Map<String, String>> cancelBooking(@RequestBody BookingDto bookingDto) {
+    public ResponseEntity<List<BookingDto>> cancelBooking(@RequestBody BookingDto bookingDto) {
         return ResponseEntity.ok(ss.cancelBooking(bookingDto));
     }
 }
