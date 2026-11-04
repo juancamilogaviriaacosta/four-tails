@@ -27,8 +27,9 @@ export interface BookingDto {
   currentRole: String;
 }
 
-interface Booking extends Omit<BookingDto, 'startDate'> {
+interface Booking extends Omit<BookingDto, 'startDate' | 'endDate'> {
   startDate: Date;
+  endDate: Date;
 }
 
 interface PendingBooking {
@@ -69,7 +70,11 @@ export class MyBookings {
       private cd: ChangeDetectorRef) {
     const bookings = this.route.snapshot.data['preload'].bookings as BookingDto[];
     this.allServices = this.extractAndSortAllServices(bookings);
-    this.bookings = bookings.map((booking) => ( { ...booking, startDate: this.parseBookingDate(booking.startDate) }));
+    this.bookings = bookings.map((booking) => ({
+      ...booking,
+      startDate: this.parseBookingDate(booking.startDate),
+      endDate: this.parseBookingDate(booking.endDate),
+    }));
   }
 
   extractAndSortAllServices(bookings: BookingDto[]) {
@@ -135,7 +140,11 @@ export class MyBookings {
     this.http.post('/api/cancelBooking', { ...this.selectedBookingForCancellation, cancellationReason: reason, currentRole: this.auth.getRole() }).subscribe({
       next: (response: any) => {
         this.loadingService.hide();
-        this.bookings = response.map((booking:any) => ( { ...booking, startDate: this.parseBookingDate(booking.startDate) }));
+        this.bookings = response.map((booking: BookingDto) => ({
+          ...booking,
+          startDate: this.parseBookingDate(booking.startDate),
+          endDate: this.parseBookingDate(booking.endDate),
+        }));
         this.cd.detectChanges();
       },
       error: (error) => {
@@ -208,7 +217,22 @@ export class MyBookings {
   }
 
   bookingsForDate(date: Date): Booking[] {
-    return this.bookings.filter((booking) => this.isSameDate(booking.startDate, date));
+    const day = this.startOfDay(date).getTime();
+    return this.bookings.filter((booking) => {
+      const start = this.startOfDay(booking.startDate).getTime();
+      const end = this.startOfDay(booking.endDate).getTime();
+      return day >= start && day <= end;
+    });
+  }
+
+  bookingTimeForDate(booking: Booking, date: Date): string {
+    if (this.isSameDate(booking.startDate, date)) {
+      return new Intl.DateTimeFormat('en', { hour: '2-digit', minute: '2-digit', hour12: false }).format(booking.startDate);
+    }
+    if (this.isSameDate(booking.endDate, date)) {
+      return new Intl.DateTimeFormat('en', { hour: '2-digit', minute: '2-digit', hour12: false }).format(booking.endDate);
+    }
+    return 'All day';
   }
 
   bookingStatusClass(status: string): string {
@@ -276,5 +300,9 @@ export class MyBookings {
     return first.getFullYear() === second.getFullYear()
       && first.getMonth() === second.getMonth()
       && first.getDate() === second.getDate();
+  }
+
+  private startOfDay(date: Date): Date {
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
   }
 }

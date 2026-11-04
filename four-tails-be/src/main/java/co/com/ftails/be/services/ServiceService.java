@@ -504,6 +504,7 @@ public class ServiceService {
             BookingDto dto = new BookingDto();
             dto.setBookingId(booking.getId());
             dto.setStartDate(booking.getStartDate());
+            dto.setEndDate(booking.getEndDate());
             dto.setClientId(booking.getClient().getUser().getId());
             dto.setClientName(booking.getClient().getUser().getFirstName() + " " + booking.getClient().getUser().getLastName());
             dto.setProviderId(booking.getProvider().getUser().getId());

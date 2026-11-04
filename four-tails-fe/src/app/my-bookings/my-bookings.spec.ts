@@ -59,6 +59,21 @@ describe('MyBookings', () => {
                     address: 'Home',
                     notes: '',
                   },
+                  {
+                    userName: 'Taylor P.',
+                    providerId: 4,
+                    providerName: 'Taylor P.',
+                    serviceId: 4,
+                    serviceName: 'Pet sitting',
+                    startDate: '2026-11-02T16:00:00',
+                    endDate: '2026-11-05T10:00:00',
+                    fare: 80,
+                    color: 'purple',
+                    serviceColor: 'purple',
+                    pets: 'Poppy',
+                    address: 'Home',
+                    notes: '',
+                  },
                 ],
               },
             },
@@ -77,23 +92,50 @@ describe('MyBookings', () => {
   });
 
   it('should use bookings from route data and normalize their start dates', () => {
-    expect(component.bookings).toHaveLength(3);
+    expect(component.bookings).toHaveLength(4);
     expect(component.bookings[0].pets).toBe('Milo');
     expect(component.bookings[0].startDate).toEqual(new Date('2026-10-28T09:00:00'));
     expect(component.bookings[2].startDate).toEqual(new Date(2026, 10, 20));
   });
 
   it('should display the start date as an hour in the calendar', () => {
-    component.currentDate = new Date(2026, 9, 28);
     fixture.detectChanges();
 
-    expect(fixture.nativeElement.querySelector('.month-event strong')?.textContent.trim()).toBe('09:00');
+    const octoberDays = component.monthDays;
+    const octoberCellIndex = octoberDays.findIndex((date) => date.getMonth() === 9 && date.getDate() === 28);
+    expect(fixture.nativeElement.querySelectorAll('.month-cell')[octoberCellIndex].querySelector('strong')?.textContent.trim()).toBe('09:00');
   });
 
   it('should count bookings in the selected week', () => {
+    fixture.detectChanges();
     component.currentDate = new Date(2026, 9, 29);
 
     expect(component.bookingsThisWeek).toBe(1);
+  });
+
+  it('should show a multi-day booking on every covered date in Month and Week views', async () => {
+    const booking = component.bookings[3];
+
+    expect(component.bookingsForDate(new Date(2026, 10, 2))).toContain(booking);
+    expect(component.bookingsForDate(new Date(2026, 10, 3))).toContain(booking);
+    expect(component.bookingsForDate(new Date(2026, 10, 4))).toContain(booking);
+    expect(component.bookingsForDate(new Date(2026, 10, 5))).toContain(booking);
+    expect(component.bookingsForDate(new Date(2026, 10, 6))).not.toContain(booking);
+
+    const rangeFixture = TestBed.createComponent(MyBookings);
+    const rangeComponent = rangeFixture.componentInstance;
+    rangeComponent.currentDate = new Date(2026, 10, 4);
+    rangeFixture.detectChanges();
+    const novemberDays = rangeComponent.monthDays;
+    const novemberCellIndex = novemberDays.findIndex((date) => date.getMonth() === 10 && date.getDate() === 4);
+    expect(rangeFixture.nativeElement.querySelectorAll('.month-cell')[novemberCellIndex].textContent).toContain('Poppy');
+
+    rangeFixture.nativeElement.querySelector('.view-switcher button:nth-child(2)').click();
+    await rangeFixture.whenStable();
+
+    expect(rangeFixture.nativeElement.querySelectorAll('.booking-event')).toHaveLength(5);
+    expect(component.bookingTimeForDate(booking, new Date(2026, 10, 3))).toBe('All day');
+    expect(component.bookingTimeForDate(booking, new Date(2026, 10, 5))).toBe('10:00');
   });
 
   it('should identify cancelled bookings for all calendar views', () => {

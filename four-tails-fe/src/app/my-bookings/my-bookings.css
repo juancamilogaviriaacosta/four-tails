@@ -35,36 +35,6 @@
 	gap: 12px;
 }
 
-.pending-count {
-	width: 30px;
-	height: 30px;
-	flex: 0 0 30px;
-	display: grid;
-	place-items: center;
-	padding: 0;
-	border: 0;
-	border-radius: 50%;
-	background: #d94747;
-	color: #fff;
-	font-size: 14px;
-	font-weight: 750;
-	box-shadow: 0 0 0 4px #fae9e7;
-	cursor: pointer;
-	transition: background 140ms ease, transform 140ms ease;
-}
-
-.pending-count:hover {
-	transform: translateY(-1px);
-	background: #bd3034;
-}
-
-.pending-count:focus-visible,
-.modal-close:focus-visible,
-.request-actions button:focus-visible {
-	outline: 3px solid #8eb7aa;
-	outline-offset: 3px;
-}
-
 .heading-copy {
 	margin-top: 9px;
 	color: var(--muted);
@@ -557,60 +527,6 @@
 .legend-dot.yellow { background: #c89a36; }
 .legend-dot.green { background: #70a268; }
 
-.pending-backdrop {
-	position: fixed;
-	inset: 0;
-	z-index: 1000;
-	display: grid;
-	place-items: center;
-	padding: 24px;
-	background: rgb(20 33 31 / 48%);
-}
-
-.pending-modal {
-	width: min(100%, 590px);
-	max-height: min(760px, calc(100dvh - 48px));
-	display: flex;
-	flex-direction: column;
-	border: 1px solid #e2e9e5;
-	border-radius: 8px;
-	background: #fff;
-	box-shadow: 0 24px 70px rgb(16 36 31 / 24%);
-	overflow: hidden;
-}
-
-.pending-modal-header {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	gap: 20px;
-	padding: 22px 24px 18px;
-	border-bottom: 1px solid var(--line);
-}
-
-.pending-modal-header .eyebrow {
-	margin-bottom: 6px;
-}
-
-.pending-modal-header h2 {
-	display: flex;
-	align-items: center;
-	gap: 9px;
-	font-size: 20px;
-}
-
-.pending-modal-header h2 span {
-	min-width: 21px;
-	height: 21px;
-	display: grid;
-	place-items: center;
-	padding: 0 5px;
-	border-radius: 50%;
-	background: #fae9e7;
-	color: #b83235;
-	font-size: 11px;
-}
-
 .modal-close {
 	width: 34px;
 	height: 34px;
@@ -634,12 +550,6 @@
 	stroke: currentColor;
 	stroke-linecap: round;
 	stroke-width: 1.8;
-}
-
-.pending-list {
-	min-height: 0;
-	padding: 4px 22px 20px;
-	overflow-y: auto;
 }
 
 .cancellation-backdrop {
@@ -731,15 +641,6 @@
 
 .cancellation-confirm:hover {
 	background: #872f29;
-}
-
-.pending-request {
-	padding: 17px 0;
-	border-bottom: 1px solid var(--line);
-}
-
-.pending-request:last-child {
-	border-bottom: 0;
 }
 
 .request-owner {
@@ -841,13 +742,6 @@
 
 .request-actions .decline-button:hover {
 	background: #f0f0f0;
-}
-
-.pending-empty {
-	padding: 28px 0 12px;
-	color: var(--muted);
-	font-size: 13px;
-	text-align: center;
 }
 
 @media (max-width: 760px) {
@@ -968,31 +862,6 @@
 
 	.booking-title-row {
 		gap: 9px;
-	}
-
-	.pending-count {
-		width: 27px;
-		height: 27px;
-		flex-basis: 27px;
-	}
-
-	.pending-backdrop {
-		align-items: end;
-		padding: 0;
-	}
-
-	.pending-modal {
-		width: 100%;
-		max-height: min(82dvh, 740px);
-		border-radius: 10px 10px 0 0;
-	}
-
-	.pending-modal-header {
-		padding: 18px 17px 15px;
-	}
-
-	.pending-list {
-		padding: 2px 17px 18px;
 	}
 
 	.request-details,
