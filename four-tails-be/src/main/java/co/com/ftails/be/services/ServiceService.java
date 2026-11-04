@@ -6,7 +6,9 @@ import co.com.ftails.be.dtos.ServiceDto;
 import co.com.ftails.be.entities.*;
 import co.com.ftails.be.repositories.*;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -491,6 +493,31 @@ public class ServiceService {
         booking.setAddress(bookingDto.getAddress());
         br.save(booking);
         return Map.of("message","ok");
+    }
+
+    @Transactional
+    public Map<String, String> replyBookingRequest(BookingDto bookingDto) {
+        if (!RoleType.PROVIDER.name().equals(bookingDto.getCurrentRole())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only providers can reply to booking requests");
+        }
+        if (!BookingStatus.CONFIRMED.name().equals(bookingDto.getStatus())
+                && !BookingStatus.REJECTED.name().equals(bookingDto.getStatus())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Booking reply status must be CONFIRMED or REJECTED");
+        }
+
+        Booking booking = br.findById(bookingDto.getBookingId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Booking not found"));
+        if (!booking.getProvider().getUser().getId().equals(bookingDto.getProviderId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Booking does not belong to this provider");
+        }
+        if (booking.getStatus() != BookingStatus.PENDING) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Only pending bookings can receive a reply");
+        }
+
+        booking.setStatus(BookingStatus.valueOf(bookingDto.getStatus()));
+        booking.setUpdatedAt(Instant.now());
+        br.save(booking);
+        return Map.of("message", "ok");
     }
 
     public List<BookingDto> getBookings(Long userId, String role, LocalDate startLocalDate, LocalDate endLocalDate) {

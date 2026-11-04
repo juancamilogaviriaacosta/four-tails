@@ -1,90 +1,107 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
+import { vi } from 'vitest';
 
 import { MyBookings } from './my-bookings';
 
 describe('MyBookings', () => {
   let component: MyBookings;
   let fixture: ComponentFixture<MyBookings>;
+  let httpTestingController: HttpTestingController;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [MyBookings],
-      providers: [{
-        provide: ActivatedRoute,
-        useValue: {
-          snapshot: {
-            data: {
-              preload: {
-                bookings: [
-                  {
-                    userName: 'Sophie L.',
-                    providerId: 1,
-                    providerName: 'Sophie L.',
-                    serviceId: 1,
-                    serviceName: 'Dog walking',
-                    startDate: '2026-10-28T09:00:00',
-                    endDate: '2026-10-28T10:00:00',
-                    fare: 25,
-                    color: 'blue',
-                    pets: 'Milo',
-                    address: 'Park',
-                    notes: '',
-                  },
-                  {
-                    userName: 'James R.',
-                    providerId: 2,
-                    providerName: 'James R.',
-                    serviceId: 2,
-                    serviceName: 'Day care',
-                    startDate: '2026-11-02T11:30:00',
-                    endDate: '2026-11-02T12:30:00',
-                    fare: 30,
-                    color: 'yellow',
-                    pets: 'Luna',
-                    address: 'Home',
-                    notes: '',
-                  },
-                  {
-                    userName: 'Alex M.',
-                    providerId: 3,
-                    providerName: 'Alex M.',
-                    serviceId: 3,
-                    serviceName: 'Home visit',
-                    startDate: '2026-11-20T00:00:00Z',
-                    endDate: '2026-11-20T01:00:00Z',
-                    fare: 35,
-                    color: 'green',
-                    pets: 'Oliver',
-                    address: 'Home',
-                    notes: '',
-                  },
-                  {
-                    userName: 'Taylor P.',
-                    providerId: 4,
-                    providerName: 'Taylor P.',
-                    serviceId: 4,
-                    serviceName: 'Pet sitting',
-                    startDate: '2026-11-02T16:00:00',
-                    endDate: '2026-11-05T10:00:00',
-                    fare: 80,
-                    color: 'purple',
-                    serviceColor: 'purple',
-                    pets: 'Poppy',
-                    address: 'Home',
-                    notes: '',
-                  },
-                ],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              data: {
+                preload: {
+                  bookings: [
+                    {
+                      bookingId: 1,
+                      userName: 'Sophie L.',
+                      providerId: 1,
+                      providerName: 'Sophie L.',
+                      serviceId: 1,
+                      serviceName: 'Dog walking',
+                      startDate: '2026-10-28T09:00:00',
+                      endDate: '2026-10-28T10:00:00',
+                      fare: 25,
+                      color: 'blue',
+                      pets: 'Milo',
+                      address: 'Park',
+                      notes: '',
+                    },
+                    {
+                      bookingId: 2,
+                      userName: 'James R.',
+                      providerId: 2,
+                      providerName: 'James R.',
+                      serviceId: 2,
+                      serviceName: 'Day care',
+                      startDate: '2026-11-02T11:30:00',
+                      endDate: '2026-11-02T12:30:00',
+                      fare: 30,
+                      color: 'yellow',
+                      pets: 'Luna',
+                      address: 'Home',
+                      notes: '',
+                    },
+                    {
+                      bookingId: 3,
+                      userName: 'Alex M.',
+                      providerId: 3,
+                      providerName: 'Alex M.',
+                      serviceId: 3,
+                      serviceName: 'Home visit',
+                      startDate: '2026-11-20T00:00:00Z',
+                      endDate: '2026-11-20T01:00:00Z',
+                      fare: 35,
+                      color: 'green',
+                      pets: 'Oliver',
+                      address: 'Home',
+                      notes: '',
+                    },
+                    {
+                      bookingId: 4,
+                      userName: 'Taylor P.',
+                      providerId: 4,
+                      providerName: 'Taylor P.',
+                      serviceId: 4,
+                      serviceName: 'Pet sitting',
+                      startDate: '2026-11-02T16:00:00',
+                      endDate: '2026-11-05T10:00:00',
+                      fare: 80,
+                      color: 'purple',
+                      serviceColor: 'purple',
+                      pets: 'Poppy',
+                      address: 'Home',
+                      notes: '',
+                    },
+                  ],
+                },
               },
             },
           },
         },
-      }],
+      ],
     }).compileComponents();
 
+    httpTestingController = TestBed.inject(HttpTestingController);
     fixture = TestBed.createComponent(MyBookings);
     component = fixture.componentInstance;
     await fixture.whenStable();
+  });
+
+  afterEach(() => {
+    httpTestingController.verify();
   });
 
   it('should create', () => {
@@ -111,6 +128,79 @@ describe('MyBookings', () => {
     component.currentDate = new Date(2026, 9, 29);
 
     expect(component.bookingsThisWeek).toBe(1);
+  });
+
+  it('lets a provider reply to a pending booking by rejecting or confirming it', async () => {
+    const booking = component.bookings[3];
+    booking.status = 'PENDING';
+    vi.spyOn(component.auth, 'getRole').mockReturnValue('PROVIDER');
+    fixture.detectChanges();
+
+    const todayIndex = component.monthDays.findIndex((date) =>
+      date.getFullYear() === component.currentDate.getFullYear()
+      && date.getMonth() === component.currentDate.getMonth()
+      && date.getDate() === component.currentDate.getDate(),
+    );
+    (fixture.nativeElement.querySelectorAll('.month-cell')[todayIndex] as HTMLButtonElement).click();
+    await fixture.whenStable();
+
+    const replyButton = fixture.nativeElement.querySelector('.reply-booking-button') as HTMLButtonElement;
+    expect(replyButton?.textContent.trim()).toBe('Reply');
+    expect(replyButton).toBeTruthy();
+    replyButton.click();
+    fixture.detectChanges();
+
+    const replyDialog = fixture.nativeElement.querySelector('#booking-reply-title')?.closest('[role="dialog"]');
+    expect(replyDialog?.textContent).toContain('Choose whether to reject or confirm');
+    expect(replyDialog?.querySelector('.booking-reply-reject')?.textContent.trim()).toBe('Reject');
+    expect(replyDialog?.querySelector('.booking-reply-confirm')?.textContent.trim()).toBe('Confirm');
+    (replyDialog?.querySelector('.booking-reply-reject') as HTMLButtonElement).click();
+    fixture.detectChanges();
+    const rejectRequest = httpTestingController.expectOne('/api/replyBookingRequest');
+    expect(rejectRequest.request.method).toBe('POST');
+    expect(rejectRequest.request.body).toEqual({
+      bookingId: booking.bookingId,
+      providerId: booking.providerId,
+      currentRole: 'PROVIDER',
+      status: 'REJECTED',
+    });
+    expect(booking.status).toBe('PENDING');
+    rejectRequest.flush({ message: 'ok' });
+    expect(fixture.nativeElement.querySelector('#booking-reply-title')).toBeNull();
+    expect(booking.status).toBe('REJECTED');
+
+    const confirmFixture = TestBed.createComponent(MyBookings);
+    const confirmComponent = confirmFixture.componentInstance;
+    const pendingBooking = confirmComponent.bookings[3];
+    pendingBooking.status = 'PENDING';
+    vi.spyOn(confirmComponent.auth, 'getRole').mockReturnValue('PROVIDER');
+    confirmFixture.detectChanges();
+    const confirmTodayIndex = confirmComponent.monthDays.findIndex((date) =>
+      date.getFullYear() === confirmComponent.currentDate.getFullYear()
+      && date.getMonth() === confirmComponent.currentDate.getMonth()
+      && date.getDate() === confirmComponent.currentDate.getDate(),
+    );
+    (confirmFixture.nativeElement.querySelectorAll('.month-cell')[confirmTodayIndex] as HTMLButtonElement).click();
+    await confirmFixture.whenStable();
+    (confirmFixture.nativeElement.querySelector('.reply-booking-button') as HTMLButtonElement).click();
+    confirmFixture.detectChanges();
+    const reopenedDialog = confirmFixture.nativeElement.querySelector('#booking-reply-title')?.closest('[role="dialog"]');
+    (reopenedDialog?.querySelector('.booking-reply-confirm') as HTMLButtonElement).click();
+    confirmFixture.detectChanges();
+
+    const request = httpTestingController.expectOne('/api/replyBookingRequest');
+    expect(request.request.method).toBe('POST');
+    expect(request.request.body).toEqual({
+      bookingId: pendingBooking.bookingId,
+      providerId: pendingBooking.providerId,
+      currentRole: 'PROVIDER',
+      status: 'CONFIRMED',
+    });
+    expect(pendingBooking.status).toBe('PENDING');
+
+    request.flush({ message: 'ok' });
+
+    expect(pendingBooking.status).toBe('CONFIRMED');
   });
 
   it('should show a multi-day booking on every covered date in Month and Week views', async () => {

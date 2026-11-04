@@ -475,7 +475,23 @@
 	background: #fff4f2;
 }
 
+.reply-booking-button {
+	padding: 6px 10px;
+	border: 1px solid #a9cfca;
+	border-radius: 4px;
+	background: #eef8f7;
+	color: var(--teal);
+	font-size: 12px;
+	font-weight: 700;
+	cursor: pointer;
+}
+
+.reply-booking-button:hover {
+	background: #def1ef;
+}
+
 .cancel-booking-button:focus-visible,
+.reply-booking-button:focus-visible,
 .cancellation-actions button:focus-visible {
 	outline: 3px solid #8eb7aa;
 	outline-offset: 3px;
@@ -632,6 +648,30 @@
 	border-color: var(--line) !important;
 	background: #fff;
 	color: #59656a;
+}
+
+.cancellation-actions button:disabled {
+	cursor: wait;
+	opacity: 0.7;
+}
+
+.booking-reply-reject {
+	border-color: #e1b9b5 !important;
+	background: #fff4f2;
+	color: #a33a32;
+}
+
+.booking-reply-reject:hover:not(:disabled) {
+	background: #fbe9e7;
+}
+
+.booking-reply-confirm {
+	background: #477654;
+	color: #fff;
+}
+
+.booking-reply-confirm:hover:not(:disabled) {
+	background: #396346;
 }
 
 .cancellation-confirm {

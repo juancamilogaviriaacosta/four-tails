@@ -56,6 +56,11 @@ public class ServicesController {
         return ResponseEntity.ok(ss.confirmBooking(bookingDto));
     }
 
+    @PostMapping("/api/replyBookingRequest")
+    public ResponseEntity<Map<String, String>> replyBookingRequest(@RequestBody BookingDto bookingDto) {
+        return ResponseEntity.ok(ss.replyBookingRequest(bookingDto));
+    }
+
     @GetMapping("/api/getBookings/{userId}")
     public ResponseEntity<List<BookingDto>> getBookings(
             @PathVariable("userId") Long userId,

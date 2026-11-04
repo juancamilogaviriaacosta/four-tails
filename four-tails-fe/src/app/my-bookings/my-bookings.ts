@@ -56,8 +56,9 @@ export class MyBookings {
   currentDate = new Date();
   weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   bookings: Booking[];
-  pendingRequests: PendingBooking[] = this.createSamplePendingRequests();
   isPendingModalOpen = false;
+  selectedBookingForReply: Booking | null = null;
+  isReplyingBooking = false;
   selectedBookingForCancellation: Booking | null = null;
   cancellationError = '';
   allServices: any = [];
@@ -155,19 +156,39 @@ export class MyBookings {
     this.closeCancellationModal();
   }
 
-  resolvePendingRequest(id: number, accepted = false): void {
-    const request = this.pendingRequests.find((pending) => pending.id === id);
-    if (accepted && request) {
-      /*this.bookings.push({
-        startDate: request.startDate,
-        //time: request.time,
-        pet: request.pet,
-        service: request.service,
-        owner: request.owner,
-        serviceColor: request.serviceColor,
-      });*/
-    }
-    this.pendingRequests = this.pendingRequests.filter((request) => request.id !== id);
+  openBookingReply(booking: Booking): void {
+    this.selectedBookingForReply = booking;
+  }
+
+  closeBookingReply(): void {
+    if (this.isReplyingBooking) return;
+    this.selectedBookingForReply = null;
+  }
+
+  replyBooking(status: 'CONFIRMED' | 'REJECTED'): void {
+    const booking = this.selectedBookingForReply;
+    if (!booking || this.isReplyingBooking) return;
+
+    this.isReplyingBooking = true;
+    this.http.post('/api/replyBookingRequest', {
+      bookingId: booking.bookingId,
+      providerId: booking.providerId,
+      currentRole: this.auth.getRole(),
+      status,
+    }).subscribe({
+      next: () => {
+        booking.status = status;
+        this.isReplyingBooking = false;
+        this.selectedBookingForReply = null;
+        this.cd.detectChanges();
+      },
+      error: (error) => {
+        console.error('Error replying to booking:', error);
+        alert('Could not reply to the booking. Please try again.');
+        this.isReplyingBooking = false;
+        this.cd.detectChanges();
+      },
+    });
   }
 
   get monthDays(): Date[] {
@@ -257,24 +278,6 @@ export class MyBookings {
 
   trackDate(_index: number, date: Date): number {
     return date.getTime();
-  }
-
-  private createSamplePendingRequests(): PendingBooking[] {
-    const monday = new Date();
-    monday.setDate(monday.getDate() - ((monday.getDay() + 6) % 7));
-    monday.setHours(0, 0, 0, 0);
-
-    const samples = [
-      { id: 1, owner: 'Olivia Bennett', initials: 'OB', pet: 'Milo', service: 'Dog walking', offset: 2, time: '09:30', serviceColor: 'blue' as const, note: 'Milo loves a long walk in the park. His leash and treats will be ready by the door.' },
-      { id: 2, owner: 'Ethan Parker', initials: 'EP', pet: 'Daisy', service: 'Day care', offset: 4, time: '08:00', serviceColor: 'yellow' as const, note: 'Daisy is friendly and gets along well with other dogs. She takes medication with lunch.' },
-      { id: 3, owner: 'Amelia Brooks', initials: 'AB', pet: 'Oliver', service: 'Home visit', offset: 5, time: '12:00', serviceColor: 'green' as const, note: 'Oliver needs a quick lunch visit and some company while I am away.' },
-    ];
-
-    return samples.map((sample) => {
-      const date = new Date(monday);
-      date.setDate(monday.getDate() + sample.offset);
-      return { ...sample, startDate: date };
-    });
   }
 
   private parseBookingDate(value: Date | string): Date {

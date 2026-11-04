@@ -103,9 +103,14 @@
 							<span class="booking-status" [ngClass]="bookingStatusClass(booking.status)">
 								{{ bookingStatusLabel(booking.status) }}
 							</span>
-							@if (booking.status !== 'CANCELLED') {
+							@if (booking.status !== 'CANCELLED' && booking.status !== 'PENDING' && booking.status !== 'REJECTED') {
 								<button class="cancel-booking-button" type="button" (click)="openCancellationModal(booking)">
 									Cancel
+								</button>
+							}
+							@if (booking.status === 'PENDING' && auth.getRole() === 'PROVIDER') {
+								<button class="reply-booking-button" type="button" (click)="openBookingReply(booking)">
+									Reply
 								</button>
 							}
 						</div>
@@ -115,6 +120,36 @@
 						<span class="empty-spark" aria-hidden="true">✳</span>
 						<h3>A little breathing room</h3>
 						<p>No bookings scheduled for this day.</p>
+					</div>
+				}
+
+				@if (selectedBookingForReply; as booking) {
+					<div class="cancellation-backdrop" (click)="closeBookingReply()" (document:keydown.escape)="closeBookingReply()">
+						<section
+							class="cancellation-modal"
+							role="dialog"
+							aria-modal="true"
+							aria-labelledby="booking-reply-title"
+							(click)="$event.stopPropagation()">
+							<h2 id="booking-reply-title">Reply to booking</h2>
+							<p>Choose whether to reject or confirm {{ booking.serviceName }} with {{ booking.pets }}.</p>
+							<div class="cancellation-actions">
+								<button
+									class="booking-reply-reject"
+									type="button"
+									[disabled]="isReplyingBooking"
+									(click)="replyBooking('REJECTED')" >
+									Reject
+								</button>
+								<button
+									class="booking-reply-confirm"
+									type="button"
+									[disabled]="isReplyingBooking"
+									(click)="replyBooking('CONFIRMED')" >
+									{{ isReplyingBooking ? 'Sending…' : 'Confirm' }}
+								</button>
+							</div>
+						</section>
 					</div>
 				}
 
