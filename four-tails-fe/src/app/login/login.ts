@@ -32,7 +32,7 @@ export class Login {
       next: (response:any) => {
         if(response && response.token) {
           localStorage.setItem('token', response.token);
-          this.router.navigate(['/']);
+          window.location.reload();
           this.closeLogin()
           this.loadingService.hide();
         } else {
