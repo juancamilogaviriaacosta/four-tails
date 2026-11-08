@@ -157,6 +157,41 @@
     color: var(--blue-dark);
 }
 
+.auth-action-highlight {
+    position: relative;
+    z-index: 11;
+    animation: auth-action-highlight 1s ease-in-out infinite alternate;
+}
+
+.auth-required-warning {
+    position: fixed;
+    z-index: 1001;
+    top: 72px;
+    right: 20px;
+    max-width: min(360px, calc(100vw - 40px));
+    margin: 0;
+    padding: 12px 16px;
+    border: 1px solid #f0c36d;
+    border-radius: 8px;
+    background: #fff8e6;
+    color: #59400a;
+    box-shadow: 0 6px 20px rgb(34 60 64 / 15%);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+@keyframes auth-action-highlight {
+    from {
+        box-shadow: 0 0 0 0 rgb(255 201 27 / 45%);
+        transform: scale(1);
+    }
+
+    to {
+        box-shadow: 0 0 0 7px rgb(255 201 27 / 75%);
+        transform: scale(1.05);
+    }
+}
+
 .header-actions .icon-action {
   position: relative;
   display: grid;
@@ -256,7 +291,8 @@
 
 @media (prefers-reduced-motion: reduce) {
     .login-modal-backdrop,
-    .login-modal-dialog {
+    .login-modal-dialog,
+    .auth-action-highlight {
         animation: none;
     }
 }

@@ -53,8 +53,8 @@
       }
     </div>
   } @else {
-    <button class="login-trigger" type="button" (click)="login()">Log in</button>
-    <button class="signup" (click)="signup()">Sign up</button>
+    <button class="login-trigger" [class.auth-action-highlight]="showAuthWarning" type="button" (click)="login()">Log in</button>
+    <button class="signup" [class.auth-action-highlight]="showAuthWarning" (click)="signup()">Sign up</button>
   }
   
   </div>
@@ -92,11 +92,15 @@
       <button class="mobile-messages" type="button" (click)="navigateToProfile()">Edit Profile</button>
       <button class="mobile-messages" type="button" (click)="logout()">Logout</button>
     } @else {
-      <button type="button" class="mobile-login" (click)="login()">Log in</button>
-      <button type="button" class="mobile-signup" (click)="signup()">Sign up</button>
+      <button type="button" class="mobile-login" [class.auth-action-highlight]="showAuthWarning" (click)="login()">Log in</button>
+      <button type="button" class="mobile-signup" [class.auth-action-highlight]="showAuthWarning" (click)="signup()">Sign up</button>
     }    
   </nav>
 </div>
+}
+
+@if (showAuthWarning) {
+<p class="auth-required-warning" role="status">Log in or sign up to send a booking request.</p>
 }
 
 <router-outlet />

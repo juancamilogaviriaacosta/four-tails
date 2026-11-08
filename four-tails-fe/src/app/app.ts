@@ -3,9 +3,11 @@ import { App as CapacitorApp } from '@capacitor/app';
 import { PluginListenerHandle } from '@capacitor/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { Login } from './login/login';
+import { Subscription } from 'rxjs';
 import { AuthService } from './utils/auth-service';
 import { LoadingService } from './utils/loading-service';
 import { Signup } from './signup/signup';
+import { AuthPromptService } from './utils/auth-prompt-service';
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, Login, Signup],
@@ -21,8 +23,24 @@ export class App implements OnInit, OnDestroy {
   username = '';
   showSignupModal = false;
   private backButtonListener?: PluginListenerHandle;
+  showAuthWarning = false;
+  private authWarningTimeout?: ReturnType<typeof setTimeout>;
+  private authPromptSubscription: Subscription;
 
-  constructor(public router: Router, public authService: AuthService, public loadingService: LoadingService) {
+  constructor(
+    public router: Router,
+    public authService: AuthService,
+    public loadingService: LoadingService,
+    public authPromptService: AuthPromptService,
+  ) {
+    this.authPromptSubscription = authPromptService.loginAndSignupPromptRequested$.subscribe(() => {
+      this.showAuthWarning = true;
+      this.mobileMenuOpen = window.matchMedia('(max-width: 1100px)').matches;
+      clearTimeout(this.authWarningTimeout);
+      this.authWarningTimeout = setTimeout(() => {
+        this.showAuthWarning = false;
+      }, 6000);
+    });
   }
 
   async ngOnInit(): Promise<void> {
@@ -47,9 +65,12 @@ export class App implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     void this.backButtonListener?.remove();
+    this.authPromptSubscription.unsubscribe();
+    clearTimeout(this.authWarningTimeout);
   }
 
   login() {
+    this.dismissAuthWarning();
     this.showUserMenu = false;
     this.mobileMenuOpen = false;
     this.showLoginModal = true;
@@ -60,9 +81,15 @@ export class App implements OnInit, OnDestroy {
   }
 
   signup() {
+    this.dismissAuthWarning();
     this.showUserMenu = false;
     this.mobileMenuOpen = false;
     this.showSignupModal = true;
+  }
+
+  dismissAuthWarning(): void {
+    this.showAuthWarning = false;
+    clearTimeout(this.authWarningTimeout);
   }
 
   closeSignupModal(): void {

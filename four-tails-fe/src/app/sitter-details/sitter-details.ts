@@ -5,6 +5,7 @@ import { Utils } from '../utils/utils';
 import { ActivatedRoute } from '@angular/router';
 import { TimeAgoPipe } from '../utils/time-ago.pipe';
 import { AuthService } from '../utils/auth-service';
+import { AuthPromptService } from '../utils/auth-prompt-service';
 
 @Component({
   selector: 'app-sitter-details',
@@ -23,7 +24,13 @@ export class SitterDetails {
   address = '';
   service = '';
 
-  constructor(private ar: ActivatedRoute, private http: HttpClient, private cd: ChangeDetectorRef, private auth: AuthService) {
+  constructor(
+    private ar: ActivatedRoute,
+    private http: HttpClient,
+    private cd: ChangeDetectorRef,
+    private auth: AuthService,
+    private authPrompt: AuthPromptService,
+  ) {
     this.sitter = this.ar.snapshot.data['preload'].sitter;
     const queryParams = this.ar.snapshot.queryParamMap;
     this.pets = queryParams.get('pets') ?? '';
@@ -48,27 +55,33 @@ export class SitterDetails {
   }
 
   confirmBooking(): void {
-    this.http.post('/api/confirmBooking', {
-      clientId : this.auth.getUserId(),
-      providerId: this.sitter.id,
-      serviceId: this.service,
-      startDate: `${this.startDate}T00:00:00Z`,
-      endDate: `${this.endDate}T00:00:00Z`,
-      fare: this.sitter.fare,
-      pets: this.pets,
-      address: this.address,
-      notes: '',
-    }).subscribe({
-      next: () => {
-        this.bookingConfirmationOpen = false;
-        this.bookingRequested = true;
-        this.cd.detectChanges();
-      },
-      error: (error) => {
-        console.error('Error confirming booking:', error);
-        this.bookingError = 'Could not submit the booking request. Please try again.';
-        this.cd.detectChanges();
-      },
-    });
+    if (this.auth.getUserId()) {
+      this.http.post('/api/confirmBooking', {
+        clientId : this.auth.getUserId(),
+        providerId: this.sitter.id,
+        serviceId: this.service,
+        startDate: `${this.startDate}T00:00:00Z`,
+        endDate: `${this.endDate}T00:00:00Z`,
+        fare: this.sitter.fare,
+        pets: this.pets,
+        address: this.address,
+        notes: '',
+      }).subscribe({
+        next: () => {
+          this.bookingConfirmationOpen = false;
+          this.bookingRequested = true;
+          this.cd.detectChanges();
+        },
+        error: (error) => {
+          console.error('Error confirming booking:', error);
+          this.bookingError = 'Could not submit the booking request. Please try again.';
+          this.cd.detectChanges();
+        },
+      });
+    } else {
+      this.bookingConfirmationOpen = false;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      this.authPrompt.showWarningAndHighlightLoginAndSignUp();
+    }
   }
 }

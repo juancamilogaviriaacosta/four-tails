@@ -21,9 +21,9 @@ import { editProfileResolver } from './edit-profile/edit-profile-resolver';
 
 export const routes: Routes = [
     { path: '', component: MainServices  },
-    { path: 'find-sitter', component: FindSitter, canActivate: [authGuard], resolve: { preload: findSitterResolver } },
-    { path: 'search-sitters', component: SearchSitters, canActivate: [authGuard], resolve: { preload: searchSittersResolver } },
-    { path: 'sitter-details/:id', component: SitterDetails, canActivate: [authGuard], resolve: { preload: sitterDetailResolver } },
+    { path: 'find-sitter', component: FindSitter, resolve: { preload: findSitterResolver } },
+    { path: 'search-sitters', component: SearchSitters, resolve: { preload: searchSittersResolver } },
+    { path: 'sitter-details/:id', component: SitterDetails, resolve: { preload: sitterDetailResolver } },
     { path: 'messages', component: Messages },
     { path: 'notifications', component: Notifications },
     { path: 'edit-profile', component: EditProfile, canActivate: [authGuard], resolve: { preload: editProfileResolver }},

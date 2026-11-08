@@ -4,6 +4,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 
 import { SitterDetails } from './sitter-details';
+import { AuthPromptService } from '../utils/auth-prompt-service';
 
 describe('SitterDetails', () => {
   let component: SitterDetails;
@@ -11,7 +12,7 @@ describe('SitterDetails', () => {
   let httpTestingController: HttpTestingController;
 
   beforeEach(async () => {
-    localStorage.setItem('token', JSON.stringify({ id: 1 }));
+    localStorage.setItem('token', `header.${btoa(JSON.stringify({ id: 1 }))}.signature`);
 
     await TestBed.configureTestingModule({
       imports: [SitterDetails],
@@ -27,6 +28,7 @@ describe('SitterDetails', () => {
                   sitter: {
                     id: 17,
                     name: 'Maya Watson',
+                    fare: 150,
                     photos: [],
                   },
                 },
@@ -77,6 +79,8 @@ describe('SitterDetails', () => {
       startDate: `${component.startDate}T00:00:00Z`,
       endDate: `${component.endDate}T00:00:00Z`,
       fare: 150,
+      pets: '',
+      address: '',
       notes: '',
     });
     expect(component.bookingRequested).toBe(false);
@@ -85,5 +89,22 @@ describe('SitterDetails', () => {
 
     expect(component.bookingConfirmationOpen).toBe(false);
     expect(component.bookingRequested).toBe(true);
+  });
+
+  it('prompts unauthenticated users to log in or sign up instead of booking', () => {
+    localStorage.removeItem('token');
+    const authPrompt = TestBed.inject(AuthPromptService);
+    const promptSpy = vi.spyOn(authPrompt, 'showWarningAndHighlightLoginAndSignUp');
+    const scrollSpy = vi.spyOn(window, 'scrollTo').mockImplementation(() => {});
+    component.requestBooking();
+
+    component.confirmBooking();
+
+    expect(promptSpy).toHaveBeenCalledOnce();
+    expect(scrollSpy).toHaveBeenCalledWith({ top: 0, behavior: 'smooth' });
+    expect(component.bookingConfirmationOpen).toBe(false);
+    expect(component.bookingRequested).toBe(false);
+    httpTestingController.expectNone('/api/confirmBooking');
+    scrollSpy.mockRestore();
   });
 });
