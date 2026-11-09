@@ -37,4 +37,15 @@ public class RefreshToken {
 
 	@Column(nullable = false)
 	private Boolean revoked;
+
+	@PrePersist
+	public void onCreate() {
+		createdAt = Instant.now();
+		updatedAt = createdAt;
+	}
+
+	@PreUpdate
+	public void onUpdate() {
+		updatedAt = Instant.now();
+	}
 }

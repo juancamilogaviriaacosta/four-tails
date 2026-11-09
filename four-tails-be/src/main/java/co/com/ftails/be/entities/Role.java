@@ -28,4 +28,15 @@ public class Role {
 	
 	@Column(nullable = false, unique = true)
 	private String name;
+
+	@PrePersist
+	public void onCreate() {
+		createdAt = Instant.now();
+		updatedAt = createdAt;
+	}
+
+	@PreUpdate
+	public void onUpdate() {
+		updatedAt = Instant.now();
+	}
 }

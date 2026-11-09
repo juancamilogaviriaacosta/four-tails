@@ -39,4 +39,22 @@ public class JwtService {
                 .signWith(signingKey)
                 .compact();
     }
+
+    public String extractEmail(String token) {
+        return Jwts.parser()
+                .verifyWith(signingKey)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .getSubject();
+    }
+
+    public boolean isTokenValid(String token) {
+        try {
+            extractEmail(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

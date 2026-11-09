@@ -1,21 +1,23 @@
 package co.com.ftails.be.services;
 
+import co.com.ftails.be.dtos.RegisterDeviceDto;
 import co.com.ftails.be.dtos.UserDto;
-import co.com.ftails.be.entities.*;
+import co.com.ftails.be.entities.Client;
+import co.com.ftails.be.entities.IdentityProvider;
+import co.com.ftails.be.entities.RoleType;
+import co.com.ftails.be.entities.User;
 import co.com.ftails.be.repositories.ClientRepository;
 import co.com.ftails.be.repositories.RoleRepository;
 import co.com.ftails.be.repositories.UserRepository;
 import co.com.ftails.be.util.JwtService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.time.Instant;
 import java.util.Arrays;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -28,14 +30,11 @@ public class UserService {
     private final JwtService jwtService;
 
     public UserDto signUp(Authentication authentication, UserDto userDto) {
-        Instant now = Instant.now();
         User user = new User();
         user.setEmail(userDto.getEmail());
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        user.setCreatedAt(now);
-        user.setUpdatedAt(now);
         user.setIdentityProvider(IdentityProvider.LOCAL.name());
         user.setEnabled(true);
         user.setEmailVerified(false);
@@ -43,8 +42,6 @@ public class UserService {
         User savedUser = ur.save(user);
 
         Client client = new Client();
-        client.setCreatedAt(now);
-        client.setUpdatedAt(now);
         client.setUser(user);
         cr.save(client);
         return userToDto(savedUser);
@@ -89,7 +86,6 @@ public class UserService {
         user.setBirthDate(userDto.getBirthDate());
         user.setAddress(userDto.getAddress());
         user.setPhone(userDto.getPhone());
-        user.setUpdatedAt(Instant.now());
         User savedUser = ur.save(user);
         return userToDto(savedUser);
     }

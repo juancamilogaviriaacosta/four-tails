@@ -74,4 +74,15 @@ public class User {
         inverseJoinColumns = @JoinColumn(name = "rol_id")
     )
     private List<Role> roles;
+
+	@PrePersist
+	public void onCreate() {
+		createdAt = Instant.now();
+		updatedAt = createdAt;
+	}
+
+	@PreUpdate
+	public void onUpdate() {
+		updatedAt = Instant.now();
+	}
 }

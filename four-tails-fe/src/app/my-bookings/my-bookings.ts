@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../utils/auth-service';
 import { HttpClient } from '@angular/common/http';
 import { LoadingService } from '../utils/loading-service';
+import { FirebaseNotificationService } from '../firebase/firebase-notification.service';
 
 type CalendarView = 'Month' | 'Week' | 'Day';
 
@@ -68,6 +69,7 @@ export class MyBookings {
       public auth: AuthService,
       private http: HttpClient,
       private loadingService: LoadingService,
+      private notificationService: FirebaseNotificationService,
       private cd: ChangeDetectorRef) {
     const bookings = this.route.snapshot.data['preload'].bookings as BookingDto[];
     this.allServices = this.extractAndSortAllServices(bookings);
@@ -226,6 +228,10 @@ export class MyBookings {
       nextDate.setDate(nextDate.getDate() + amount * (this.activeView === 'Week' ? 7 : 1));
     }
     this.currentDate = nextDate;
+  }
+
+  async enableNotifications() {
+    await this.notificationService.enableNotifications();
   }
 
   goToToday(): void {

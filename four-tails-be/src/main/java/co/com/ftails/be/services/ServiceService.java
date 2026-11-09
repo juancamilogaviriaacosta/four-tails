@@ -12,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
@@ -38,69 +39,49 @@ public class ServiceService {
 	public Map<String, String> initDatabase() {
 		Instant now = Instant.now();
 		Service service1 = new Service();
-		service1.setCreatedAt(now);
-		service1.setUpdatedAt(now);
 		service1.setName("Hosting");
         service1.setColor("#4a7144");
 		sr.save(service1);
 
 		Service service2 = new Service();
-		service2.setCreatedAt(now);
-		service2.setUpdatedAt(now);
 		service2.setName("Sitting");
         service2.setColor("#c76b6b");
 		sr.save(service2);
 
 		Service service3 = new Service();
-		service3.setCreatedAt(now);
-		service3.setUpdatedAt(now);
 		service3.setName("Daycare");
         service3.setColor("#8b6ca8");
 		sr.save(service3);
 
 		Service service4 = new Service();
-		service4.setCreatedAt(now);
-		service4.setUpdatedAt(now);
 		service4.setName("House visits");
         service4.setColor("#668bb5");
 		sr.save(service4);
 
 		Service service5 = new Service();
-		service5.setCreatedAt(now);
-		service5.setUpdatedAt(now);
 		service5.setName("Walking");
         service5.setColor("#d69a55");
 		sr.save(service5);
 
 		Service service6 = new Service();
-		service6.setCreatedAt(now);
-		service6.setUpdatedAt(now);
 		service6.setName("Grooming");
         service6.setColor("#b5a05c");
 		sr.save(service6);
 
 		Role roleAdmin = new Role();
-		roleAdmin.setCreatedAt(now);
-		roleAdmin.setUpdatedAt(now);
 		roleAdmin.setName(RoleType.ADMIN.name());
 		rr.save(roleAdmin);
 		
 		Role roleProvider = new Role();
-		roleProvider.setCreatedAt(now);
-		roleProvider.setUpdatedAt(now);
 		roleProvider.setName(RoleType.PROVIDER.name());
 		rr.save(roleProvider);
 		
 		Role roleClient = new Role();
-		roleClient.setCreatedAt(now);
-		roleClient.setUpdatedAt(now);
 		roleClient.setName(RoleType.CLIENT.name());
 		rr.save(roleClient);
 
         String password = passwordEncoder.encode("123456");
         User user0 = new User();
-        user0.setCreatedAt(now);
-        user0.setUpdatedAt(now);
         user0.setFirstName("Admin");
         user0.setLastName("Four Tails");
         user0.setAddress("Williamsburg, Brooklyn, NY");
@@ -117,8 +98,6 @@ public class ServiceService {
         ur.save(user0);
 
         User user1 = new User();
-        user1.setCreatedAt(now);
-        user1.setUpdatedAt(now);
         user1.setFirstName("Ashley");
         user1.setLastName("Dombrowsky");
         user1.setAddress("Williamsburg, Brooklyn, NY");
@@ -140,8 +119,6 @@ public class ServiceService {
         ur.save(user1);
 
         User user2 = new User();
-        user2.setCreatedAt(now);
-        user2.setUpdatedAt(now);
         user2.setFirstName("Maya");
         user2.setLastName("Watson");
         user2.setAddress("Williamsburg, Brooklyn, NY");
@@ -152,7 +129,6 @@ public class ServiceService {
         user2.setIdentityProviderId(null);
         user2.setEnabled(true);
         user2.setRoles(Arrays.asList(roleProvider));
-        user2.setLastSeen(now);
         user2.setPhotos(createPhotos(user2,
                 "https://img.magnific.com/foto-gratis/joven-bella-mujer-caminando-su-perro-parque_1301-3557.jpg",
                 "https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=1400&q=85",
@@ -163,8 +139,6 @@ public class ServiceService {
         ur.save(user2);
 
         User user3 = new User();
-        user3.setCreatedAt(now);
-        user3.setUpdatedAt(now);
         user3.setFirstName("Liam");
         user3.setLastName("Parker");
         user3.setAddress("Williamsburg, Brooklyn, NY");
@@ -175,7 +149,6 @@ public class ServiceService {
         user3.setIdentityProviderId(null);
         user3.setEnabled(true);
         user3.setRoles(Arrays.asList(roleProvider));
-        user3.setLastSeen(now);
         user3.setPhotos(createPhotos(user3,
                 "https://img.magnific.com/foto-gratis/paseo-matutino-perro_158595-4280.jpg",
                 "https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=1400&q=85",
@@ -186,8 +159,6 @@ public class ServiceService {
         ur.save(user3);
 
         User user4 = new User();
-        user4.setCreatedAt(now);
-        user4.setUpdatedAt(now);
         user4.setFirstName("Jenny");
         user4.setLastName("Anderson");
         user4.setAddress("Williamsburg, Brooklyn, NY");
@@ -209,8 +180,6 @@ public class ServiceService {
         ur.save(user4);
 
         User user5 = new User();
-        user5.setCreatedAt(now);
-        user5.setUpdatedAt(now);
         user5.setFirstName("Martin");
         user5.setLastName("Dawson");
         user5.setAddress("Williamsburg, Brooklyn, NY");
@@ -232,8 +201,6 @@ public class ServiceService {
         ur.save(user5);
 
         User user6 = new User();
-        user6.setCreatedAt(now);
-        user6.setUpdatedAt(now);
         user6.setFirstName("Sarah");
         user6.setLastName("Chen");
         user6.setAddress("Williamsburg, Brooklyn, NY");
@@ -255,8 +222,6 @@ public class ServiceService {
         ur.save(user6);
 
         User user7 = new User();
-        user7.setCreatedAt(now);
-        user7.setUpdatedAt(now);
         user7.setFirstName("Lilian");
         user7.setLastName("Alper");
         user7.setAddress("Williamsburg, Brooklyn, NY");
@@ -278,8 +243,6 @@ public class ServiceService {
         ur.save(user7);
 		
 		Provider provider1 = new Provider();
-		provider1.setCreatedAt(now);
-		provider1.setUpdatedAt(now);
 		provider1.setDescription("Calm, attentive care for dogs who love a little extra company.");
 		provider1.setRating(4.9);
         provider1.setReviews(12);
@@ -290,8 +253,6 @@ public class ServiceService {
 		pr.save(provider1);
 		
 		Provider provider2 = new Provider();
-		provider2.setCreatedAt(now);
-		provider2.setUpdatedAt(now);
         provider2.setDescription("Calm, attentive care for dogs who love a little extra company.");
         provider2.setRating(4.9);
         provider2.setReviews(12);
@@ -302,8 +263,6 @@ public class ServiceService {
 		pr.save(provider2);
 		
 		Provider provider3 = new Provider();
-		provider3.setCreatedAt(now);
-		provider3.setUpdatedAt(now);
         provider3.setDescription("Calm, attentive care for dogs who love a little extra company.");
         provider3.setRating(4.9);
         provider3.setReviews(12);
@@ -314,8 +273,6 @@ public class ServiceService {
 		pr.save(provider3);
 
         Provider provider4 = new Provider();
-        provider4.setCreatedAt(now);
-        provider4.setUpdatedAt(now);
         provider4.setDescription("Calm, attentive care for dogs who love a little extra company.");
         provider4.setRating(4.9);
         provider4.setReviews(12);
@@ -326,8 +283,6 @@ public class ServiceService {
         pr.save(provider4);
 
         Provider provider5 = new Provider();
-        provider5.setCreatedAt(now);
-        provider5.setUpdatedAt(now);
         provider5.setDescription("Calm, attentive care for dogs who love a little extra company.");
         provider5.setRating(4.9);
         provider5.setReviews(12);
@@ -338,8 +293,6 @@ public class ServiceService {
         pr.save(provider5);
 
         Provider provider6 = new Provider();
-        provider6.setCreatedAt(now);
-        provider6.setUpdatedAt(now);
         provider6.setDescription("Calm, attentive care for dogs who love a little extra company.");
         provider6.setRating(4.9);
         provider6.setReviews(12);
@@ -350,8 +303,6 @@ public class ServiceService {
         pr.save(provider6);
 
         Provider provider7 = new Provider();
-        provider7.setCreatedAt(now);
-        provider7.setUpdatedAt(now);
         provider7.setDescription("Calm, attentive care for dogs who love a little extra company.");
         provider7.setRating(4.9);
         provider7.setReviews(12);
@@ -362,8 +313,6 @@ public class ServiceService {
         pr.save(provider7);
 
         User user8 = new User();
-        user8.setCreatedAt(now);
-        user8.setUpdatedAt(now);
         user8.setFirstName("Abraham");
         user8.setLastName("Simpson");
         user8.setAddress("Evergreen AV 742");
@@ -381,38 +330,27 @@ public class ServiceService {
         ur.save(user8);
 
         Client client1 = new Client();
-        client1.setCreatedAt(now);
-        client1.setUpdatedAt(now);
         client1.setUser(user8);
         cr.save(client1);
 
 		KindOfPet kp1 =  new KindOfPet();
-		kp1.setCreatedAt(now);
-		kp1.setUpdatedAt(now);
 		kp1.setName("Dog");
 		kr.save(kp1);
 
 		KindOfPet kp2 =  new KindOfPet();
-		kp2.setCreatedAt(now);
-		kp2.setUpdatedAt(now);
 		kp2.setName("Cat");
 		kr.save(kp2);
 
 		KindOfPet kp3 =  new KindOfPet();
-		kp3.setCreatedAt(now);
-		kp3.setUpdatedAt(now);
 		kp3.setName("Bird");
 		kr.save(kp3);
 		return Map.of("message","ok");
 	}
 
     private List<UserPhoto> createPhotos(User user, String ... urls) {
-        Instant now = Instant.now();
         List<UserPhoto> photos = new ArrayList<>();
         for (int i = 0; i < urls.length ; i++) {
             UserPhoto photo = new UserPhoto();
-            photo.setCreatedAt(now);
-            photo.setUpdatedAt(now);
             photo.setUrl(urls[i]);
             photo.setPrimary(i==0);
             photo.setUser(user);
@@ -479,8 +417,6 @@ public class ServiceService {
     public Map<String, String> confirmBooking(BookingDto bookingDto) {
         Instant now = Instant.now();
         Booking booking = new Booking();
-        booking.setCreatedAt(now);
-        booking.setUpdatedAt(now);
         booking.setClient(cr.finByUserId(bookingDto.getClientId()));
         booking.setProvider(pr.getReferenceById(bookingDto.getProviderId()));
         booking.setService(sr.getReferenceById(bookingDto.getServiceId()));
@@ -515,7 +451,6 @@ public class ServiceService {
         }
 
         booking.setStatus(BookingStatus.valueOf(bookingDto.getStatus()));
-        booking.setUpdatedAt(Instant.now());
         br.save(booking);
         return Map.of("message", "ok");
     }
@@ -550,7 +485,6 @@ public class ServiceService {
         Booking booking = br.findById(bookingDto.getBookingId()).get();
         booking.setStatus(BookingStatus.CANCELLED);
         booking.setCancellationReason(bookingDto.getCancellationReason());
-        booking.setUpdatedAt(Instant.now());
         br.save(booking);
 
         Long id = RoleType.CLIENT.name().equals(bookingDto.getCurrentRole()) ? bookingDto.getClientId() : bookingDto.getProviderId();

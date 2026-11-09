@@ -53,4 +53,15 @@ public class Provider {
 			inverseJoinColumns = @JoinColumn(name = "service_id")
 	)
 	private List<Service> services;
+
+	@PrePersist
+	public void onCreate() {
+		createdAt = Instant.now();
+		updatedAt = createdAt;
+	}
+
+	@PreUpdate
+	public void onUpdate() {
+		updatedAt = Instant.now();
+	}
 }

@@ -28,4 +28,15 @@ public class Client {
 	
 	@ManyToOne
 	private User user;
+
+	@PrePersist
+	public void onCreate() {
+		createdAt = Instant.now();
+		updatedAt = createdAt;
+	}
+
+	@PreUpdate
+	public void onUpdate() {
+		updatedAt = Instant.now();
+	}
 }

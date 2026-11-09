@@ -1,7 +1,6 @@
 package co.com.ftails.be.entities;
 
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 

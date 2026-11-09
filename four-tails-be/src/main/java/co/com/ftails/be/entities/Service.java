@@ -38,4 +38,15 @@ public class Service {
 	
 	@ManyToMany(mappedBy = "services")
     private List<Provider> providers;
+
+	@PrePersist
+	public void onCreate() {
+		createdAt = Instant.now();
+		updatedAt = createdAt;
+	}
+
+	@PreUpdate
+	public void onUpdate() {
+		updatedAt = Instant.now();
+	}
 }
