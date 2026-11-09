@@ -33,7 +33,7 @@ public class ServiceService {
 	private final KindOfPetRepository kr;
     private final BookingRepository br;
     private final PasswordEncoder passwordEncoder;
-
+    private final NotificationService notificationService;
 
     @Transactional
 	public Map<String, String> initDatabase() {
@@ -415,7 +415,6 @@ public class ServiceService {
     }
 
     public Map<String, String> confirmBooking(BookingDto bookingDto) {
-        Instant now = Instant.now();
         Booking booking = new Booking();
         booking.setClient(cr.finByUserId(bookingDto.getClientId()));
         booking.setProvider(pr.getReferenceById(bookingDto.getProviderId()));
@@ -452,6 +451,17 @@ public class ServiceService {
 
         booking.setStatus(BookingStatus.valueOf(bookingDto.getStatus()));
         br.save(booking);
+
+        notificationService.sendToUser(
+                booking.getClient().getUser().getId(),
+                "Booking confirmed",
+                "Your booking has been confirmed!",
+                NotificationType.BOOKING_CONFIRMED,
+                "/my-bookings",
+                "BOOKING",
+                booking.getId()
+        );
+
         return Map.of("message", "ok");
     }
 

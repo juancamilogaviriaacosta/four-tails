@@ -28,7 +28,7 @@ public class AuthController {
         return ResponseEntity.ok(Map.of("token", token));
     }
 
-    @PostMapping("api/devices/register")
+    @PostMapping("/api/devices/register")
     public ResponseEntity<Void> register(@RequestBody RegisterDeviceDto registerDeviceDto, Authentication authentication) {
         userDeviceService.register(registerDeviceDto, authentication);
         return ResponseEntity.ok().build();
