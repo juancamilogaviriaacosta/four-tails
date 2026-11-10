@@ -1,6 +1,7 @@
 import { Location } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { NotificationService } from './notification.service';
 
 interface NotificationItem {
   id: number;
@@ -69,7 +70,7 @@ export class Notifications {
   activeFilter: 'all' | 'unread' = 'all';
   searchTerm = '';
 
-  constructor(private location: Location) {}
+  constructor(private location: Location, public notificationService: NotificationService) { }
 
   get unreadCount(): number {
     return this.notifications.filter((notification) => !notification.read).length;
@@ -94,5 +95,20 @@ export class Notifications {
 
   close(): void {
     this.location.back();
+  }
+
+  openNotification(notification: NotificationItem): void {
+    if (notification.read) {
+      return;
+    }
+
+    this.notificationService.markAsRead(notification.id).subscribe({
+      next: () => {
+        this.notifications = this.notifications.map(item => item.id === notification.id ? { ...item, read: true } : item);
+      },
+      error: (error) => {
+        console.error('Error marking notification as read', error);
+      }
+    });
   }
 }

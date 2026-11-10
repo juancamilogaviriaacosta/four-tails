@@ -37,7 +37,7 @@
 
 		<nav class="notification-list" aria-label="Notifications">
 			@for (notification of filteredNotifications; track notification.id) {
-				<article class="notification-item" [class.notification-item--unread]="!notification.read">
+				<article class="notification-item" [class.notification-item--unread]="!notification.read" (click)="openNotification(notification)">
 					<span class="notification-icon" [class]="'notification-icon notification-icon--' + notification.type" aria-hidden="true">
 						<svg viewBox="0 0 24 24">
 							@switch (notification.type) {

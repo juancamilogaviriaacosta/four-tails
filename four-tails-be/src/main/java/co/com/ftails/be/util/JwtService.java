@@ -35,7 +35,7 @@ public class JwtService {
                 .claim("lastName", user.getLastName())
                 .claim("role", user.getRoles().getFirst().getName())
                 .issuedAt(Date.from(issuedAt))
-                .expiration(Date.from(issuedAt.plus(1, ChronoUnit.HOURS)))
+                .expiration(Date.from(issuedAt.plus(365, ChronoUnit.DAYS)))
                 .signWith(signingKey)
                 .compact();
     }

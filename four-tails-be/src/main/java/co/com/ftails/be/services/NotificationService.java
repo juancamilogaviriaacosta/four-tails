@@ -1,6 +1,7 @@
 
 package co.com.ftails.be.services;
 
+import co.com.ftails.be.dtos.NotificationDto;
 import co.com.ftails.be.entities.*;
 import co.com.ftails.be.repositories.NotificationRepository;
 import co.com.ftails.be.repositories.UserDeviceRepository;
@@ -49,5 +50,26 @@ public class NotificationService {
             }
         }
         return notification;
+    }
+
+    @Transactional(readOnly = true)
+    public List<NotificationDto> getNotifications(Long userId) {
+        return notificationRepository.findByUserIdOrderByCreatedAtDesc(userId).stream().map(NotificationDto::from).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public long getUnreadCount(Long userId) {
+        return notificationRepository.countByUserIdAndReadFalse(userId);
+    }
+
+    @Transactional
+    public void markAsRead(Long notificationId, Long userId) {
+        Notification notification = notificationRepository.findByIdAndUserId(notificationId, userId)
+                .orElseThrow(() -> new IllegalArgumentException("Notification not found"));
+        if (!notification.isRead()) {
+            notification.setRead(true);
+            notification.setReadAt(Instant.now());
+            notificationRepository.save(notification);
+        }
     }
 }
