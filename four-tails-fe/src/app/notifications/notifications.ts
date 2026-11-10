@@ -1,7 +1,7 @@
 import { Location } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NotificationDto, NotificationService } from './notification.service';
 
 
@@ -16,7 +16,7 @@ interface NotificationItem extends NotificationDto {
   templateUrl: './notifications.html',
   styleUrl: './notifications.css',
 })
-export class Notifications implements OnInit {
+export class Notifications {
 
   private notificationService = inject(NotificationService);
   private location = inject(Location);
@@ -29,40 +29,14 @@ export class Notifications implements OnInit {
   searchTerm = '';
   loading = false;
 
-  ngOnInit(): void {
-    this.loadNotifications();
-    this.loadUnreadCount();
-  }
-
-  loadNotifications(): void {
-    this.loading = true;
-
-    this.notificationService.getNotifications().subscribe({
-      next: (data) => {
-        this.notifications = data.map(notification => ({
+  constructor(private route: ActivatedRoute) {
+    const notifications = this.route.snapshot.data['preload'].notifications as NotificationItem[];
+    this.notifications = notifications.map(notification => ({
           ...notification,
           time: this.formatTime(notification.createdAt),
           category: this.getCategory(notification.type)
         }));
-
-        this.loading = false;
-      },
-      error: (error) => {
-        console.error('Error loading notifications', error);
-        this.loading = false;
-      }
-    });
-  }
-
-  loadUnreadCount(): void {
-    this.notificationService.getUnreadCount().subscribe({
-      next: (count) => {
-        this.unreadCount = count;
-      },
-      error: (error) => {
-        console.error('Error loading unread count', error);
-      }
-    });
+    this.unreadCount = this.route.snapshot.data['preload'].unreadCount;
   }
 
   get filteredNotifications(): NotificationItem[] {
