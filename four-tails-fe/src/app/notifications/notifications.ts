@@ -1,16 +1,13 @@
 import { Location } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NotificationService } from './notification.service';
+import { Router } from '@angular/router';
+import { NotificationDto, NotificationService } from './notification.service';
 
-interface NotificationItem {
-  id: number;
-  title: string;
-  description: string;
+
+interface NotificationItem extends NotificationDto {
   time: string;
   category: string;
-  type: 'booking' | 'message' | 'review' | 'pet';
-  read: boolean;
 }
 
 @Component({
@@ -19,96 +16,139 @@ interface NotificationItem {
   templateUrl: './notifications.html',
   styleUrl: './notifications.css',
 })
-export class Notifications {
-  notifications: NotificationItem[] = [
-    {
-      id: 1,
-      title: 'New booking request',
-      description: 'Alex Morgan would like you to care for Milo this weekend.',
-      time: '5 min ago',
-      category: 'Booking',
-      type: 'booking',
-      read: false,
-    },
-    {
-      id: 2,
-      title: 'You have a new message',
-      description: 'Jamie: Thanks for the update! Luna is doing great.',
-      time: '28 min ago',
-      category: 'Messages',
-      type: 'message',
-      read: false,
-    },
-    {
-      id: 3,
-      title: 'Your booking is confirmed',
-      description: 'Your stay with Charlie is confirmed for 21-23 June.',
-      time: '2 hours ago',
-      category: 'Booking',
-      type: 'booking',
-      read: false,
-    },
-    {
-      id: 4,
-      title: 'A new review is in',
-      description: 'Taylor left a review after your walk with Pepper.',
-      time: 'Yesterday',
-      category: 'Reviews',
-      type: 'review',
-      read: true,
-    },
-    {
-      id: 5,
-      title: 'A new friend joined Four Tails',
-      description: 'Meet Maple, a playful border collie looking for a sitter.',
-      time: '2 days ago',
-      category: 'Community',
-      type: 'pet',
-      read: true,
-    },
-  ];
+export class Notifications implements OnInit {
+
+  private notificationService = inject(NotificationService);
+  private location = inject(Location);
+  private router = inject(Router);
+
+  notifications: NotificationItem[] = [];
+  unreadCount = 0;
+
   activeFilter: 'all' | 'unread' = 'all';
   searchTerm = '';
+  loading = false;
 
-  constructor(private location: Location, public notificationService: NotificationService) { }
+  ngOnInit(): void {
+    this.loadNotifications();
+    this.loadUnreadCount();
+  }
 
-  get unreadCount(): number {
-    return this.notifications.filter((notification) => !notification.read).length;
+  loadNotifications(): void {
+    this.loading = true;
+
+    this.notificationService.getNotifications().subscribe({
+      next: (data) => {
+        this.notifications = data.map(notification => ({
+          ...notification,
+          time: this.formatTime(notification.createdAt),
+          category: this.getCategory(notification.type)
+        }));
+
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Error loading notifications', error);
+        this.loading = false;
+      }
+    });
+  }
+
+  loadUnreadCount(): void {
+    this.notificationService.getUnreadCount().subscribe({
+      next: (count) => {
+        this.unreadCount = count;
+      },
+      error: (error) => {
+        console.error('Error loading unread count', error);
+      }
+    });
   }
 
   get filteredNotifications(): NotificationItem[] {
     const search = this.searchTerm.trim().toLowerCase();
 
-    return this.notifications.filter((notification) => {
-      const matchesFilter = this.activeFilter === 'all' || !notification.read;
-      const matchesSearch = !search || `${notification.title} ${notification.description} ${notification.category}`
-        .toLowerCase()
-        .includes(search);
+    return this.notifications.filter(notification => {
+      const matchesFilter =
+        this.activeFilter === 'all' || !notification.read;
+
+      const matchesSearch =
+        !search ||
+        `${notification.title} ${notification.body} ${notification.category}`
+          .toLowerCase()
+          .includes(search);
 
       return matchesFilter && matchesSearch;
     });
   }
 
-  markAllAsRead(): void {
-    this.notifications = this.notifications.map((notification) => ({ ...notification, read: true }));
-  }
-
-  close(): void {
-    this.location.back();
-  }
-
   openNotification(notification: NotificationItem): void {
     if (notification.read) {
+      this.navigateToNotification(notification);
       return;
     }
 
     this.notificationService.markAsRead(notification.id).subscribe({
       next: () => {
-        this.notifications = this.notifications.map(item => item.id === notification.id ? { ...item, read: true } : item);
+        this.notifications = this.notifications.map(item =>
+          item.id === notification.id
+            ? { ...item, read: true, readAt: new Date().toISOString() }
+            : item
+        );
+
+        this.unreadCount = Math.max(0, this.unreadCount - 1);
+
+        this.navigateToNotification(notification);
       },
       error: (error) => {
         console.error('Error marking notification as read', error);
       }
     });
+  }
+
+  private navigateToNotification(notification: NotificationItem): void {
+    if (notification.actionUrl) {
+      this.router.navigateByUrl(notification.actionUrl);
+    }
+  }
+
+  private getCategory(type: string): string {
+    const categories: Record<string, string> = {
+      BOOKING: 'Booking',
+      MESSAGE: 'Messages',
+      REVIEW: 'Reviews',
+      PET: 'Community'
+    };
+
+    return categories[type] ?? 'General';
+  }
+
+  private formatTime(date: string): string {
+    const timestamp = new Date(date).getTime();
+    const diff = Math.max(0, Date.now() - timestamp);
+
+    const minutes = Math.floor(diff / 60000);
+
+    if (minutes < 1) return 'Just now';
+    if (minutes < 60) return `${minutes} min ago`;
+
+    const hours = Math.floor(minutes / 60);
+
+    if (hours < 24) return `${hours} hours ago`;
+
+    const days = Math.floor(hours / 24);
+
+    if (days === 1) return 'Yesterday';
+    if (days < 7) return `${days} days ago`;
+
+    return new Date(date).toLocaleDateString();
+  }
+
+  markAllAsRead(): void {
+    // Pendiente de implementar endpoint en Spring Boot.
+  }
+
+  close(): void {
+    this.location.back();
   }
 }
