@@ -1,6 +1,7 @@
 package co.com.ftails.be.controllers;
 
 import co.com.ftails.be.dtos.NotificationDto;
+import co.com.ftails.be.entities.NotificationType;
 import co.com.ftails.be.entities.User;
 import co.com.ftails.be.repositories.UserRepository;
 import co.com.ftails.be.services.FirebaseMessagingService;
@@ -21,9 +22,17 @@ public class NotificationController {
 
     /*TODO REMOVE*/
     @PostMapping("/api/notifications/test")
-    public ResponseEntity<String> test(@RequestParam String token) throws Exception {
-        String messageId = firebaseMessagingService.sendNotification(token, "4Tails 🐾", "¡Las notificaciones están funcionando!", "");
-        return ResponseEntity.ok(messageId);
+    public ResponseEntity<String> test(@RequestParam String token, Authentication authentication) throws Exception {
+        //String messageId = firebaseMessagingService.sendNotification(token, "4Tails 🐾", "¡Las notificaciones están funcionando!", "");
+        notificationService.sendToUser(
+                getAuthenticatedUserId(authentication),
+                "Booking TEST confirmed",
+                "Your booking has been confirmed!",
+                NotificationType.BOOKING_CONFIRMED,
+                "/my-bookings",
+                "BOOKING",
+                1L);
+        return ResponseEntity.ok("ok");
     }
 
     private Long getAuthenticatedUserId(Authentication authentication) {
@@ -37,7 +46,7 @@ public class NotificationController {
         return ResponseEntity.ok(notificationService.getNotifications(userId));
     }
 
-    @GetMapping("/api/notifications/unread-count")
+    @GetMapping("/api/notifications/getUnreadCount")
     public ResponseEntity<Long> getUnreadCount(Authentication authentication) {
         Long userId = getAuthenticatedUserId(authentication);
         return ResponseEntity.ok(notificationService.getUnreadCount(userId));

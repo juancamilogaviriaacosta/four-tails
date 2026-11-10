@@ -31,7 +31,7 @@ export class NotificationService {
 
     getUnreadCount(): Observable<number> {
         return this.http.get<number>(
-            `${this.apiUrl}/unread-count`
+            `${this.apiUrl}/getUnreadCount`
         );
     }
 
