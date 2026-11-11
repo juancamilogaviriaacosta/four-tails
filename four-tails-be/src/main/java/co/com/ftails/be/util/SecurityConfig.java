@@ -34,7 +34,7 @@ public class SecurityConfig {
             "/api/getServices",
             "/api/getKindOfPets",
             "/api/getProviders",
-            "/api/getProvider"
+            "/api/getProvider/**"
         };
 
         http

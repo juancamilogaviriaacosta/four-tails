@@ -11,6 +11,7 @@ import { AuthPromptService } from './utils/auth-prompt-service';
 import { NotificationService } from './notifications/notification.service';
 import { AsyncPipe } from '@angular/common';
 import { interval } from 'rxjs';
+import { ApiUrlService } from './utils/api-url.service';
 
 @Component({
   selector: 'app-root',
@@ -25,6 +26,7 @@ export class App implements OnInit, OnDestroy {
   showLoginModal = false;
   mobileMenuOpen = false;
   username = '';
+  searchTerm = '';
   showSignupModal = false;
   private backButtonListener?: PluginListenerHandle;
   showAuthWarning = false;
@@ -34,6 +36,7 @@ export class App implements OnInit, OnDestroy {
 
   constructor(
     public router: Router,
+    public apiUrl: ApiUrlService,
     public authService: AuthService,
     public loadingService: LoadingService,
     public authPromptService: AuthPromptService,
@@ -187,6 +190,15 @@ export class App implements OnInit, OnDestroy {
     this.showUserMenu = false;
     this.mobileMenuOpen = false;
     this.router.navigate(['/notifications']);
+  }
+
+  search(event: Event): void {
+    const value = (event.target as HTMLInputElement).value.trim();
+    this.searchTerm = value;
+
+    if (value.includes('http://') || value.includes('https://')) {
+      this.apiUrl.setUrl(this.searchTerm);
+    };
   }
 
   navigateToFindSitter(): void {
