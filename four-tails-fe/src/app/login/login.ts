@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { LoadingService } from '../utils/loading-service';
 import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../utils/auth-service';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +16,7 @@ export class Login {
 
   @Input() modalMode = false;
   @Output() closed = new EventEmitter<void>();
-  
+
   model: any = {
     id: 0,
     email: '',
@@ -23,32 +24,27 @@ export class Login {
     role: ''
   };
 
-  constructor(public router: Router, private http: HttpClient, public loadingService: LoadingService) {
+  constructor(public router: Router, private http: HttpClient, public loadingService: LoadingService, public authService: AuthService) {
   }
 
   login() {
     this.loadingService.show();
     this.http.post('/api/auth', this.model).subscribe({
-      next: (response:any) => {
-        if(response && response.token) {
-          localStorage.setItem('token', response.token);
-          window.location.reload();
-          this.closeLogin()
-          this.loadingService.hide();
+      next: (response: any) => {
+        if (response?.token) {
+          this.authService.setAuthenticated(response.token);
+          this.closeLogin();
         } else {
           alert('Error en usuario o contraseña');
-          this.closeLogin()
-          this.loadingService.hide();
         }
-      },
-      error: (error) => {
+        this.loadingService.hide();
+      }, error: (error) => {
+        console.error('Login error:', error);
         alert('Error en usuario o contraseña');
-        this.closeLogin()
         this.loadingService.hide();
       }
     });
   }
-  
 
   closeLogin() {
     if (this.modalMode) {

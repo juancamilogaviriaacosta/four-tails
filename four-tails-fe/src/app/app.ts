@@ -3,19 +3,23 @@ import { App as CapacitorApp } from '@capacitor/app';
 import { PluginListenerHandle } from '@capacitor/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { Login } from './login/login';
-import { Subscription } from 'rxjs';
+import { catchError, distinctUntilChanged, EMPTY, of, Subscription, switchMap, timer } from 'rxjs';
 import { AuthService } from './utils/auth-service';
 import { LoadingService } from './utils/loading-service';
 import { Signup } from './signup/signup';
 import { AuthPromptService } from './utils/auth-prompt-service';
+import { NotificationService } from './notifications/notification.service';
+import { AsyncPipe } from '@angular/common';
+import { interval } from 'rxjs';
+
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Login, Signup],
+  imports: [RouterOutlet, Login, Signup, AsyncPipe],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
 export class App implements OnInit, OnDestroy {
-  
+
   protected readonly title = signal('Four Tails');
   showUserMenu = false;
   showLoginModal = false;
@@ -26,12 +30,14 @@ export class App implements OnInit, OnDestroy {
   showAuthWarning = false;
   private authWarningTimeout?: ReturnType<typeof setTimeout>;
   private authPromptSubscription: Subscription;
+  private notificationSyncSubscription?: Subscription;
 
   constructor(
     public router: Router,
     public authService: AuthService,
     public loadingService: LoadingService,
     public authPromptService: AuthPromptService,
+    public notificationService: NotificationService,
   ) {
     this.authPromptSubscription = authPromptService.loginAndSignupPromptRequested$.subscribe(() => {
       this.showAuthWarning = true;
@@ -44,6 +50,27 @@ export class App implements OnInit, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
+
+    if (this.authService.isLoggedIn()) {
+      this.notificationService.refreshUnreadCount().subscribe({
+        error: error => console.error('Error loading notifications', error)
+      });
+    } else {
+      this.notificationService.resetUnreadCount();
+    }
+
+    this.notificationSyncSubscription = this.authService.isAuthenticated$.pipe(distinctUntilChanged(), switchMap(isAuthenticated => {
+      if (!isAuthenticated) {
+        return of(0);
+      }
+      return timer(0, 30_000).pipe(switchMap(() => this.notificationService.getUnreadCount().pipe(catchError(error => {
+        console.error('Error refreshing notification count', error);
+        return EMPTY;
+      }))));
+    })).subscribe(count => {
+      this.notificationService.setUnreadCount(count);
+    });
+
     this.backButtonListener = await CapacitorApp.addListener('backButton', ({ canGoBack }) => {
       if (this.showLoginModal || this.showSignupModal) {
         this.closeLoginOrSignupModalOnEscape();
@@ -64,10 +91,11 @@ export class App implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    void this.backButtonListener?.remove();
-    this.authPromptSubscription.unsubscribe();
-    clearTimeout(this.authWarningTimeout);
-  }
+  void this.backButtonListener?.remove();
+  this.authPromptSubscription.unsubscribe();
+  this.notificationSyncSubscription?.unsubscribe();
+  clearTimeout(this.authWarningTimeout);
+}
 
   login() {
     this.dismissAuthWarning();
@@ -117,14 +145,15 @@ export class App implements OnInit, OnDestroy {
 
   logout() {
     this.loadingService.show();
+
     setTimeout(() => {
       this.showUserMenu = false;
       this.mobileMenuOpen = false;
+      this.notificationService.resetUnreadCount();
       this.authService.logout();
       this.loadingService.hide();
       this.router.navigate(['/']);
     }, 1000);
-    
   }
 
   toggleUserMenu(): void {

@@ -27,12 +27,19 @@
       <span class="event-count" aria-label="1 evento">1</span>
     </button>
 
-    <button class="icon-action" type="button" aria-label="Notifications" (click)="navigateToNotifications()">
+    <button class="icon-action notification-action" type="button" aria-label="Notifications" (click)="navigateToNotifications()">
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
         <path d="M10 21h4"></path>
       </svg>
-      <span class="event-count" aria-label="3 eventos">3</span>
+
+      @if (notificationService.unreadCount$ | async; as count) {
+        @if (count > 0) {
+          <span class="event-count" [attr.aria-label]="count + ' unread notifications'">
+            {{ count > 99 ? '99+' : count }}
+          </span>
+        }
+      }
     </button>
 
     <div class="user-menu-container" (focusout)="closeUserMenuOnFocusOut($event)">

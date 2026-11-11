@@ -1,6 +1,7 @@
+
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 
 export interface NotificationDto {
     id: number;
@@ -22,6 +23,8 @@ export class NotificationService {
 
     private http = inject(HttpClient);
     private readonly apiUrl = '/api/notifications';
+    private unreadCountSubject = new BehaviorSubject<number>(0);
+    readonly unreadCount$ = this.unreadCountSubject.asObservable();
 
     getNotifications(): Observable<NotificationDto[]> {
         return this.http.get<NotificationDto[]>(
@@ -35,10 +38,38 @@ export class NotificationService {
         );
     }
 
-    markAsRead(id: number): Observable<void> {
+    refreshUnreadCount(): Observable<number> {
+        return this.getUnreadCount().pipe(
+            tap(count => this.unreadCountSubject.next(count))
+        );
+    }
+
+    markAsRead(id: number, wasUnread = false): Observable<void> {
         return this.http.patch<void>(
             `${this.apiUrl}/${id}/read`,
             {}
+        ).pipe(
+            tap(() => {
+                if (wasUnread) {
+                    const current = this.unreadCountSubject.value;
+                    this.unreadCountSubject.next(Math.max(0, current - 1));
+                }
+            })
         );
+    }
+
+    setUnreadCount(count: number): void {
+        this.unreadCountSubject.next(count);
+    }
+
+    resetUnreadCount(): void {
+        this.unreadCountSubject.next(0);
+    }
+
+    refreshUnreadCountSilently(): void {
+        this.getUnreadCount().subscribe({
+            next: count => this.unreadCountSubject.next(count),
+            error: error => console.error('Error refreshing notifications', error)
+        });
     }
 }

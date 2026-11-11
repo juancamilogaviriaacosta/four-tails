@@ -1,7 +1,9 @@
+
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoadingService } from './loading-service';
+import { BehaviorSubject } from 'rxjs';
 
 interface JwtPayload {
   role?: unknown;
@@ -16,16 +18,30 @@ interface JwtPayload {
   providedIn: 'root',
 })
 export class AuthService {
-  
-  constructor(public router: Router, private http: HttpClient, public loadingService: LoadingService) {    
-  }
+
+  private authenticatedSubject = new BehaviorSubject<boolean>(
+    !!localStorage.getItem('token')
+  );
+
+  readonly isAuthenticated$ = this.authenticatedSubject.asObservable();
+
+  constructor(
+    public router: Router,
+    private http: HttpClient,
+    public loadingService: LoadingService
+  ) { }
 
   isInLogin() {
     return this.router.url.startsWith('/login');
   }
 
-  isLoggedIn() {
+  isLoggedIn(): boolean {
     return !!localStorage.getItem('token');
+  }
+
+  setAuthenticated(token: string): void {
+    localStorage.setItem('token', token);
+    this.authenticatedSubject.next(true);
   }
 
   signUp(form: any) {
@@ -36,17 +52,6 @@ export class AuthService {
     const role = this.getTokenPayload()?.role;
     return typeof role === 'string' ? role : null;
   }
-
-  /*getUserName(): string {
-    const payload = this.getTokenPayload();
-    if (typeof payload?.username === 'string') {
-      return payload.username;
-    }
-
-    return [payload?.firstName, payload?.lastName]
-      .filter((name): name is string => typeof name === 'string')
-      .join(' ');
-  }*/
 
   getUserEmail(): string {
     const response = this.getTokenPayload()?.email;
@@ -65,11 +70,14 @@ export class AuthService {
 
   getUserId(): number | '' {
     const response = this.getTokenPayload()?.id;
-    return typeof response === 'number' && Number.isFinite(response) ? response : '';
+    return typeof response === 'number' && Number.isFinite(response)
+      ? response
+      : '';
   }
 
   private getTokenPayload(): JwtPayload | null {
     const token = localStorage.getItem('token');
+
     if (!token) {
       return null;
     }
@@ -81,22 +89,39 @@ export class AuthService {
       }
 
       const base64Payload = parts[1].replace(/-/g, '+').replace(/_/g, '/');
-      const paddedPayload = base64Payload.padEnd(Math.ceil(base64Payload.length / 4) * 4, '=');
-      const bytes = Uint8Array.from(atob(paddedPayload), character => character.charCodeAt(0));
-      const payload: unknown = JSON.parse(new TextDecoder().decode(bytes));
-      if (payload === null || typeof payload !== 'object' || Array.isArray(payload)) {
+      const paddedPayload = base64Payload.padEnd(
+        Math.ceil(base64Payload.length / 4) * 4,
+        '='
+      );
+
+      const bytes = Uint8Array.from(
+        atob(paddedPayload),
+        character => character.charCodeAt(0)
+      );
+
+      const payload: unknown = JSON.parse(
+        new TextDecoder().decode(bytes)
+      );
+
+      if (
+        payload === null ||
+        typeof payload !== 'object' ||
+        Array.isArray(payload)
+      ) {
         throw new Error('JWT payload must be a JSON object');
       }
 
       return payload as JwtPayload;
+
     } catch (error) {
       console.error('Error parsing JWT:', error);
       return null;
     }
   }
 
-  logout() {    
-    localStorage.clear();
+  logout(): void {
+    localStorage.removeItem('token');
+    this.authenticatedSubject.next(false);
     this.router.navigate(['/']);
   }
 }
