@@ -6,6 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { TimeAgoPipe } from '../utils/time-ago.pipe';
 import { AuthService } from '../utils/auth-service';
 import { AuthPromptService } from '../utils/auth-prompt-service';
+import { ApiUrlService } from '../utils/api-url.service';
 
 @Component({
   selector: 'app-sitter-details',
@@ -30,6 +31,7 @@ export class SitterDetails {
     private cd: ChangeDetectorRef,
     private auth: AuthService,
     private authPrompt: AuthPromptService,
+    private apiUrl: ApiUrlService
   ) {
     this.sitter = this.ar.snapshot.data['preload'].sitter;
     const queryParams = this.ar.snapshot.queryParamMap;
@@ -56,7 +58,7 @@ export class SitterDetails {
 
   confirmBooking(): void {
     if (this.auth.getUserId()) {
-      this.http.post('/api/confirmBooking', {
+      this.http.post(`${this.apiUrl.apiUrl}/api/confirmBooking`, {
         clientId : this.auth.getUserId(),
         providerId: this.sitter.id,
         serviceId: this.service,

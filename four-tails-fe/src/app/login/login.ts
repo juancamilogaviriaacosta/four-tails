@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { LoadingService } from '../utils/loading-service';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../utils/auth-service';
+import { ApiUrlService } from '../utils/api-url.service';
 
 @Component({
   selector: 'app-login',
@@ -24,12 +25,17 @@ export class Login {
     role: ''
   };
 
-  constructor(public router: Router, private http: HttpClient, public loadingService: LoadingService, public authService: AuthService) {
+  constructor(
+    public router: Router, 
+    private http: HttpClient, 
+    public loadingService: LoadingService, 
+    public authService: AuthService, 
+    private apiUrl: ApiUrlService) {
   }
 
   login() {
     this.loadingService.show();
-    this.http.post('/api/auth', this.model).subscribe({
+    this.http.post(`${this.apiUrl.apiUrl}/api/auth`, this.model).subscribe({
       next: (response: any) => {
         if (response?.token) {
           this.authService.setAuthenticated(response.token);

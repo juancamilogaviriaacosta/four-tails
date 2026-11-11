@@ -2,6 +2,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { ApiUrlService } from '../utils/api-url.service';
 
 export interface NotificationDto {
     id: number;
@@ -21,20 +22,21 @@ export interface NotificationDto {
 })
 export class NotificationService {
 
-    private http = inject(HttpClient);
-    private readonly apiUrl = '/api/notifications';
     private unreadCountSubject = new BehaviorSubject<number>(0);
     readonly unreadCount$ = this.unreadCountSubject.asObservable();
 
+    constructor(private http: HttpClient, private apiUrl: ApiUrlService) {
+    }
+
     getNotifications(): Observable<NotificationDto[]> {
         return this.http.get<NotificationDto[]>(
-            `${this.apiUrl}/getNotifications`
+            `${this.apiUrl.apiUrl}/api/notifications/getNotifications`
         );
     }
 
     getUnreadCount(): Observable<number> {
         return this.http.get<number>(
-            `${this.apiUrl}/getUnreadCount`
+            `${this.apiUrl.apiUrl}/api/notifications/getUnreadCount`
         );
     }
 
@@ -45,7 +47,7 @@ export class NotificationService {
     }
 
     markAsRead(id: number, wasUnread = false): Observable<void> {
-        return this.http.patch<void>(`${this.apiUrl}/${id}/read`, {}).pipe(tap(() => {
+        return this.http.patch<void>(`${this.apiUrl.apiUrl}/api/notifications/${id}/read`, {}).pipe(tap(() => {
             if (wasUnread) {
                 const current = this.unreadCountSubject.value;
                 this.unreadCountSubject.next(Math.max(0, current - 1));

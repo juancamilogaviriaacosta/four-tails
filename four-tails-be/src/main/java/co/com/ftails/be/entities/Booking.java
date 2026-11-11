@@ -63,4 +63,15 @@ public class Booking {
 
     @Column(length = 500)
     private String cancellationReason;
+
+    @PrePersist
+    public void onCreate() {
+        createdAt = Instant.now();
+        updatedAt = createdAt;
+    }
+
+    @PreUpdate
+    public void onUpdate() {
+        updatedAt = Instant.now();
+    }
 }

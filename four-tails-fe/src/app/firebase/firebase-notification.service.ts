@@ -9,13 +9,14 @@ import { getFirebaseMessaging } from './firebase';
 import { vapidKey } from './firebase.config';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
+import { ApiUrlService } from '../utils/api-url.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FirebaseNotificationService {
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private apiUrl: ApiUrlService) {
   }
 
   async enableNotifications(): Promise<void> {
@@ -24,7 +25,7 @@ export class FirebaseNotificationService {
       return;
     }
 
-    await firstValueFrom(this.http.post('/api/devices/register', { token, platform: 'WEB'}));
+    await firstValueFrom(this.http.post(`${this.apiUrl.apiUrl}/api/devices/register`, { token, platform: 'WEB'}));
     console.log('Device registered successfully');
   }
 

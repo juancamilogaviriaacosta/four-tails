@@ -5,6 +5,7 @@ import { LoadingService } from '../utils/loading-service';
 import { AuthService } from '../utils/auth-service';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
+import { ApiUrlService } from '../utils/api-url.service';
 
 @Component({
   selector: 'app-edit-profile',
@@ -25,7 +26,12 @@ export class EditProfile {
     address: '',
   };
 
-  constructor(private loadingService: LoadingService, private auth: AuthService, private http: HttpClient, private ar: ActivatedRoute) {
+  constructor(
+    private loadingService: LoadingService, 
+    private auth: AuthService, 
+    private http: HttpClient, 
+    private ar: ActivatedRoute, 
+    private apiUrl: ApiUrlService) {
     this.profile = this.ar.snapshot.data['preload'].profile;
     if (!this.profile.profilePicture) {
       this.profile.profilePicture = '21-profile.png';
@@ -48,7 +54,7 @@ export class EditProfile {
   }
 
   setProfile(): void {
-    this.http.post('/api/setProfile', { id: this.auth.getUserId() , ...this.profile}).subscribe({
+    this.http.post(`${this.apiUrl.apiUrl}/api/setProfile`, { id: this.auth.getUserId() , ...this.profile}).subscribe({
       next: (response:any) => {
         localStorage.setItem('token', response.token);
         this.saved = true;

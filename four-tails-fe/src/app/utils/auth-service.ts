@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoadingService } from './loading-service';
 import { BehaviorSubject } from 'rxjs';
+import { ApiUrlService } from './api-url.service';
 
 interface JwtPayload {
   role?: unknown;
@@ -28,8 +29,9 @@ export class AuthService {
   constructor(
     public router: Router,
     private http: HttpClient,
-    public loadingService: LoadingService
-  ) { }
+    public loadingService: LoadingService,
+    private apiUrl: ApiUrlService) {
+    }
 
   isInLogin() {
     return this.router.url.startsWith('/login');
@@ -45,7 +47,7 @@ export class AuthService {
   }
 
   signUp(form: any) {
-    return this.http.post('/api/signUp', form);
+    return this.http.post(`${this.apiUrl.apiUrl}/api/signUp`, form);
   }
 
   getRole(): string | null {

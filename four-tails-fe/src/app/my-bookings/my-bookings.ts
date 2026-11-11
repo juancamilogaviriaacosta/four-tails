@@ -5,6 +5,7 @@ import { AuthService } from '../utils/auth-service';
 import { HttpClient } from '@angular/common/http';
 import { LoadingService } from '../utils/loading-service';
 import { FirebaseNotificationService } from '../firebase/firebase-notification.service';
+import { ApiUrlService } from '../utils/api-url.service';
 
 type CalendarView = 'Month' | 'Week' | 'Day';
 
@@ -70,7 +71,8 @@ export class MyBookings {
       private http: HttpClient,
       private loadingService: LoadingService,
       private notificationService: FirebaseNotificationService,
-      private cd: ChangeDetectorRef) {
+      private cd: ChangeDetectorRef, 
+      private apiUrl: ApiUrlService) {
     const bookings = this.route.snapshot.data['preload'].bookings as BookingDto[];
     this.allServices = this.extractAndSortAllServices(bookings);
     this.bookings = bookings.map((booking) => ({
@@ -140,7 +142,7 @@ export class MyBookings {
       return;
     }
 
-    this.http.post('/api/cancelBooking', { ...this.selectedBookingForCancellation, cancellationReason: reason, currentRole: this.auth.getRole() }).subscribe({
+    this.http.post(`${this.apiUrl.apiUrl}/api/cancelBooking`, { ...this.selectedBookingForCancellation, cancellationReason: reason, currentRole: this.auth.getRole() }).subscribe({
       next: (response: any) => {
         this.loadingService.hide();
         this.bookings = response.map((booking: BookingDto) => ({
@@ -172,7 +174,7 @@ export class MyBookings {
     if (!booking || this.isReplyingBooking) return;
 
     this.isReplyingBooking = true;
-    this.http.post('/api/replyBookingRequest', {
+    this.http.post(`${this.apiUrl.apiUrl}/api/replyBookingRequest`, {
       bookingId: booking.bookingId,
       providerId: booking.providerId,
       currentRole: this.auth.getRole(),
