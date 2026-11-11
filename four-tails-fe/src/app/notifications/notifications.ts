@@ -61,7 +61,7 @@ export class Notifications {
           this.navigateToNotification(notification);
           return;
       }
-      this.notificationService.markAsRead(notification.id).subscribe({
+      this.notificationService.markAsRead(notification.id, true).subscribe({
           next: () => {
               this.notifications = this.notifications.map(item => item.id === notification.id ? {
                   ...item,

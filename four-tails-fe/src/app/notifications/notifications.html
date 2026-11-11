@@ -1,8 +1,7 @@
 <div class="notifications-backdrop">
 	<section
 		class="notifications-panel"
-		aria-labelledby="notifications-title"
-	>
+		aria-labelledby="notifications-title">
 		<header class="notifications-heading">
 			<div>
 				<p class="notifications-eyebrow">Four Tails</p>
@@ -25,9 +24,6 @@
 					Unread
 				</button>
 			</div>
-			<button class="mark-read-button" type="button" [disabled]="unreadCount === 0" (click)="markAllAsRead()">
-				Mark all as read
-			</button>
 		</div>
 
 		<label class="notification-search">
