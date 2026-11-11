@@ -45,17 +45,12 @@ export class NotificationService {
     }
 
     markAsRead(id: number, wasUnread = false): Observable<void> {
-        return this.http.patch<void>(
-            `${this.apiUrl}/${id}/read`,
-            {}
-        ).pipe(
-            tap(() => {
-                if (wasUnread) {
-                    const current = this.unreadCountSubject.value;
-                    this.unreadCountSubject.next(Math.max(0, current - 1));
-                }
-            })
-        );
+        return this.http.patch<void>(`${this.apiUrl}/${id}/read`, {}).pipe(tap(() => {
+            if (wasUnread) {
+                const current = this.unreadCountSubject.value;
+                this.unreadCountSubject.next(Math.max(0, current - 1));
+            }
+        }));
     }
 
     setUnreadCount(count: number): void {

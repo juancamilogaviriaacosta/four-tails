@@ -57,27 +57,24 @@ export class Notifications {
   }
 
   openNotification(notification: NotificationItem): void {
-    if (notification.read) {
-      this.navigateToNotification(notification);
-      return;
-    }
-
-    this.notificationService.markAsRead(notification.id).subscribe({
-      next: () => {
-        this.notifications = this.notifications.map(item =>
-          item.id === notification.id
-            ? { ...item, read: true, readAt: new Date().toISOString() }
-            : item
-        );
-
-        this.unreadCount = Math.max(0, this.unreadCount - 1);
-
-        this.navigateToNotification(notification);
-      },
-      error: (error) => {
-        console.error('Error marking notification as read', error);
+      if (notification.read) {
+          this.navigateToNotification(notification);
+          return;
       }
-    });
+      this.notificationService.markAsRead(notification.id).subscribe({
+          next: () => {
+              this.notifications = this.notifications.map(item => item.id === notification.id ? {
+                  ...item,
+                  read: true,
+                  readAt: new Date().toISOString()
+              } : item);
+              this.unreadCount = Math.max(0, this.unreadCount - 1);
+              this.navigateToNotification(notification);
+          },
+          error: (error) => {
+              console.error('Error marking notification as read', error);
+          }
+      });
   }
 
   private navigateToNotification(notification: NotificationItem): void {
