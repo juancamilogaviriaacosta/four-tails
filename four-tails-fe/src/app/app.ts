@@ -12,6 +12,7 @@ import { NotificationService } from './notifications/notification.service';
 import { AsyncPipe } from '@angular/common';
 import { interval } from 'rxjs';
 import { ApiUrlService } from './utils/api-url.service';
+import { PushNotificationService } from './utils/push-notification.service';
 
 @Component({
   selector: 'app-root',
@@ -41,6 +42,7 @@ export class App implements OnInit, OnDestroy {
     public loadingService: LoadingService,
     public authPromptService: AuthPromptService,
     public notificationService: NotificationService,
+    private pushNotificationService: PushNotificationService,
   ) {
     this.authPromptSubscription = authPromptService.loginAndSignupPromptRequested$.subscribe(() => {
       this.showAuthWarning = true;
@@ -53,6 +55,7 @@ export class App implements OnInit, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
+    void this.pushNotificationService.initialize();
 
     if (this.authService.isLoggedIn()) {
       this.notificationService.refreshUnreadCount().subscribe({

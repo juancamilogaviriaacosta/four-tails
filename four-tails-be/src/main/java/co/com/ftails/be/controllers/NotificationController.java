@@ -21,9 +21,8 @@ public class NotificationController {
     private final UserRepository userRepository;
 
     /*TODO REMOVE*/
-    @PostMapping("/api/notifications/test")
-    public ResponseEntity<String> test(@RequestParam String token, Authentication authentication) throws Exception {
-        //String messageId = firebaseMessagingService.sendNotification(token, "4Tails 🐾", "¡Las notificaciones están funcionando!", "");
+    @PostMapping("/api/notifications/sendNotificationAllDevices")
+    public ResponseEntity<String> sendNotificationAllDevices(Authentication authentication) throws Exception {
         notificationService.sendToUser(
                 getAuthenticatedUserId(authentication),
                 "Booking TEST confirmed",
@@ -33,6 +32,13 @@ public class NotificationController {
                 "BOOKING",
                 1L);
         return ResponseEntity.ok("ok");
+    }
+
+    /*TODO REMOVE*/
+    @PostMapping("/api/notifications/sendNotification")
+    public ResponseEntity<String> sendNotification(@RequestParam String token, Authentication authentication) throws Exception {
+        String messageId = firebaseMessagingService.sendNotification(token, "4Tails 🐾", "¡Las notificaciones están funcionando!", "/my-bookings");
+        return ResponseEntity.ok(messageId);
     }
 
     private Long getAuthenticatedUserId(Authentication authentication) {
