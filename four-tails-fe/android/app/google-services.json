@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "642300847988",
+    "project_id": "copernicus-4tails",
+    "storage_bucket": "copernicus-4tails.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:642300847988:android:530830698f84e584232e21",
+        "android_client_info": {
+          "package_name": "co.com.ftails"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgihtz4hR7uYNQ_-L1tXprZ9aYgPK3GHk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

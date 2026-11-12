@@ -6,6 +6,7 @@ import { LoadingService } from '../utils/loading-service';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../utils/auth-service';
 import { ApiUrlService } from '../utils/api-url.service';
+import { PushNotificationService } from '../utils/push-notification.service';
 
 @Component({
   selector: 'app-login',
@@ -27,18 +28,24 @@ export class Login {
 
   constructor(
     public router: Router, 
-    private http: HttpClient, 
+    public http: HttpClient, 
+    public apiUrl: ApiUrlService,
+    public authService: AuthService,
     public loadingService: LoadingService, 
-    public authService: AuthService, 
-    private apiUrl: ApiUrlService) {
+    public pushNotificationService: PushNotificationService) {
   }
 
   login() {
     this.loadingService.show();
     this.http.post(`${this.apiUrl.apiUrl}/api/auth`, this.model).subscribe({
-      next: (response: any) => {
+      next: async (response: any) => {
         if (response?.token) {
           this.authService.setAuthenticated(response.token);
+          try {
+              await this.pushNotificationService.initialize();
+          } catch (error) {
+              console.error('Push notification initialization failed:', error);
+          }
           this.closeLogin();
         } else {
           alert('Error en usuario o contraseña');
