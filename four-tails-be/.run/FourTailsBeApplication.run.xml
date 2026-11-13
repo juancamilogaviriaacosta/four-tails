@@ -1,0 +1,18 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="FourTailsBeApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+    <envs>
+      <env name="APP_JWT_SECRET" value="clave-jwt-4tails-clave-jwt-4tails-clave-jwt-4tails" />
+      <env name="GOOGLE_APPLICATION_CREDENTIALS" value="$PROJECT_DIR$/../../copernicus-4tails-firebase-adminsdk-fbsvc-facde97aae.json" />
+      <env name="PGDATABASE" value="four-tails" />
+      <env name="PGHOST" value="localhost" />
+      <env name="PGPASSWORD" value="123456" />
+      <env name="PGPORT" value="5432" />
+      <env name="PGUSER" value="postgres" />
+    </envs>
+    <module name="four-tails-be.main" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="co.com.ftails.be.FourTailsBeApplication" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
