@@ -7,7 +7,6 @@ import { PushNotifications } from '@capacitor/push-notifications';
 import { firstValueFrom } from 'rxjs';
 import { ApiUrlService } from '../utils/api-url.service';
 import { NotificationService } from '../notifications/notification.service';
-import { LocalNotifications } from '@capacitor/local-notifications';
 import { AuthService } from './auth-service';
 
 @Injectable({
@@ -42,45 +41,8 @@ import { AuthService } from './auth-service';
             await PushNotifications.addListener('registrationError', error => {
                 console.error('FCM registration error:', error);
             });
-            await LocalNotifications.createChannel({
-                id: '4tails_notifications',
-                name: 'Notificaciones 4Tails',
-                description: 'Reservas y actualizaciones de 4Tails',
-                importance: 5,
-                visibility: 1,
-                vibration: true,
-                lights: true
-            });
-            await PushNotifications.addListener('pushNotificationReceived', async notification => {
+            await PushNotifications.addListener('pushNotificationReceived', notification => {
                 console.log('Android foreground notification:', JSON.stringify(notification));
-                this.notificationService.refreshUnreadCountSilently();
-                const data = notification.data ?? {};
-                const title = data['title'] || notification.title || '4Tails';
-                const body = data['body'] || notification.body || 'You have a new notification';
-                const actionUrl = data['url'] || data['actionUrl'] || '/';
-                try {
-                    await LocalNotifications.schedule({
-                        notifications: [{
-                            id: Date.now() % 2147483647,
-                            title,
-                            body,
-                            schedule: {
-                                at: new Date(Date.now() + 1000)
-                            },
-                            extra: {
-                                actionUrl
-                            }
-                        }]
-                    });
-                } catch (error) {
-                    console.error('Error displaying local notification:', error);
-                }
-            });
-            await LocalNotifications.addListener('localNotificationActionPerformed', action => {
-                const actionUrl = action.notification.extra?.['actionUrl'];
-                if (typeof actionUrl === 'string' && actionUrl.startsWith('/')) {
-                    this.router.navigateByUrl(actionUrl);
-                }
                 this.notificationService.refreshUnreadCountSilently();
             });
             await PushNotifications.addListener('pushNotificationActionPerformed', action => {

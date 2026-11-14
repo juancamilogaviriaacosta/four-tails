@@ -73,6 +73,7 @@ export class MyBookings {
       private notificationService: FirebaseNotificationService,
       private cd: ChangeDetectorRef, 
       private apiUrl: ApiUrlService) {
+    this.notificationService.enableNotifications();
     const bookings = this.route.snapshot.data['preload'].bookings as BookingDto[];
     this.allServices = this.extractAndSortAllServices(bookings);
     this.bookings = bookings.map((booking) => ({
@@ -230,10 +231,6 @@ export class MyBookings {
       nextDate.setDate(nextDate.getDate() + amount * (this.activeView === 'Week' ? 7 : 1));
     }
     this.currentDate = nextDate;
-  }
-
-  async enableNotifications() {
-    await this.notificationService.enableNotifications();
   }
 
   goToToday(): void {

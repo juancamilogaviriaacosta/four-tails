@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface UserDeviceRepository extends JpaRepository<UserDevice, Long> {
     Optional<UserDevice> findByToken(String token);
     List<UserDevice> findByUserIdAndActiveTrue(Long userId);
+    Optional<UserDevice> findByIdAndActiveTrue(Long id);
 }

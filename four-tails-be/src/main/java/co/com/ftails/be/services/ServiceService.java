@@ -427,7 +427,19 @@ public class ServiceService {
         booking.setPets(bookingDto.getPets());
         booking.setAddress(bookingDto.getAddress());
         br.save(booking);
-        return Map.of("message","ok");
+
+        Booking savedBooking = br.save(booking);
+        Long providerUserId = savedBooking.getProvider().getUser().getId();
+        notificationService.sendToUser(
+                providerUserId,
+                "New Booking Request 🐾",
+                "You have received a new booking request. Check the details.",
+                NotificationType.BOOKING_CREATED,
+                "/my-bookings",
+                "BOOKING",
+                savedBooking.getId()
+        );
+        return Map.of("message", "ok");
     }
 
     @Transactional

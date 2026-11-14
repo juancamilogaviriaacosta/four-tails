@@ -7,6 +7,8 @@ import co.com.ftails.be.repositories.NotificationRepository;
 import co.com.ftails.be.repositories.UserDeviceRepository;
 import co.com.ftails.be.repositories.UserRepository;
 
+import com.google.firebase.messaging.FirebaseMessagingException;
+import com.google.firebase.messaging.MessagingErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -45,6 +47,14 @@ public class NotificationService {
         for (UserDevice device : devices) {
             try {
                 firebaseMessagingService.sendNotification(device.getToken(), title, body, actionUrl);
+            } catch (FirebaseMessagingException e) {
+                if (e.getMessagingErrorCode() == MessagingErrorCode.UNREGISTERED) {
+                    device.setActive(false);
+                    userDeviceRepository.save(device);
+                    log.warn("FCM token deactivated. Device ID: {}", device.getId());
+                } else {
+                    log.error("FCM error for device {}. Error code: {}", device.getId(), e.getMessagingErrorCode(), e);
+                }
             } catch (Exception e) {
                 log.error("Failed to send notification to device {}", device.getId(), e);
             }
