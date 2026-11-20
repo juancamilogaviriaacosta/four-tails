@@ -2,7 +2,9 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingService } from '../utils/loading-service';
 import { Utils } from '../utils/utils';
-import { FindSitterSearchForm, PetOption, ServiceOption, SitterSearchFilters } from './find-sitter-search-form';
+import { FindSitterSearchForm } from './find-sitter-search-form';
+import type { SitterSearchFilters } from './find-sitter-search-form';
+import type { KindOfPet, ServiceOption } from '../utils/static-data-cache';
 
 @Component({
   selector: 'app-find-sitter',
@@ -15,11 +17,11 @@ export class FindSitter {
   endDate = '';
   address = '';
   service = '';
-  kindOfPets: PetOption[] = [];
+  kindOfPets: KindOfPet[] = [];
   services: ServiceOption[] = [];
 
   constructor(private router: Router, public loadingService: LoadingService, private ar: ActivatedRoute) {
-    this.kindOfPets = this.ar.snapshot.data['preload'].kindOfPets.map((pet: PetOption) => ({
+    this.kindOfPets = this.ar.snapshot.data['preload'].kindOfPets.map((pet: KindOfPet) => ({
       ...pet,
       quantity: pet.quantity ?? 0,
     }));

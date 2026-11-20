@@ -1,16 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-
-export interface PetOption {
-  id: number | string;
-  name: string;
-  quantity: number;
-}
-
-export interface ServiceOption {
-  id: number | string;
-  name: string;
-}
+import type { KindOfPet, ServiceOption } from '../utils/static-data-cache';
 
 export interface SitterSearchFilters {
   pets: { id: number | string; quantity: number }[];
@@ -27,7 +17,7 @@ export interface SitterSearchFilters {
   styleUrl: './find-sitter-search-form.css',
 })
 export class FindSitterSearchForm {
-  @Input() kindOfPets: PetOption[] = [];
+  @Input() kindOfPets: KindOfPet[] = [];
   @Input() services: ServiceOption[] = [];
   @Input() address = '';
   @Input() service = '';
