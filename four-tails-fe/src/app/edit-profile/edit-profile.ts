@@ -6,6 +6,9 @@ import { AuthService } from '../utils/auth-service';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { ApiUrlService } from '../utils/api-url.service';
+import { EMPTY, Observable, catchError, map, tap } from 'rxjs';
+import { PushNotificationService } from '../utils/push-notification.service';
+import { FirebaseNotificationService } from '../firebase/firebase-notification.service';
 
 @Component({
   selector: 'app-edit-profile',
@@ -14,7 +17,7 @@ import { ApiUrlService } from '../utils/api-url.service';
   styleUrl: './edit-profile.css',
 })
 export class EditProfile {
-  saved = false;
+  saved$?: Observable<boolean>;
 
   profile = {
     profilePicture: '21-profile.png',
@@ -26,12 +29,15 @@ export class EditProfile {
     address: '',
   };
 
-  constructor(
+  constructor(  
     private loadingService: LoadingService, 
     private auth: AuthService, 
     private http: HttpClient, 
     private ar: ActivatedRoute, 
-    private apiUrl: ApiUrlService) {
+    private apiUrl: ApiUrlService,
+    private pushNotificationService: PushNotificationService,
+    private firebaseNotificationService: FirebaseNotificationService,
+  ) {
     this.profile = this.ar.snapshot.data['preload'].profile;
     if (!this.profile.profilePicture) {
       this.profile.profilePicture = '21-profile.png';
@@ -54,16 +60,17 @@ export class EditProfile {
   }
 
   setProfile(): void {
-    this.http.post(`${this.apiUrl.apiUrl}/api/setProfile`, { id: this.auth.getUserId() , ...this.profile}).subscribe({
-      next: (response:any) => {
+    this.loadingService.show();
+    this.saved$ = this.http.post <{token: string}> (`${this.apiUrl.apiUrl}/api/setProfile`, {id: this.auth.getUserId(), ...this.profile})
+    .pipe(tap(response => {
         localStorage.setItem('token', response.token);
-        this.saved = true;
         this.loadingService.hide();
-      },
-      error: (error) => {
+        this.pushNotificationService.initialize();//android
+        this.firebaseNotificationService.enableNotifications();//web
+    }), map(() => true), catchError(() => {
         alert('Unexpected error');
         this.loadingService.hide();
-      }
-    });
+        return EMPTY;
+    }), );
   }
 }

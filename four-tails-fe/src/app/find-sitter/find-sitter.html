@@ -6,7 +6,7 @@
 			<p>Tell us what your pet needs and when you need a helping hand.</p>
 		</header>
 
-		<form class="find-sitter-form" (ngSubmit)="onSubmit()" #findSitterForm="ngForm">
+		<form class="find-sitter-form" (ngSubmit)="onSubmit(findSitterForm)" #findSitterForm="ngForm">
 			<div class="form-field">
 				<span id="kind-of-pet-label" class="field-label">Kind of pet</span>
 				<button id="kind-of-pet" class="pet-picker-trigger" type="button"
@@ -15,17 +15,17 @@
 					<span>{{ selectedPetSummary || 'Choose pets' }}</span>
 					<span class="pet-picker-chevron" aria-hidden="true">⌄</span>
 				</button>
-				<input type="hidden" name="kindOfPet" [value]="selectedPetSummary" />
+				<input type="hidden" name="kindOfPet" [ngModel]="selectedPetSummary" required />
 			</div>
 
 			<div class="form-field">
 				<label for="your-address">Your address</label>
-				<input id="your-address" name="address" type="text" [(ngModel)]="address"/>
+				<input id="your-address" name="address" type="text" [(ngModel)]="address" required />
 			</div>
 
 			<div class="form-field">
 				<label for="service">Which service are you looking for?</label>
-				<select id="service" name="service" [(ngModel)]="service">
+				<select id="service" name="service" [(ngModel)]="service" required>
 					<option value="" selected disabled>Select a service</option>
 					@for(tmp of services; track tmp.id) {
 						<option [value]="tmp.id">{{ tmp.name }}</option>
@@ -36,11 +36,11 @@
 			<fieldset class="date-fields">
 				<div class="form-field">
 					<label for="start-date">Start date</label>
-					<input id="start-date" name="startDate" type="date" [(ngModel)]="startDate"/>
+					<input id="start-date" name="startDate" type="date" [(ngModel)]="startDate" required />
 				</div>
 				<div class="form-field">
 					<label for="end-date">End date</label>
-					<input id="end-date" name="endDate" type="date" [(ngModel)]="endDate"/>
+					<input id="end-date" name="endDate" type="date" [(ngModel)]="endDate" required />
 				</div>
 			</fieldset>
 

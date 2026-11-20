@@ -64,7 +64,9 @@
         <button class="save-btn" type="submit">Save changes</button>
       </div>
 
-      <p class="success-message" *ngIf="saved">Profile updated successfully.</p>
+      @if (saved$ | async) {
+        <p class="success-message">Profile updated successfully.</p>
+      }
     </form>
   </div>
 </section>

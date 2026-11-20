@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingService } from '../utils/loading-service';
 import { Utils } from '../utils/utils';
@@ -53,7 +53,11 @@ export class FindSitter {
     }
   }
 
-  onSubmit(): void {
+  onSubmit(form: NgForm): void {
+    if (form.invalid) {
+      return;
+    }
+
     this.loadingService.show();
     setTimeout(() => {
       const pets = this.kindOfPets.filter((pet: any) => pet.quantity > 0).map((pet: any) => ({ id: pet.id, quantity: pet.quantity }));

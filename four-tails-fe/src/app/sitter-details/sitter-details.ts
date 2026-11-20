@@ -7,6 +7,7 @@ import { TimeAgoPipe } from '../utils/time-ago.pipe';
 import { AuthService } from '../utils/auth-service';
 import { AuthPromptService } from '../utils/auth-prompt-service';
 import { ApiUrlService } from '../utils/api-url.service';
+import { LoadingService } from '../utils/loading-service';
 
 @Component({
   selector: 'app-sitter-details',
@@ -31,7 +32,8 @@ export class SitterDetails {
     private cd: ChangeDetectorRef,
     private auth: AuthService,
     private authPrompt: AuthPromptService,
-    private apiUrl: ApiUrlService
+    private apiUrl: ApiUrlService,
+    private loadingService: LoadingService,
   ) {
     this.sitter = this.ar.snapshot.data['preload'].sitter;
     const queryParams = this.ar.snapshot.queryParamMap;
@@ -58,6 +60,7 @@ export class SitterDetails {
 
   confirmBooking(): void {
     if (this.auth.getUserId()) {
+      this.loadingService.show();
       this.http.post(`${this.apiUrl.apiUrl}/api/confirmBooking`, {
         clientId : this.auth.getUserId(),
         providerId: this.sitter.id,
@@ -72,11 +75,13 @@ export class SitterDetails {
         next: () => {
           this.bookingConfirmationOpen = false;
           this.bookingRequested = true;
+          this.loadingService.hide();
           this.cd.detectChanges();
         },
         error: (error) => {
           console.error('Error confirming booking:', error);
           this.bookingError = 'Could not submit the booking request. Please try again.';
+          this.loadingService.hide();
           this.cd.detectChanges();
         },
       });
