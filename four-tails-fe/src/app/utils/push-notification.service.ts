@@ -103,21 +103,18 @@ import { AuthService } from './auth-service';
         }
     }
 
-    async unregisterDevice(): Promise < void > {
-        if (!Capacitor.isNativePlatform() || Capacitor.getPlatform() !== 'android') {
-            return;
-        }
+    async unregisterDevice() {
         if (!this.deviceToken) {
             return;
         }
         const token = this.deviceToken;
         try {
-            await firstValueFrom(this.http.post(`${this.apiUrl.apiUrl}/api/devices/unregister`, { token, platform: 'ANDROID' }));
-            console.log('Android device unregistered successfully');
+            await firstValueFrom(this.http.post(`${this.apiUrl.apiUrl}/api/devices/unregister`, { token, platform: Capacitor.isNativePlatform() ? 'ANDROID' : 'WEB' }));
+            console.log('Device unregistered successfully');
             const registrationKey = `${this.authService.getUserId()}:${token}`;
             this.registeredDevices.delete(registrationKey);
         } catch (error) {
-            console.error('Error unregistering Android device:', error);
+            console.error('Error unregistering device:', error);
         }
     }
 }
