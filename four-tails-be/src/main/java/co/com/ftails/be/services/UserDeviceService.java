@@ -32,4 +32,11 @@ public class UserDeviceService {
         User user = ur.findByEmail(authentication.getName()).orElseThrow();
         register(user, registerDeviceDto);
     }
+
+    public void unregister(RegisterDeviceDto registerDeviceDto, Authentication authentication) {
+        Long userId = ((User) authentication.getPrincipal()).getId();
+        deviceRepository.findByToken(registerDeviceDto.token())
+            .filter(device -> device.getUser() != null && device.getUser().getId().equals(userId))
+            .ifPresent(device -> { device.setUser(null); deviceRepository.save(device); });
+    }
 }

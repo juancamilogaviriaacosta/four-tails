@@ -156,6 +156,7 @@ export class App implements OnInit, OnDestroy {
 
   logout() {
     this.loadingService.show();
+    this.pushNotificationService.unregisterDevice();
 
     setTimeout(() => {
       this.showUserMenu = false;

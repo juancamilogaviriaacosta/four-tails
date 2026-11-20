@@ -33,4 +33,10 @@ public class AuthController {
         userDeviceService.register(registerDeviceDto, authentication);
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/api/devices/unregister")
+    public ResponseEntity<Void> unregister(@RequestBody RegisterDeviceDto registerDeviceDto, Authentication authentication) {
+        userDeviceService.unregister(registerDeviceDto, authentication);
+        return ResponseEntity.ok().build();
+    }
 }
