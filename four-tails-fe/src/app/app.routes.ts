@@ -23,7 +23,7 @@ import { notificationsResolver } from './notifications/notifications-resolver';
 export const routes: Routes = [
     { path: '', component: MainServices  },
     { path: 'find-sitter', component: FindSitter, resolve: { preload: findSitterResolver } },
-    { path: 'search-sitters', component: SearchSitters, resolve: { preload: searchSittersResolver } },
+    { path: 'search-sitters', component: SearchSitters, resolve: { preload: searchSittersResolver }, runGuardsAndResolvers: 'paramsOrQueryParamsChange' },
     { path: 'sitter-details/:id', component: SitterDetails, resolve: { preload: sitterDetailResolver } },
     { path: 'messages', component: Messages },
     { path: 'notifications', component: Notifications, canActivate: [authGuard], resolve: { preload: notificationsResolver } },

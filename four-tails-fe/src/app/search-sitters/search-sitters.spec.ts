@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, provideRouter } from '@angular/router';
+import { of } from 'rxjs';
 
 import { SearchSitters } from './search-sitters';
 
@@ -8,6 +9,12 @@ describe('SearchSitters', () => {
   let fixture: ComponentFixture<SearchSitters>;
 
   beforeEach(async () => {
+    const preload = {
+      sitters: [],
+      kindOfPets: [{ id: 1, name: 'Dog', quantity: 0 }],
+      services: [{ id: 'walking', name: 'Walking' }],
+    };
+
     await TestBed.configureTestingModule({
       imports: [SearchSitters],
       providers: [
@@ -15,8 +22,9 @@ describe('SearchSitters', () => {
         {
           provide: ActivatedRoute,
           useValue: {
+            data: of({ preload }),
             snapshot: {
-              data: { preload: { sitters: [] } },
+              data: { preload },
               queryParamMap: {
                 get: (name: string) => ({
                   pets: '[{"id":1,"quantity":2}]',
@@ -47,5 +55,7 @@ describe('SearchSitters', () => {
     expect(component.service).toBe('walking');
     expect(component.startDate).toBe('2026-10-27');
     expect(component.endDate).toBe('2026-10-31');
+    expect(component.kindOfPets[0].quantity).toBe(2);
+    expect(component.services).toEqual([{ id: 'walking', name: 'Walking' }]);
   });
 });
