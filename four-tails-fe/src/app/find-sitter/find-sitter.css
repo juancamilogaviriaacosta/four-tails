@@ -91,6 +91,19 @@
 	box-shadow: 0 0 0 3px rgb(8 166 209 / 13%);
 }
 
+.form-field input.ng-invalid.ng-touched,
+.form-field select.ng-invalid.ng-touched,
+.form-field .pet-picker-trigger.invalid {
+	border-color: #c62828;
+	background: #fff7f7;
+}
+
+.form-field input.ng-invalid.ng-touched:focus,
+.form-field select.ng-invalid.ng-touched:focus,
+.form-field .pet-picker-trigger.invalid:focus-visible {
+	box-shadow: 0 0 0 3px rgb(198 40 40 / 13%);
+}
+
 .pet-picker-trigger {
 	display: flex;
 	align-items: center;

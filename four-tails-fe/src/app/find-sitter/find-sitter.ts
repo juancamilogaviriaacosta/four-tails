@@ -55,6 +55,7 @@ export class FindSitter {
 
   onSubmit(form: NgForm): void {
     if (form.invalid) {
+      form.control.markAllAsTouched();
       return;
     }
 

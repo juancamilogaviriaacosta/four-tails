@@ -11,11 +11,15 @@
 				<span id="kind-of-pet-label" class="field-label">Kind of pet</span>
 				<button id="kind-of-pet" class="pet-picker-trigger" type="button"
 					aria-labelledby="kind-of-pet-label" aria-haspopup="dialog"
-					[attr.aria-expanded]="petModalOpen" (click)="openPetModal()">
+					[attr.aria-expanded]="petModalOpen" aria-required="true"
+					[class.invalid]="kindOfPetControl.invalid && kindOfPetControl.touched"
+					[attr.aria-invalid]="kindOfPetControl.invalid && kindOfPetControl.touched"
+					(click)="openPetModal()">
 					<span>{{ selectedPetSummary || 'Choose pets' }}</span>
 					<span class="pet-picker-chevron" aria-hidden="true">⌄</span>
 				</button>
-				<input type="hidden" name="kindOfPet" [ngModel]="selectedPetSummary" required />
+				<input type="hidden" name="kindOfPet" [ngModel]="selectedPetSummary" required
+					#kindOfPetControl="ngModel" />
 			</div>
 
 			<div class="form-field">
