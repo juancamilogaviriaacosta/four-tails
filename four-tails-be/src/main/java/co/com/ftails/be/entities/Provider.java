@@ -1,5 +1,6 @@
 package co.com.ftails.be.entities;
 
+import java.awt.*;
 import java.time.Instant;
 import java.math.BigDecimal;
 import java.util.List;
@@ -7,6 +8,8 @@ import java.util.List;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Getter
 @Setter
@@ -42,6 +45,19 @@ public class Provider {
 
 	@Column(precision = 10, scale = 2)
 	private BigDecimal fare;
+
+	@Column(length = 255)
+	private String address;
+
+	@Column(length = 100)
+	private String city;
+
+	@Column(length = 100)
+	private String neighborhood;
+
+	@JdbcTypeCode(SqlTypes.GEOGRAPHY)
+	@Column(columnDefinition = "geography(Point,4326)")
+	private Point location;
 
 	@ManyToOne
 	private User user;
