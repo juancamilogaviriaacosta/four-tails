@@ -1,6 +1,6 @@
 <!-- ======================================================= HEADER ======================================================== -->
 <header class="header">
-  <a href="#" class="logo" aria-label="4tails"><span class="logo-four">4</span> tails </a>
+  <a [routerLink]="['/']" class="logo" aria-label="4tails"><span class="logo-four">4</span> tails </a>
   <label class="header-search">
     <svg viewBox="0 0 24 24" aria-hidden="true">
       <circle cx="11" cy="11" r="7"></circle>
@@ -10,10 +10,11 @@
   </label>
   <!-- Desktop navigation -->
   <nav class="desktop-nav" aria-label="Navegación principal">
-    <a href="#find"> Find a Sitter </a>
-    <a href="#market"> Pet Market </a>
-    <a href="#sitter"> Become a Sitter </a>
-    <a href="#work"> Work with Us </a>
+    
+    <a [routerLink]="['/find-sitter']">Find a Sitter</a>
+    <a [routerLink]="['/pet-market']"> Pet Market </a>
+    <a [routerLink]="['/become-sitter']"> Become a Sitter </a>
+    <a [routerLink]="['/']"> Work with Us </a>
   </nav>
   <!-- Desktop actions -->
 

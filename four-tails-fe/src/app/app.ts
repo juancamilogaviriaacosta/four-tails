@@ -1,7 +1,7 @@
 import { Component, HostListener, OnDestroy, OnInit, signal } from '@angular/core';
 import { App as CapacitorApp } from '@capacitor/app';
 import { PluginListenerHandle } from '@capacitor/core';
-import { Router, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { Login } from './login/login';
 import { catchError, distinctUntilChanged, EMPTY, of, Subscription, switchMap, timer } from 'rxjs';
 import { AuthService } from './utils/auth-service';
@@ -17,7 +17,7 @@ import { FirebaseNotificationService } from './firebase/firebase-notification.se
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Login, Signup, AsyncPipe],
+  imports: [RouterOutlet, Login, Signup, AsyncPipe, RouterLink],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
