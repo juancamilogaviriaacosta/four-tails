@@ -38,18 +38,14 @@ export class FindSitter {
   }
 
   onSearch(filters: SitterSearchFilters): void {
-    this.loadingService.show();
-    setTimeout(() => {
-      this.router.navigate(['/search-sitters'], {
-        queryParams: {
-          pets: JSON.stringify(filters.pets),
-          address: filters.address,
-          service: filters.service,
-          startDate: filters.startDate,
-          endDate: filters.endDate,
-        },
-      });
-      this.loadingService.hide();
-    }, 1000);
+    this.router.navigate(['/search-sitters'], {
+      queryParams: {
+        pets: JSON.stringify(filters.pets),
+        address: filters.address,
+        service: filters.service,
+        startDate: filters.startDate,
+        endDate: filters.endDate,
+      },
+    });
   }
 }
