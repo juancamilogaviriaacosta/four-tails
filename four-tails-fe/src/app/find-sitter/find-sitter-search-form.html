@@ -16,7 +16,25 @@
 
 	<div class="form-field">
 		<label for="your-address">Your address</label>
-		<input id="your-address" name="address" type="text" [(ngModel)]="address" required />
+
+		<input id="your-address" name="address" type="text" [(ngModel)]="address" (input)="clearCoordinates()"
+			[required]="latitude === null || longitude === null"/>
+
+		<button type="button" class="use-location-button" (click)="useMyLocation()" [disabled]="gettingLocation">
+			@if (gettingLocation) {
+				Getting your location...
+			} @else {
+				Use my current location
+			}
+		</button>
+
+		@if (latitude !== null && longitude !== null) {
+			<small>Using your current location ({{ radius }} km radius)</small>
+		}
+
+		@if (locationError) {
+			<small class="location-error">{{ locationError }}</small>
+		}
 	</div>
 
 	<div class="form-field">

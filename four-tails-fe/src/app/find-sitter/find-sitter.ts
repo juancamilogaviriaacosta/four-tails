@@ -45,6 +45,13 @@ export class FindSitter {
         service: filters.service,
         startDate: filters.startDate,
         endDate: filters.endDate,
+        ...(filters.latitude !== undefined && filters.longitude !== undefined
+          ? {
+              latitude: filters.latitude,
+              longitude: filters.longitude,
+              radius: filters.radius ?? 5,
+            }
+          : {}),
       },
     });
   }

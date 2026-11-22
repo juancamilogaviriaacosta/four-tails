@@ -12,13 +12,28 @@ export const searchSittersResolver: ResolveFn<any> = (route, state) => {
     const staticDataCache = inject(StaticDataCache);
     const loadingService = inject(LoadingService);
     const params: any = {
-        'pets': route.queryParamMap.get('pets') ?? '',
-        'address': route.queryParamMap.get('address') ?? '',
-        'service': route.queryParamMap.get('service') ?? '',
-        'startDate': route.queryParamMap.get('startDate') ?? '',
-        'endDate': route.queryParamMap.get('endDate') ?? '',
+        pets: route.queryParamMap.get('pets') ?? '',
+        address: route.queryParamMap.get('address') ?? '',
+        service: route.queryParamMap.get('service') ?? '',
+        startDate: route.queryParamMap.get('startDate') ?? '',
+        endDate: route.queryParamMap.get('endDate') ?? '',
     };
+
+    const latitude = route.queryParamMap.get('latitude');
+    const longitude = route.queryParamMap.get('longitude');
+    const radius = route.queryParamMap.get('radius');
+
+    if (latitude !== null && longitude !== null) {
+        params.latitude = latitude;
+        params.longitude = longitude;
+    }
+
+    if (radius !== null) {
+        params.radius = radius;
+    }
+
     loadingService.show();
+
     return forkJoin({
         sitters: http.get(`${apiUrl.apiUrl}/api/getProviders`, { params, responseType: 'json' }),
         staticData: staticDataCache.load(),

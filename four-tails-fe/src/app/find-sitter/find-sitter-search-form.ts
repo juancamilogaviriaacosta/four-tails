@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
+import { Geolocation } from '@capacitor/geolocation';
 import type { KindOfPet, ServiceOption } from '../utils/static-data-cache';
 
 export interface SitterSearchFilters {
@@ -8,6 +9,9 @@ export interface SitterSearchFilters {
   service: string;
   startDate: string;
   endDate: string;
+  latitude?: number;
+  longitude?: number;
+  radius?: number;
 }
 
 @Component({
@@ -26,6 +30,12 @@ export class FindSitterSearchForm {
   @Output() search = new EventEmitter<SitterSearchFilters>();
 
   petModalOpen = false;
+  gettingLocation = false;
+  locationError = '';
+
+  latitude: number | null = null;
+  longitude: number | null = null;
+  radius = 5;
 
   get selectedPetSummary(): string {
     return this.kindOfPets
@@ -49,6 +59,40 @@ export class FindSitterSearchForm {
     }
   }
 
+  async useMyLocation(): Promise<void> {
+    this.gettingLocation = true;
+    this.locationError = '';
+
+    try {
+      const position = await Geolocation.getCurrentPosition({
+        enableHighAccuracy: true,
+        timeout: 15000,
+        maximumAge: 60000,
+      });
+
+      this.latitude = position.coords.latitude;
+      this.longitude = position.coords.longitude;
+      this.address = '';
+
+      // The GPS coordinates will be used instead of the typed address.
+      this.address = 'Current location';
+
+    } catch (error) {
+      console.error('Unable to get current location:', error);
+
+      this.locationError =
+        'Unable to get your location. Please check your location permissions.';
+    } finally {
+      this.gettingLocation = false;
+    }
+  }
+
+  clearCoordinates(): void {
+    this.latitude = null;
+    this.longitude = null;
+    this.locationError = '';
+  }
+
   onSubmit(form: NgForm): void {
     if (form.invalid) {
       form.control.markAllAsTouched();
@@ -63,6 +107,13 @@ export class FindSitterSearchForm {
       service: this.service,
       startDate: this.startDate,
       endDate: this.endDate,
+      ...(this.latitude !== null && this.longitude !== null
+        ? {
+            latitude: this.latitude,
+            longitude: this.longitude,
+            radius: this.radius,
+          }
+        : {}),
     });
   }
 }
