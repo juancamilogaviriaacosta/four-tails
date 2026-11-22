@@ -35,7 +35,7 @@ export class FindSitterSearchForm {
 
   latitude: number | null = null;
   longitude: number | null = null;
-  radius = 5;
+  radius = 30;
 
   get selectedPetSummary(): string {
     return this.kindOfPets
