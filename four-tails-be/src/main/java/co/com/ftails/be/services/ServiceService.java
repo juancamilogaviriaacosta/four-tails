@@ -34,6 +34,7 @@ public class ServiceService {
     private final BookingRepository br;
     private final PasswordEncoder passwordEncoder;
     private final NotificationService notificationService;
+    private final GeoLocationService geoLocationService;
 
     @Transactional
 	public Map<String, String> initDatabase() {
@@ -250,6 +251,10 @@ public class ServiceService {
 		provider1.setVerified(true);
 		provider1.setUser(user1);
 		provider1.setServices(Arrays.asList(service1, service2));
+        provider1.setAddress("Calle 85 # 15-20");
+        provider1.setCity("Bogotá");
+        provider1.setNeighborhood("Chicó");
+        provider1.setLocation(geoLocationService.createPoint(-74.0520, 4.6760));
 		pr.save(provider1);
 		
 		Provider provider2 = new Provider();
@@ -380,15 +385,20 @@ public class ServiceService {
 	    return response;
 	}
 
-    public List<ProviderDto> getProviders(String pets, String address, String service, String startDate, String endDate) {
+    public List<ProviderDto> getProviders (String pets, String address, String service, String startDate, String endDate, Double latitude, Double longitude, Double radius) {
         List<ProviderDto> response = new ArrayList<>();
-        List<Provider> all = pr.findAll();
-        for (Provider provider : all) {
+        List<Provider> providers;
+        if (latitude != null && longitude != null) {
+            providers = pr.findNearbyProviders(longitude, latitude, radius * 1000);
+        } else {
+            providers = pr.findAll();
+        }
+        for (Provider provider : providers) {
             ProviderDto dto = new ProviderDto();
             dto.setId(provider.getId());
             dto.setName(provider.getUser().getFirstName() + " " + provider.getUser().getLastName());
             dto.setDescription(provider.getDescription());
-            dto.setAddress(provider.getUser().getAddress());
+            dto.setAddress(provider.getAddress());
             dto.setRating(provider.getRating() == null ? null : String.valueOf(provider.getRating()));
             dto.setReviews(provider.getReviews());
             dto.setFare(provider.getFare());

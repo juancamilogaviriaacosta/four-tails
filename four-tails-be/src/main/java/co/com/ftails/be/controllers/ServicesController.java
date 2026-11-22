@@ -42,8 +42,21 @@ public class ServicesController {
             @RequestParam(defaultValue = "") String address,
             @RequestParam(defaultValue = "") String service,
             @RequestParam(defaultValue = "") String startDate,
-            @RequestParam(defaultValue = "") String endDate) {
-        return ResponseEntity.ok(ss.getProviders(pets, address, service, startDate, endDate));
+            @RequestParam(defaultValue = "") String endDate,
+            @RequestParam(required = false) Double latitude,
+            @RequestParam(required = false) Double longitude,
+            @RequestParam(defaultValue = "5") Double radius) {
+
+        //XOR either both values must be present or both must be absent
+        if ((latitude == null) != (longitude == null)) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        if (radius <= 0) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok(ss.getProviders( pets, address, service, startDate, endDate, latitude, longitude, radius));
     }
 
     @GetMapping("/api/getProvider/{id}")
