@@ -97,6 +97,8 @@ export class SearchSitters {
         service: this.service,
         startDate: this.startDate,
         endDate: this.endDate,
+        ...(filters.latitude !== undefined && filters.longitude !== undefined ?
+           { latitude: filters.latitude, longitude: filters.longitude, radius: filters.radius ?? 30, } : {}),
       },
     });
     this.closeSearchModal();
