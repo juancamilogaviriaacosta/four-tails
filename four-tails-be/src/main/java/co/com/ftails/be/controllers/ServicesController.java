@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import co.com.ftails.be.dtos.*;
+import co.com.ftails.be.repositories.AddressRepository;
 import co.com.ftails.be.services.KindOfPetService;
 import lombok.AllArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -20,6 +21,7 @@ public class ServicesController {
 
 	private final ServiceService ss;
     private final KindOfPetService ks;
+    private final AddressRepository ar;
 	
 	@GetMapping("/api/initDatabase")
     public ResponseEntity<Map<String, String>> initDatabase() {
@@ -51,11 +53,9 @@ public class ServicesController {
         if ((latitude == null) != (longitude == null)) {
             return ResponseEntity.badRequest().build();
         }
-
         if (radius <= 0) {
             return ResponseEntity.badRequest().build();
         }
-
         return ResponseEntity.ok(ss.getProviders( pets, address, service, startDate, endDate, latitude, longitude, radius));
     }
 
@@ -86,5 +86,14 @@ public class ServicesController {
     @PostMapping("/api/cancelBooking")
     public ResponseEntity<List<BookingDto>> cancelBooking(@RequestBody BookingDto bookingDto) {
         return ResponseEntity.ok(ss.cancelBooking(bookingDto));
+    }
+
+    @GetMapping("/api/getAddressSuggestions")
+    public ResponseEntity<List<AddressSuggestionDto>> getAddressSuggestions(@RequestParam String query) {
+        if (query == null || query.trim().length() < 3) {
+            return ResponseEntity.ok(List.of());
+        }
+        List<AddressSuggestionDto> results = ar.searchAddressSuggestions(query.trim());
+        return ResponseEntity.ok(results);
     }
 }

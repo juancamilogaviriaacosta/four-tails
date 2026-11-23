@@ -16,30 +16,60 @@
 
 	<div class="form-field">
 		<label for="your-address">Your address</label>
+		<div class="address-autocomplete">
+			<div class="address-field">
+				<input
+					id="your-address"
+					name="address"
+					type="text"
+					[(ngModel)]="address"
+					(ngModelChange)="onAddressChange($event)"
+					autocomplete="off"
+					placeholder="Start typing your address..."
+					[required]="latitude === null || longitude === null"
+				/>
 
-		<div class="address-field">
-			<input id="your-address" name="address" type="text" [(ngModel)]="address" (input)="clearCoordinates()"
-				[required]="latitude === null || longitude === null"/>
+				<button
+					type="button"
+					class="use-location-button"
+					(click)="useMyLocation()"
+					[disabled]="gettingLocation"
+					[attr.aria-label]="gettingLocation
+			? 'Getting your location'
+			: 'Use my current location'"
+					[attr.title]="gettingLocation
+			? 'Getting your location'
+			: 'Use my current location'"
+				>
+					<svg viewBox="0 0 24 24" aria-hidden="true">
+						<circle cx="12" cy="12" r="3"></circle>
+						<path d="M12 2v3M12 19v3M2 12h3M19 12h3"></path>
+						<circle cx="12" cy="12" r="8"></circle>
+					</svg>
+				</button>
+			</div>
 
-			<button type="button" class="use-location-button" (click)="useMyLocation()" [disabled]="gettingLocation"
-				[attr.aria-label]="gettingLocation ? 'Getting your location' : 'Use my current location'"
-				[attr.title]="gettingLocation ? 'Getting your location' : 'Use my current location'">
-				<svg viewBox="0 0 24 24" aria-hidden="true">
-					<circle cx="12" cy="12" r="3"></circle>
-					<path d="M12 2v3M12 19v3M2 12h3M19 12h3"></path>
-					<circle cx="12" cy="12" r="8"></circle>
-				</svg>
-			</button>
+			@if (searchingAddresses) {
+			<small>Searching addresses...</small>
+			} @if (addressSuggestions.length > 0) {
+			<div class="address-suggestions" role="listbox">
+				@for (suggestion of addressSuggestions; track suggestion.addressDetailPid) {
+				<button type="button" class="address-suggestion" role="option" (click)="selectAddress(suggestion)">
+					<span class="address-suggestion-icon">⌖</span>
+					<span>{{ suggestion.address }}</span>
+				</button>
+				}
+			</div>
+			}
 		</div>
 
 		@if (latitude !== null && longitude !== null) {
-			<small>Using your current location ({{ radius }} km radius)</small>
-		}
-
-		@if (locationError) {
-			<small class="location-error">{{ locationError }}</small>
+		<small> Using selected location ({{ radius }} km radius) </small>
+		} @if (locationError) {
+		<small class="location-error">{{ locationError }}</small>
 		}
 	</div>
+
 
 	<div class="form-field">
 		<label for="service">Which service are you looking for?</label>

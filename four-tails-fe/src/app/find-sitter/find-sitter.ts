@@ -33,8 +33,6 @@ export class FindSitter {
     const checkout = new Date(today);
     checkout.setDate(checkout.getDate() + 4);
     this.endDate = Utils.toDateInputValue(checkout);
-
-    this.address = 'Toowoomba QLD, Australia'
   }
 
   onSearch(filters: SitterSearchFilters): void {
