@@ -27,7 +27,7 @@ export class EditSitterProfile {
       },
       error: (error: unknown) => {
         console.error('Error loading sitter profile services:', error);
-        this.servicesError = 'No se pudieron cargar los servicios. Intenta de nuevo más tarde.';
+        this.servicesError = 'Could not load services. Please try again later.';
         this.servicesLoading = false;
       },
     });

@@ -2,10 +2,10 @@
   <div class="profile-card">
     <header class="card-header">
       <div>
-        <p class="eyebrow">PERFIL DE SITTER</p>
-        <h1>Edita tus servicios</h1>
+        <p class="eyebrow">SITTER PROFILE</p>
+        <h1>Edit your services</h1>
         <p class="intro">
-          Configura tus tarifas, la dirección donde prestas el servicio y tu área de cobertura.
+          Set your rates, service address, and coverage area.
         </p>
       </div>
     </header>
@@ -14,24 +14,24 @@
       <section class="services-section" aria-labelledby="services-heading">
         <div class="section-heading">
           <div>
-            <h2 id="services-heading">Servicios y tarifas</h2>
-            <p>Indica cuánto cobras por cada servicio que ofreces.</p>
+            <h2 id="services-heading">Services and rates</h2>
+            <p>Set the rate for each service you offer.</p>
           </div>
         </div>
 
         @if (servicesLoading) {
-          <p class="status-message" role="status">Cargando servicios...</p>
+          <p class="status-message" role="status">Loading services...</p>
         } @else if (servicesError) {
           <p class="status-message error-message" role="alert">{{ servicesError }}</p>
         } @else if (services.length === 0) {
-          <p class="status-message">No hay servicios disponibles en este momento.</p>
+          <p class="status-message">No services are available right now.</p>
         } @else {
-          <div class="table-scroll" role="region" aria-label="Tarifas de servicios" tabindex="0">
+          <div class="table-scroll" role="region" aria-label="Service rates" tabindex="0">
             <table class="services-table">
               <thead>
                 <tr>
-                  <th scope="col">Servicio</th>
-                  <th scope="col">Tarifa</th>
+                  <th scope="col">Service</th>
+                  <th scope="col">Rate</th>
                 </tr>
               </thead>
               <tbody>
@@ -40,7 +40,7 @@
                     <th scope="row">{{ service.name }}</th>
                     <td>
                       <label class="sr-only" [for]="'service-rate-' + service.id">
-                        Tarifa para {{ service.name }}
+                        Rate for {{ service.name }}
                       </label>
                       <div class="rate-input">
                         <span aria-hidden="true">$</span>
@@ -66,27 +66,27 @@
       <section class="details-section" aria-labelledby="coverage-heading">
         <div class="section-heading">
           <div>
-            <h2 id="coverage-heading">Ubicación y cobertura</h2>
-            <p>Cuéntales a tus clientes dónde trabajas y hasta dónde puedes desplazarte.</p>
+            <h2 id="coverage-heading">Location and coverage</h2>
+            <p>Let clients know where you work and how far you are willing to travel.</p>
           </div>
         </div>
 
         <div class="form-grid">
           <div class="field-group">
-            <label for="service-address">Dirección</label>
+            <label for="service-address">Address</label>
             <input
               id="service-address"
               class="text-input"
               type="text"
               name="address"
               autocomplete="street-address"
-              placeholder="Escribe tu dirección"
+              placeholder="Enter your address"
               [(ngModel)]="address"
             />
           </div>
 
           <div class="field-group">
-            <label for="coverage-radius">Radio de cobertura</label>
+            <label for="coverage-radius">Coverage radius</label>
             <div class="radius-input">
               <input
                 id="coverage-radius"
@@ -104,7 +104,7 @@
       </section>
 
       <div class="actions">
-        <button class="save-btn" type="button">Guardar cambios</button>
+        <button class="save-btn" type="button">Save changes</button>
       </div>
     </form>
   </div>
