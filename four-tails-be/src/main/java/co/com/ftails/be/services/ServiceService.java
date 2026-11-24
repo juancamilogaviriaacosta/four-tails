@@ -3,6 +3,7 @@ package co.com.ftails.be.services;
 import co.com.ftails.be.dtos.BookingDto;
 import co.com.ftails.be.dtos.ProviderDto;
 import co.com.ftails.be.dtos.ServiceDto;
+import co.com.ftails.be.dtos.ServiceFeeDto;
 import co.com.ftails.be.entities.*;
 import co.com.ftails.be.repositories.*;
 import lombok.AllArgsConstructor;
@@ -402,7 +403,7 @@ public class ServiceService {
             dto.setAddress(provider.getAddress());
             dto.setRating(provider.getRating() == null ? null : String.valueOf(provider.getRating()));
             dto.setReviews(provider.getReviews());
-            dto.setFare(provider.getServiceFees().stream().filter(sf -> sf.getService().getId().equals(service)).map(ServiceFee::getAmount).findFirst().get());
+            dto.setFeeToDisplay(provider.getServiceFees().stream().filter(sf -> sf.getService().getId().equals(service)).map(ServiceFee::getAmount).findFirst().get());
             dto.setLastSeen(provider.getUser().getLastSeen());
             dto.setPhotos(provider.getUser().getPhotos().stream().map(UserPhoto::getUrl).toList());
             response.add(dto);
@@ -419,7 +420,17 @@ public class ServiceService {
         dto.setAddress(provider.getUser().getAddress());
         dto.setRating(provider.getRating() == null ? null : String.valueOf(provider.getRating()));
         dto.setReviews(provider.getReviews());
-        //dto.setFare(provider.getFare());
+        List<ServiceFeeDto> serviceFeesList = new ArrayList<>();
+        for (ServiceFee serviceFee : provider.getServiceFees()) {
+            ServiceFeeDto sfDto = new ServiceFeeDto();
+            sfDto.setServiceId(serviceFee.getService().getId());
+            sfDto.setServiceName(serviceFee.getService().getName());
+            sfDto.setAmount(serviceFee.getAmount());
+            sfDto.setCurrency(serviceFee.getCurrency());
+            sfDto.setPricingUnit(serviceFee.getPricingUnit().name());
+            serviceFeesList.add(sfDto);
+        }
+        dto.setServiceFees(serviceFeesList);
         dto.setLastSeen(provider.getUser().getLastSeen());
         dto.setPhotos(provider.getUser().getPhotos().stream().map(UserPhoto::getUrl).toList());
         return dto;
@@ -432,7 +443,7 @@ public class ServiceService {
         booking.setService(sr.getReferenceById(bookingDto.getServiceId()));
         booking.setStartDate(bookingDto.getStartDate());
         booking.setEndDate(bookingDto.getEndDate());
-        booking.setFare(bookingDto.getFare());
+        booking.setFare(bookingDto.getFee());
         booking.setNotes(bookingDto.getNotes());
         booking.setStatus(BookingStatus.PENDING);
         booking.setPets(bookingDto.getPets());

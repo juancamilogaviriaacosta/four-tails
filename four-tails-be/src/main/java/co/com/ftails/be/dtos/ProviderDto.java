@@ -16,7 +16,8 @@ public class ProviderDto {
     private String address;
     private String rating;
     private Integer reviews;
-    private BigDecimal fare;
+    private BigDecimal feeToDisplay;
+    private List<ServiceFeeDto> serviceFees;
     private Instant lastSeen;
     private List<String> photos;
 }

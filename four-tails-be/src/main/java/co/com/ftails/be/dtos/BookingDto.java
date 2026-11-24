@@ -19,7 +19,7 @@ public class BookingDto {
     private String serviceColor;
     private Instant startDate;
     private Instant endDate;
-    private BigDecimal fare;
+    private BigDecimal fee;
     private String pets;
     private String address;
     private String notes;

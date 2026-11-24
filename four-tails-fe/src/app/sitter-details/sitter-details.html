@@ -91,7 +91,7 @@
 			</div>
 
 			<aside class="booking-card" aria-label="Request a booking">
-				<div class="booking-price"><strong>${{ sitter.fare }}</strong><span>per night</span></div>
+				<div class="booking-price"><strong>${{ sitter.feeToDisplay }}</strong><span>per night</span></div>
 				<p class="booking-rating"><span aria-hidden="true">★</span> {{ sitter.rating }} <span>· {{ sitter.reviews }} reviews</span></p>
 				<form class="booking-form" (ngSubmit)="requestBooking()">
 					<div class="date-fields">

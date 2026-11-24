@@ -35,11 +35,15 @@ export class SitterDetails {
     private apiUrl: ApiUrlService,
     private loadingService: LoadingService,
   ) {
-    this.sitter = this.ar.snapshot.data['preload'].sitter;
+    
     const queryParams = this.ar.snapshot.queryParamMap;
     this.pets = queryParams.get('pets') ?? '';
     this.address = queryParams.get('address') ?? '';
     this.service = queryParams.get('service') ?? '';
+
+    const sitter = this.ar.snapshot.data['preload'].sitter;
+    const matchingServiceFee = sitter.serviceFees.find((fee: any) => fee.serviceId == this.service);
+    this.sitter = {...sitter, feeToDisplay: matchingServiceFee?.amount ?? 0};
 
     const today = new Date();
     this.startDate = queryParams.get('startDate') ?? Utils.toDateInputValue(today);
@@ -67,7 +71,7 @@ export class SitterDetails {
         serviceId: this.service,
         startDate: `${this.startDate}T00:00:00Z`,
         endDate: `${this.endDate}T00:00:00Z`,
-        fare: this.sitter.fare,
+        fee: this.sitter.feeToDisplay,
         pets: this.pets,
         address: this.address,
         notes: '',
