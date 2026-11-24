@@ -242,15 +242,28 @@ public class ServiceService {
                 "https://images.unsplash.com/photo-1545249390-6bdfa286032f?auto=format&fit=crop&w=700&q=85"
         ));
         ur.save(user7);
-		
+
+        ServiceFee serviceFee1 = new ServiceFee();
+        serviceFee1.setService(service1);
+        serviceFee1.setAmount(BigDecimal.valueOf(30));
+        serviceFee1.setCurrency("AUD");
+        serviceFee1.setPricingUnit(PricingUnit.PER_NIGHT);
+
+        ServiceFee serviceFee2 = new ServiceFee();
+        serviceFee2.setService(service2);
+        serviceFee2.setAmount(BigDecimal.valueOf(30));
+        serviceFee2.setCurrency("AUD");
+        serviceFee2.setPricingUnit(PricingUnit.PER_DAY);
+
 		Provider provider1 = new Provider();
 		provider1.setDescription("Calm, attentive care for dogs who love a little extra company.");
 		provider1.setRating(4.9);
         provider1.setReviews(12);
-        provider1.setFare(BigDecimal.valueOf(30));
+        provider1.setServiceFees(Arrays.asList(serviceFee1, serviceFee2));
+        serviceFee1.setProvider(provider1);
+        serviceFee2.setProvider(provider1);
 		provider1.setVerified(true);
 		provider1.setUser(user1);
-		provider1.setServices(Arrays.asList(service1, service2));
         provider1.setAddress("Calle 85 # 15-20");
         provider1.setCity("Bogotá");
         provider1.setNeighborhood("Chicó");
@@ -261,60 +274,48 @@ public class ServiceService {
         provider2.setDescription("Calm, attentive care for dogs who love a little extra company.");
         provider2.setRating(4.9);
         provider2.setReviews(12);
-        provider2.setFare(BigDecimal.valueOf(30));
 		provider2.setVerified(true);
 		provider2.setUser(user2);
-		provider2.setServices(Arrays.asList(service1));
 		pr.save(provider2);
 		
 		Provider provider3 = new Provider();
         provider3.setDescription("Calm, attentive care for dogs who love a little extra company.");
         provider3.setRating(4.9);
         provider3.setReviews(12);
-        provider3.setFare(BigDecimal.valueOf(30));
 		provider3.setVerified(true);
 		provider3.setUser(user3);
-		provider3.setServices(Arrays.asList(service2));
 		pr.save(provider3);
 
         Provider provider4 = new Provider();
         provider4.setDescription("Calm, attentive care for dogs who love a little extra company.");
         provider4.setRating(4.9);
         provider4.setReviews(12);
-        provider4.setFare(BigDecimal.valueOf(30));
         provider4.setVerified(true);
         provider4.setUser(user4);
-        provider4.setServices(Arrays.asList(service2));
         pr.save(provider4);
 
         Provider provider5 = new Provider();
         provider5.setDescription("Calm, attentive care for dogs who love a little extra company.");
         provider5.setRating(4.9);
         provider5.setReviews(12);
-        provider5.setFare(BigDecimal.valueOf(30));
         provider5.setVerified(true);
         provider5.setUser(user5);
-        provider5.setServices(Arrays.asList(service2));
         pr.save(provider5);
 
         Provider provider6 = new Provider();
         provider6.setDescription("Calm, attentive care for dogs who love a little extra company.");
         provider6.setRating(4.9);
         provider6.setReviews(12);
-        provider6.setFare(BigDecimal.valueOf(30));
         provider6.setVerified(true);
         provider6.setUser(user6);
-        provider6.setServices(Arrays.asList(service2));
         pr.save(provider6);
 
         Provider provider7 = new Provider();
         provider7.setDescription("Calm, attentive care for dogs who love a little extra company.");
         provider7.setRating(4.9);
         provider7.setReviews(12);
-        provider7.setFare(BigDecimal.valueOf(30));
         provider7.setVerified(true);
         provider7.setUser(user7);
-        provider7.setServices(Arrays.asList(service2));
         pr.save(provider7);
 
         User user8 = new User();
@@ -369,10 +370,10 @@ public class ServiceService {
 	    List<ServiceDto> response = new ArrayList<>();
 	    for (Service service : services) {
 	        List<ProviderDto> providers = new ArrayList<>();
-	        for (Provider provider : service.getProviders()) {
+	        for (ServiceFee serviceFee : service.getServiceFees()) {
 	            ProviderDto pDto = new ProviderDto();
-	            pDto.setId(provider.getId());
-	            pDto.setName(provider.getUser().getFirstName());
+	            pDto.setId(serviceFee.getProvider().getId());
+	            pDto.setName(serviceFee.getProvider().getUser().getFirstName());
 	            providers.add(pDto);
 	        }
 	        ServiceDto sDto = new ServiceDto();
@@ -385,11 +386,11 @@ public class ServiceService {
 	    return response;
 	}
 
-    public List<ProviderDto> getProviders (String pets, String address, String service, String startDate, String endDate, Double latitude, Double longitude, Double radius) {
+    public List<ProviderDto> getProviders (String pets, String address, Long service, String startDate, String endDate, Double latitude, Double longitude, Double radius) {
         List<ProviderDto> response = new ArrayList<>();
         List<Provider> providers;
         if (latitude != null && longitude != null) {
-            providers = pr.findNearbyProviders(longitude, latitude, radius * 1000);
+            providers = pr.findNearbyProviders(service, longitude, latitude, radius * 1000);
         } else {
             providers = pr.findAll();
         }
@@ -401,7 +402,7 @@ public class ServiceService {
             dto.setAddress(provider.getAddress());
             dto.setRating(provider.getRating() == null ? null : String.valueOf(provider.getRating()));
             dto.setReviews(provider.getReviews());
-            dto.setFare(provider.getFare());
+            dto.setFare(provider.getServiceFees().stream().filter(sf -> sf.getService().getId().equals(service)).map(ServiceFee::getAmount).findFirst().get());
             dto.setLastSeen(provider.getUser().getLastSeen());
             dto.setPhotos(provider.getUser().getPhotos().stream().map(UserPhoto::getUrl).toList());
             response.add(dto);
@@ -418,7 +419,7 @@ public class ServiceService {
         dto.setAddress(provider.getUser().getAddress());
         dto.setRating(provider.getRating() == null ? null : String.valueOf(provider.getRating()));
         dto.setReviews(provider.getReviews());
-        dto.setFare(provider.getFare());
+        //dto.setFare(provider.getFare());
         dto.setLastSeen(provider.getUser().getLastSeen());
         dto.setPhotos(provider.getUser().getPhotos().stream().map(UserPhoto::getUrl).toList());
         return dto;

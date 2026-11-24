@@ -42,7 +42,7 @@ public class ServicesController {
     public ResponseEntity<List<ProviderDto>> getProviders(
             @RequestParam(defaultValue = "") String pets,
             @RequestParam(defaultValue = "") String address,
-            @RequestParam(defaultValue = "") String service,
+            @RequestParam(defaultValue = "") Long service,
             @RequestParam(defaultValue = "") String startDate,
             @RequestParam(defaultValue = "") String endDate,
             @RequestParam(required = false) Double latitude,

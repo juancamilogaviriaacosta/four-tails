@@ -35,9 +35,9 @@ public class Service {
 
 	@Column(length = 7)
 	private String color;
-	
-	@ManyToMany(mappedBy = "services")
-    private List<Provider> providers;
+
+	@OneToMany(mappedBy = "service", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<ServiceFee> serviceFees;
 
 	@PrePersist
 	public void onCreate() {

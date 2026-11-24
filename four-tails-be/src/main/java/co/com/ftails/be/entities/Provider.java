@@ -43,9 +43,6 @@ public class Provider {
 	@Column
 	private Integer reviews;
 
-	@Column(precision = 10, scale = 2)
-	private BigDecimal fare;
-
 	@Column(length = 255)
 	private String address;
 
@@ -59,16 +56,12 @@ public class Provider {
 	@Column(columnDefinition = "geography(Point,4326)")
 	private Point location;
 
-	@ManyToOne
+	@OneToOne(optional = false)
+	@JoinColumn(name = "user_id", nullable = false, unique = true)
 	private User user;
 
-	@ManyToMany
-	@JoinTable(
-			name = "provider_services",
-			joinColumns = @JoinColumn(name = "provider_id"),
-			inverseJoinColumns = @JoinColumn(name = "service_id")
-	)
-	private List<Service> services;
+	@OneToMany(mappedBy = "provider", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<ServiceFee> serviceFees;
 
 	@PrePersist
 	public void onCreate() {

@@ -120,10 +120,9 @@ export class FindSitterSearchForm {
       this.addressSuggestions = [];
     } catch (error) {
       console.error('Unable to get current location:', error);
-
-      this.locationError =
-        'Unable to get your location. Please check your location permissions.';
+      this.locationError = 'Unable to get your location. Please check your location permissions.';
     } finally {
+      this.cdr.markForCheck();
       this.gettingLocation = false;
     }
   }
