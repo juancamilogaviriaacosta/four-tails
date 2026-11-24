@@ -34,4 +34,10 @@ public class UserController {
         UserDto response = us.setProfile(userDto);
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping(path = "api/setSitterProfile", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserDto> setSitterProfile(Authentication authentication) {
+        UserDto response = us.setSitterProfile(authentication);
+        return ResponseEntity.ok(response);
+    }
 }

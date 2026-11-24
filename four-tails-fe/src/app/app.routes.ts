@@ -19,6 +19,8 @@ import { sitterDetailResolver } from './sitter-details/sitter-detail-resolver';
 import { myBookingsResolver } from './my-bookings/my-bookings-resolver';
 import { editProfileResolver } from './edit-profile/edit-profile-resolver';
 import { notificationsResolver } from './notifications/notifications-resolver';
+import { EditSitterProfile } from './edit-sitter-profile/edit-sitter-profile';
+import { editSitterProfileResolver } from './edit-sitter-profile/edit-sitter-profile-resolver';
 
 export const routes: Routes = [
     { path: '', component: MainServices  },
@@ -33,4 +35,5 @@ export const routes: Routes = [
     { path: 'my-bookings', component: MyBookings, canActivate: [authGuard], resolve: { preload: myBookingsResolver } },
     { path: 'pet-market', component: PetMarket },
     { path: 'my-orders', component: MyOrders },
+    { path: 'edit-sitter-profile', component: EditSitterProfile, canActivate: [authGuard], resolve: { preload: editSitterProfileResolver} },
 ];

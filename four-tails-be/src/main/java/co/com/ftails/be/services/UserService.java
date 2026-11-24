@@ -89,4 +89,8 @@ public class UserService {
         User savedUser = ur.save(user);
         return userToDto(savedUser);
     }
+
+    public UserDto setSitterProfile(Authentication authentication) {
+        return new UserDto();
+    }
 }
