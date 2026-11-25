@@ -1,9 +1,17 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, DestroyRef, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import type { ServiceOption, StaticData } from '../utils/static-data-cache';
-import { Subject } from 'rxjs';
-import { AddressSuggestion } from '../find-sitter/address-autocomplete.service';
+import { Subject, of } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  switchMap,
+  catchError,
+} from 'rxjs/operators';
+import { AddressAutocompleteService } from '../find-sitter/address-autocomplete.service';
+import type { AddressSuggestion } from '../find-sitter/address-autocomplete.service';
 import { Geolocation } from '@capacitor/geolocation';
 
 interface SitterServiceRate extends ServiceOption {
@@ -25,13 +33,43 @@ export class EditSitterProfile {
   latitude: number | null = null;
   longitude: number | null = null;
   radius = 30;
-  addressQuery$ = new Subject<string>();
+  private readonly addressQuery$ = new Subject<string>();
   addressSuggestions: AddressSuggestion[] = [];
   gettingLocation = false;
+  searchingAddresses = false;
+
+  private readonly addressAutocompleteService = inject(AddressAutocompleteService);
+  private readonly destroyRef = inject(DestroyRef);
 
   constructor(private readonly route: ActivatedRoute, public cdr: ChangeDetectorRef) {
     const staticData: StaticData = this.route.snapshot.data['preload'].staticData;
     this.services = staticData.services.map((service) => ({ ...service, amount: null, active: false }));
+
+    this.addressQuery$.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap((query) => {
+        if (query.length < 3) {
+          this.searchingAddresses = false;
+          this.cdr.markForCheck();
+          return of([]);
+        }
+
+        this.searchingAddresses = true;
+        this.cdr.markForCheck();
+        return this.addressAutocompleteService.search(query).pipe(
+          catchError((error: unknown) => {
+            console.error('Address autocomplete error:', error);
+            return of([]);
+          }),
+        );
+      }),
+      takeUntilDestroyed(this.destroyRef),
+    ).subscribe((results) => {
+      this.addressSuggestions = results;
+      this.searchingAddresses = false;
+      this.cdr.markForCheck();
+    });
   }
 
   clearCoordinates(): void {
@@ -44,6 +82,14 @@ export class EditSitterProfile {
     this.clearCoordinates();
     this.addressSuggestions = [];
     this.addressQuery$.next(value.trim());
+  }
+
+  selectAddress(suggestion: AddressSuggestion): void {
+    this.address = suggestion.address;
+    this.latitude = suggestion.latitude;
+    this.longitude = suggestion.longitude;
+    this.addressSuggestions = [];
+    this.locationError = '';
   }
 
   async useMyLocation(): Promise<void> {

@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
+import { of } from 'rxjs';
+import { AddressAutocompleteService } from '../find-sitter/address-autocomplete.service';
 
 import { EditSitterProfile } from './edit-sitter-profile';
 
@@ -11,6 +13,10 @@ describe('EditSitterProfile', () => {
     await TestBed.configureTestingModule({
       imports: [EditSitterProfile],
       providers: [
+        {
+          provide: AddressAutocompleteService,
+          useValue: { search: () => of([]) },
+        },
         {
           provide: ActivatedRoute,
           useValue: {
@@ -39,5 +45,19 @@ describe('EditSitterProfile', () => {
     expect(component.services).toEqual([
       { id: 1, name: 'Dog walking', amount: null, active: false },
     ]);
+  });
+
+  it('sets the selected address and coordinates', () => {
+    component.selectAddress({
+      addressDetailPid: 'address-1',
+      address: '123 Main Street',
+      latitude: 10,
+      longitude: -20,
+    });
+
+    expect(component.address).toBe('123 Main Street');
+    expect(component.latitude).toBe(10);
+    expect(component.longitude).toBe(-20);
+    expect(component.addressSuggestions).toEqual([]);
   });
 });

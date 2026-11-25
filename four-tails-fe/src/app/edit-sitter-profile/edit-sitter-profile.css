@@ -133,6 +133,52 @@ h1 {
   gap: 8px;
 }
 
+.address-autocomplete {
+  position: relative;
+  width: 100%;
+}
+
+.address-suggestions {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 100;
+  max-height: 260px;
+  overflow-y: auto;
+  border: 1px solid rgba(91, 76, 63, 0.16);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+.address-suggestion {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 0;
+  background: #fff;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.address-suggestion:hover {
+  background: #faf8f5;
+}
+
+.address-suggestion + .address-suggestion {
+  border-top: 1px solid rgba(91, 76, 63, 0.1);
+}
+
+.address-suggestion-icon {
+  color: #77818b;
+  font-size: 20px;
+}
+
 .address-field input {
   min-width: 0;
 }
