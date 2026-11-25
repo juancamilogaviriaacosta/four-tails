@@ -12,6 +12,7 @@ export interface KindOfPet {
 export interface ServiceOption {
   id: number | string;
   name: string;
+  pricingUnit: string;
 }
 
 export interface StaticData {

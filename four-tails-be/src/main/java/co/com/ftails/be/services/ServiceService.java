@@ -43,31 +43,31 @@ public class ServiceService {
 		Service service1 = new Service();
 		service1.setName("Hosting");
         service1.setColor("#4a7144");
+        service1.setPricingUnit(PricingUnit.PER_NIGHT);
 		sr.save(service1);
-
-		Service service2 = new Service();
-		service2.setName("Sitting");
-        service2.setColor("#c76b6b");
-		sr.save(service2);
 
 		Service service3 = new Service();
 		service3.setName("Daycare");
         service3.setColor("#8b6ca8");
+        service3.setPricingUnit(PricingUnit.PER_DAY);
 		sr.save(service3);
 
 		Service service4 = new Service();
 		service4.setName("House visits");
         service4.setColor("#668bb5");
+        service4.setPricingUnit(PricingUnit.PER_HOUR);
 		sr.save(service4);
 
 		Service service5 = new Service();
 		service5.setName("Walking");
         service5.setColor("#d69a55");
+        service5.setPricingUnit(PricingUnit.PER_HOUR);
 		sr.save(service5);
 
 		Service service6 = new Service();
 		service6.setName("Grooming");
         service6.setColor("#b5a05c");
+        service6.setPricingUnit(PricingUnit.PER_SESSION);
 		sr.save(service6);
 
 		Role roleAdmin = new Role();
@@ -248,13 +248,11 @@ public class ServiceService {
         serviceFee1.setService(service1);
         serviceFee1.setAmount(BigDecimal.valueOf(30));
         serviceFee1.setCurrency("AUD");
-        serviceFee1.setPricingUnit(PricingUnit.PER_NIGHT);
 
         ServiceFee serviceFee2 = new ServiceFee();
-        serviceFee2.setService(service2);
+        serviceFee2.setService(service3);
         serviceFee2.setAmount(BigDecimal.valueOf(30));
         serviceFee2.setCurrency("AUD");
-        serviceFee2.setPricingUnit(PricingUnit.PER_DAY);
 
 		Provider provider1 = new Provider();
 		provider1.setDescription("Calm, attentive care for dogs who love a little extra company.");
@@ -366,7 +364,7 @@ public class ServiceService {
         return photos;
     }
 
-    public List<ServiceDto> getServices() {
+    /*public List<ServiceDto> getServices() {
 		List<Service> services = sr.findAll();
 	    List<ServiceDto> response = new ArrayList<>();
 	    for (Service service : services) {
@@ -385,7 +383,21 @@ public class ServiceService {
 	        response.add(sDto);
 	    }
 	    return response;
-	}
+	}*/
+
+    public List<ServiceDto> getServices() {
+        List<Service> services = sr.findAll();
+        List<ServiceDto> response = new ArrayList<>();
+        for (Service service : services) {
+            ServiceDto sDto = new ServiceDto();
+            sDto.setId(service.getId());
+            sDto.setName(service.getName());
+            sDto.setPicture(service.getPicture());
+            sDto.setPricingUnit(service.getPricingUnit().name());
+            response.add(sDto);
+        }
+        return response;
+    }
 
     public List<ProviderDto> getProviders (String pets, String address, Long service, String startDate, String endDate, Double latitude, Double longitude, Double radius) {
         List<ProviderDto> response = new ArrayList<>();
@@ -427,7 +439,7 @@ public class ServiceService {
             sfDto.setServiceName(serviceFee.getService().getName());
             sfDto.setAmount(serviceFee.getAmount());
             sfDto.setCurrency(serviceFee.getCurrency());
-            sfDto.setPricingUnit(serviceFee.getPricingUnit().name());
+            sfDto.setPricingUnit(serviceFee.getService().getPricingUnit().name());
             serviceFeesList.add(sfDto);
         }
         dto.setServiceFees(serviceFeesList);

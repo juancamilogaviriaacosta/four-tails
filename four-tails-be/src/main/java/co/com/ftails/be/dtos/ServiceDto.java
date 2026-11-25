@@ -8,9 +8,9 @@ import java.util.List;
 @Getter
 @Setter
 public class ServiceDto {
-	
 	private Long id;
     private String name;
     private String picture;
-    private List<ProviderDto> providers;
+    private String pricingUnit;
+    //private List<ProviderDto> providers;
 }

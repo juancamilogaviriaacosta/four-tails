@@ -70,6 +70,86 @@ h1 {
   font-size: 0.92rem;
 }
 
+.service-picker {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.service-picker select {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 48px;
+  border: 1px solid rgba(91, 76, 63, 0.16);
+  border-radius: 12px;
+  padding: 0 0.9rem;
+  background: #fff;
+  color: #202a35;
+  font: inherit;
+}
+
+.service-picker select:focus {
+  outline: none;
+  border-color: var(--yellow);
+  box-shadow: 0 0 0 4px rgba(214, 120, 71, 0.12);
+}
+
+.service-picker select:disabled {
+  background: #faf8f5;
+  color: #77818b;
+  cursor: not-allowed;
+}
+
+.service-picker small {
+  color: #a2382d;
+}
+
+.add-service-btn,
+.remove-service-btn {
+  min-height: 48px;
+  border: 0;
+  border-radius: 12px;
+  padding: 0.7rem 1rem;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 160ms ease, opacity 160ms ease;
+}
+
+.add-service-btn {
+  min-width: 90px;
+  background: var(--yellow);
+  color: var(--navy);
+}
+
+.add-service-btn:hover:not(:disabled) {
+  background: #e5a84e;
+}
+
+.remove-service-btn {
+  min-height: 40px;
+  border: 1px solid rgba(162, 56, 45, 0.25);
+  background: #fff;
+  color: #a2382d;
+}
+
+.remove-service-btn:hover {
+  background: #fff1ef;
+}
+
+.add-service-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.add-service-btn:focus-visible,
+.remove-service-btn:focus-visible {
+  outline: 3px solid var(--navy);
+  outline-offset: 3px;
+}
+
 .table-scroll {
   overflow-x: auto;
   border: 1px solid rgba(91, 76, 63, 0.12);
@@ -78,7 +158,7 @@ h1 {
 
 .services-table {
   width: 100%;
-  min-width: 540px;
+  min-width: 680px;
   border-collapse: collapse;
   text-align: left;
 }
@@ -102,16 +182,25 @@ h1 {
   font-weight: 600;
 }
 
-.service-toggle-cell {
+.pricing-unit-cell {
+  min-width: 130px;
+  color: #707780;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.services-table thead th:last-child {
+  text-align: center;
+}
+
+.service-actions-cell {
   width: 1%;
   text-align: center;
 }
 
-.service-toggle-cell input {
-  width: 18px;
-  height: 18px;
-  accent-color: var(--yellow);
-  cursor: pointer;
+.empty-services-cell {
+  color: #707780;
+  text-align: center;
 }
 
 .services-table tbody tr:last-child th,

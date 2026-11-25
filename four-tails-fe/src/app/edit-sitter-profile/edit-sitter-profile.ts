@@ -13,20 +13,22 @@ import {
 import { AddressAutocompleteService } from '../find-sitter/address-autocomplete.service';
 import type { AddressSuggestion } from '../find-sitter/address-autocomplete.service';
 import { Geolocation } from '@capacitor/geolocation';
+import { EnumConverterPipe } from '../utils/enum-converter.pipe';
 
 interface SitterServiceRate extends ServiceOption {
   amount: number | null;
-  active: boolean;
 }
 
 @Component({
   selector: 'app-edit-sitter-profile',
-  imports: [FormsModule],
+  imports: [FormsModule, EnumConverterPipe],
   templateUrl: './edit-sitter-profile.html',
   styleUrl: './edit-sitter-profile.css',
 })
 export class EditSitterProfile {
+  availableServices: ServiceOption[] = [];
   services: SitterServiceRate[] = [];
+  selectedServiceId: number | string | null = null;
   address = '';
   coverageRadius = 30;
   locationError = '';
@@ -43,7 +45,7 @@ export class EditSitterProfile {
 
   constructor(private readonly route: ActivatedRoute, public cdr: ChangeDetectorRef) {
     const staticData: StaticData = this.route.snapshot.data['preload'].staticData;
-    this.services = staticData.services.map((service) => ({ ...service, amount: null, active: false }));
+    this.availableServices = staticData.services;
 
     this.addressQuery$.pipe(
       debounceTime(300),
@@ -70,6 +72,28 @@ export class EditSitterProfile {
       this.searchingAddresses = false;
       this.cdr.markForCheck();
     });
+  }
+
+  get selectedServiceAlreadyAdded(): boolean {
+    return this.services.some((service) => service.id === this.selectedServiceId);
+  }
+
+  addService(): void {
+    if (this.selectedServiceId === null || this.selectedServiceAlreadyAdded) {
+      return;
+    }
+
+    const service = this.availableServices.find((option) => option.id === this.selectedServiceId);
+    if (!service) {
+      return;
+    }
+
+    this.services = [...this.services, { ...service, amount: null }];
+    this.selectedServiceId = null;
+  }
+
+  removeService(serviceId: number | string): void {
+    this.services = this.services.filter((service) => service.id !== serviceId);
   }
 
   clearCoordinates(): void {

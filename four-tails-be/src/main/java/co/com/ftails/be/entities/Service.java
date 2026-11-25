@@ -39,6 +39,10 @@ public class Service {
 	@OneToMany(mappedBy = "service", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ServiceFee> serviceFees;
 
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private PricingUnit pricingUnit;
+
 	@PrePersist
 	public void onCreate() {
 		createdAt = Instant.now();

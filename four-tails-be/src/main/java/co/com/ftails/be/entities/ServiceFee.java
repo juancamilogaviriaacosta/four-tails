@@ -40,10 +40,6 @@ public class ServiceFee {
     @JoinColumn(name = "service_id", nullable = false)
     private Service service;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private PricingUnit pricingUnit;
-
     @PrePersist
     public void onCreate() {
         createdAt = Instant.now();

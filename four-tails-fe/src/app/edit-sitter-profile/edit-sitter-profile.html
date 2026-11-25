@@ -19,16 +19,39 @@
           </div>
         </div>
 
-        @if (services.length === 0) {
-        <p class="status-message">No services are available right now.</p>
-        } @else {
+        <div class="service-picker">
+          <div class="field-group">
+            <label for="service-to-add">Service</label>
+            <select id="service-to-add" name="serviceToAdd" [(ngModel)]="selectedServiceId"
+              [disabled]="availableServices.length === 0">
+              <option [ngValue]="null">
+                {{ availableServices.length === 0 ? 'No services available' : 'Choose a service' }}
+              </option>
+              @for (option of availableServices; track option.id) {
+                <option [ngValue]="option.id">{{ option.name }}</option>
+              }
+            </select>
+          </div>
+          <button class="add-service-btn" type="button" (click)="addService()"
+            [disabled]="selectedServiceId === null || selectedServiceAlreadyAdded">
+            Add
+          </button>
+        </div>
+
+        <div class="service-picker">
+          @if (selectedServiceAlreadyAdded) {
+            <small>This service is already in the table.</small>
+          }
+        </div>
+
         <div class="table-scroll" role="region" aria-label="Service rates" tabindex="0">
           <table class="services-table">
             <thead>
               <tr>
                 <th scope="col">Service</th>
                 <th scope="col">Rate</th>
-                <th scope="col">Active</th>
+                <th scope="col">Pricing unit</th>
+                <th scope="col">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -45,19 +68,27 @@
                       min="0" step="0.01" placeholder="0" [(ngModel)]="service.amount" />
                   </div>
                 </td>
-                <td class="service-toggle-cell">
-                  <label class="sr-only" [for]="'service-active-' + service.id">
-                    Activate {{ service.name }}
-                  </label>
-                  <input [id]="'service-active-' + service.id" [name]="'service-active-' + service.id" type="checkbox"
-                    [(ngModel)]="service.active" />
+                <td class="pricing-unit-cell">
+                  {{ service.pricingUnit | enumConverter }}
+                </td>
+                <td class="service-actions-cell">
+                  <button class="remove-service-btn" type="button"
+                    [attr.aria-label]="'Remove ' + service.name"
+                    (click)="removeService(service.id)">
+                    Remove
+                  </button>
                 </td>
               </tr>
+              } @empty {
+                <tr>
+                  <td class="empty-services-cell" colspan="4">
+                    {{ availableServices.length === 0 ? 'No services are available right now.' : 'No services added yet.' }}
+                  </td>
+                </tr>
               }
             </tbody>
           </table>
         </div>
-        }
       </section>
 
       <section class="details-section" aria-labelledby="coverage-heading">

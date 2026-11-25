@@ -42,9 +42,21 @@ describe('EditSitterProfile', () => {
   });
 
   it('loads services from resolved static data', () => {
-    expect(component.services).toEqual([
-      { id: 1, name: 'Dog walking', amount: null, active: false },
-    ]);
+    expect(component.availableServices).toEqual([{ id: 1, name: 'Dog walking' }]);
+    expect(component.services).toEqual([]);
+  });
+
+  it('adds a service only once and can remove it', () => {
+    component.selectedServiceId = 1;
+    component.addService();
+    expect(component.services).toEqual([{ id: 1, name: 'Dog walking', amount: null }]);
+
+    component.selectedServiceId = 1;
+    component.addService();
+    expect(component.services).toHaveLength(1);
+
+    component.removeService(1);
+    expect(component.services).toEqual([]);
   });
 
   it('sets the selected address and coordinates', () => {
