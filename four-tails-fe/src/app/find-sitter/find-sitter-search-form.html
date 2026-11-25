@@ -34,13 +34,8 @@
 					class="use-location-button"
 					(click)="useMyLocation()"
 					[disabled]="gettingLocation"
-					[attr.aria-label]="gettingLocation
-			? 'Getting your location'
-			: 'Use my current location'"
-					[attr.title]="gettingLocation
-			? 'Getting your location'
-			: 'Use my current location'"
-				>
+					[attr.aria-label]="gettingLocation ? 'Getting your location' : 'Use my current location'"
+                	[attr.title]="gettingLocation ? 'Getting your location' : 'Use my current location'">
 					<svg viewBox="0 0 24 24" aria-hidden="true">
 						<circle cx="12" cy="12" r="3"></circle>
 						<path d="M12 2v3M12 19v3M2 12h3M19 12h3"></path>

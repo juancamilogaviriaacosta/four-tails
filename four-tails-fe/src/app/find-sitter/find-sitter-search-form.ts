@@ -135,7 +135,6 @@ export class FindSitterSearchForm {
 
   onAddressChange(value: string): void {
     this.clearCoordinates();
-
     this.addressSuggestions = [];
     this.addressQuery$.next(value.trim());
   }
