@@ -1,18 +1,31 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 import { AddressAutocompleteService } from '../find-sitter/address-autocomplete.service';
+import { ApiUrlService } from '../utils/api-url.service';
 
 import { EditSitterProfile } from './edit-sitter-profile';
 
 describe('EditSitterProfile', () => {
   let component: EditSitterProfile;
   let fixture: ComponentFixture<EditSitterProfile>;
+  let postRequest: ReturnType<typeof vi.fn>;
 
   beforeEach(async () => {
+    postRequest = vi.fn().mockReturnValue(of({}));
+
     await TestBed.configureTestingModule({
       imports: [EditSitterProfile],
       providers: [
+        {
+          provide: HttpClient,
+          useValue: { post: postRequest },
+        },
+        {
+          provide: ApiUrlService,
+          useValue: { apiUrl: 'https://api.example.test' },
+        },
         {
           provide: AddressAutocompleteService,
           useValue: { search: () => of([]) },
@@ -23,7 +36,9 @@ describe('EditSitterProfile', () => {
             snapshot: {
               data: {
                 preload: {
-                  staticData: { services: [{ id: 1, name: 'Dog walking' }] },
+                  staticData: {
+                    services: [{ id: 1, name: 'Dog walking', pricingUnit: 'PER_DAY' }],
+                  },
                 },
               },
             },
@@ -42,14 +57,16 @@ describe('EditSitterProfile', () => {
   });
 
   it('loads services from resolved static data', () => {
-    expect(component.availableServices).toEqual([{ id: 1, name: 'Dog walking' }]);
+    expect(component.availableServices).toEqual([{ id: 1, name: 'Dog walking', pricingUnit: 'PER_DAY' }]);
     expect(component.services).toEqual([]);
   });
 
   it('adds a service only once and can remove it', () => {
     component.selectedServiceId = 1;
     component.addService();
-    expect(component.services).toEqual([{ id: 1, name: 'Dog walking', amount: null }]);
+    expect(component.services).toEqual([
+      { id: 1, name: 'Dog walking', pricingUnit: 'PER_DAY', amount: null },
+    ]);
 
     component.selectedServiceId = 1;
     component.addService();
@@ -71,5 +88,35 @@ describe('EditSitterProfile', () => {
     expect(component.latitude).toBe(10);
     expect(component.longitude).toBe(-20);
     expect(component.addressSuggestions).toEqual([]);
+  });
+
+  it('sends service fees, address, radius, and selected coordinates', () => {
+    component.services = [{
+      id: 1,
+      name: 'Dog walking',
+      pricingUnit: 'PER_DAY',
+      amount: 25,
+    }];
+    component.address = '123 Main Street';
+    component.coverageRadius = 12;
+    component.latitude = 10;
+    component.longitude = -20;
+
+    component.setSitterProfile();
+
+    expect(postRequest).toHaveBeenCalledWith('https://api.example.test/api/setSitterProfile', {
+      serviceFees: [{
+        serviceId: 1,
+        serviceName: 'Dog walking',
+        amount: 25,
+        currency: 'AUD',
+        pricingUnit: 'PER_DAY',
+      }],
+      address: '123 Main Street',
+      coverageRadius: 12,
+      latitude: 10,
+      longitude: -20,
+    });
+    expect(component.saveSuccess).toBe('Sitter profile request sent.');
   });
 });

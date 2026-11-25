@@ -137,7 +137,7 @@
               }
             </div>
             @if (latitude !== null && longitude !== null) {
-              <small>Using selected location ({{ radius }} km radius)</small>
+              <small>Using selected location ({{ coverageRadius }} km radius)</small>
             }
             @if (locationError) {
               <small class="location-error">{{ locationError }}</small>
@@ -155,8 +155,20 @@
         </div>
       </section>
 
+      @if (saving) {
+        <p class="status-message" role="status">Saving sitter profile...</p>
+      }
+      @if (saveSuccess) {
+        <p class="status-message" role="status">{{ saveSuccess }}</p>
+      }
+      @if (saveError) {
+        <p class="status-message error-message" role="alert">{{ saveError }}</p>
+      }
+
       <div class="actions">
-        <button class="save-btn" type="button">Save changes</button>
+        <button class="save-btn" type="button" (click)="setSitterProfile()" [disabled]="saving">
+          Save changes
+        </button>
       </div>
     </form>
   </div>

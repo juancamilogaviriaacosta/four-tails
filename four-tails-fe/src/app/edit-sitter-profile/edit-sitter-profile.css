@@ -408,6 +408,11 @@ h1 {
   transform: translateY(-1px);
 }
 
+.save-btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
 .save-btn:focus-visible {
   outline: 3px solid var(--navy);
   outline-offset: 3px;

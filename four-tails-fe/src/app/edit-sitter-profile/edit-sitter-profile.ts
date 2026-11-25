@@ -1,8 +1,9 @@
+import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, DestroyRef, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import type { ServiceOption, StaticData } from '../utils/static-data-cache';
-import { Subject, of } from 'rxjs';
+import { Subject, finalize, of } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   debounceTime,
@@ -14,9 +15,24 @@ import { AddressAutocompleteService } from '../find-sitter/address-autocomplete.
 import type { AddressSuggestion } from '../find-sitter/address-autocomplete.service';
 import { Geolocation } from '@capacitor/geolocation';
 import { EnumConverterPipe } from '../utils/enum-converter.pipe';
+import { ApiUrlService } from '../utils/api-url.service';
 
 interface SitterServiceRate extends ServiceOption {
   amount: number | null;
+}
+
+interface SitterProfilePayload {
+  serviceFees: {
+    serviceId: number | string;
+    serviceName: string;
+    amount: number;
+    currency: 'AUD';
+    pricingUnit: string;
+  }[];
+  address: string;
+  coverageRadius: number;
+  latitude?: number;
+  longitude?: number;
 }
 
 @Component({
@@ -32,9 +48,11 @@ export class EditSitterProfile {
   address = '';
   coverageRadius = 30;
   locationError = '';
+  saveError = '';
+  saveSuccess = '';
+  saving = false;
   latitude: number | null = null;
   longitude: number | null = null;
-  radius = 30;
   private readonly addressQuery$ = new Subject<string>();
   addressSuggestions: AddressSuggestion[] = [];
   gettingLocation = false;
@@ -42,6 +60,8 @@ export class EditSitterProfile {
 
   private readonly addressAutocompleteService = inject(AddressAutocompleteService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly http = inject(HttpClient);
+  private readonly apiUrl = inject(ApiUrlService);
 
   constructor(private readonly route: ActivatedRoute, public cdr: ChangeDetectorRef) {
     const staticData: StaticData = this.route.snapshot.data['preload'].staticData;
@@ -141,5 +161,70 @@ export class EditSitterProfile {
       this.cdr.markForCheck();
       this.gettingLocation = false;
     }
+  }
+
+  setSitterProfile(): void {
+    this.saveError = '';
+    this.saveSuccess = '';
+
+    if (this.saving) {
+      return;
+    }
+
+    if (this.services.length === 0) {
+      this.saveError = 'Add at least one service before saving.';
+      return;
+    }
+
+    const pricedServices = this.services.filter(
+      (service): service is SitterServiceRate & { amount: number } =>
+        service.amount !== null && Number.isFinite(service.amount) && service.amount >= 0,
+    );
+    if (pricedServices.length !== this.services.length) {
+      this.saveError = 'Enter a valid rate for every service.';
+      return;
+    }
+
+    const address = this.address.trim();
+    if (!address) {
+      this.saveError = 'Enter an address or use your current location.';
+      return;
+    }
+
+    if (!Number.isFinite(this.coverageRadius) || this.coverageRadius < 1) {
+      this.saveError = 'Enter a coverage radius of at least 1 km.';
+      return;
+    }
+
+    const payload: SitterProfilePayload = {
+      serviceFees: pricedServices.map((service) => ({
+        serviceId: service.id,
+        serviceName: service.name,
+        amount: service.amount,
+        currency: 'AUD',
+        pricingUnit: service.pricingUnit,
+      })),
+      address,
+      coverageRadius: this.coverageRadius,
+      ...(this.latitude !== null && this.longitude !== null
+        ? { latitude: this.latitude, longitude: this.longitude }
+        : {}),
+    };
+
+    this.saving = true;
+    this.http.post<unknown>(`${this.apiUrl.apiUrl}/api/setSitterProfile`, payload)
+      .pipe(finalize(() => {
+        this.saving = false;
+        this.cdr.markForCheck();
+      }))
+      .subscribe({
+        next: () => {
+          this.saveSuccess = 'Sitter profile request sent.';
+        },
+        error: (error: unknown) => {
+          console.error('Error saving sitter profile:', error);
+          this.saveError = 'Could not save your sitter profile. Please try again.';
+        },
+      });
   }
 }
