@@ -19,11 +19,7 @@
           </div>
         </div>
 
-        @if (servicesLoading) {
-        <p class="status-message" role="status">Loading services...</p>
-        } @else if (servicesError) {
-        <p class="status-message error-message" role="alert">{{ servicesError }}</p>
-        } @else if (services.length === 0) {
+        @if (services.length === 0) {
         <p class="status-message">No services are available right now.</p>
         } @else {
         <div class="table-scroll" role="region" aria-label="Service rates" tabindex="0">

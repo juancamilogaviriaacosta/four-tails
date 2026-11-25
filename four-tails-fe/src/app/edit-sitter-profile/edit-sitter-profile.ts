@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ServiceOption, StaticDataCache } from '../utils/static-data-cache';
+import { ActivatedRoute } from '@angular/router';
+import type { ServiceOption, StaticData } from '../utils/static-data-cache';
 import { Subject } from 'rxjs';
 import { AddressSuggestion } from '../find-sitter/address-autocomplete.service';
 import { Geolocation } from '@capacitor/geolocation';
@@ -20,8 +21,6 @@ export class EditSitterProfile {
   services: SitterServiceRate[] = [];
   address = '';
   coverageRadius = 30;
-  servicesLoading = true;
-  servicesError = '';
   locationError = '';
   latitude: number | null = null;
   longitude: number | null = null;
@@ -30,18 +29,9 @@ export class EditSitterProfile {
   addressSuggestions: AddressSuggestion[] = [];
   gettingLocation = false;
 
-  constructor(public staticDataCache: StaticDataCache, public cdr: ChangeDetectorRef) {
-    staticDataCache.load().subscribe({
-      next: ({ services }) => {
-        this.services = services.map((service) => ({ ...service, amount: null, active: false }));
-        this.servicesLoading = false;
-      },
-      error: (error: unknown) => {
-        console.error('Error loading sitter profile services:', error);
-        this.servicesError = 'Could not load services. Please try again later.';
-        this.servicesLoading = false;
-      },
-    });
+  constructor(private readonly route: ActivatedRoute, public cdr: ChangeDetectorRef) {
+    const staticData: StaticData = this.route.snapshot.data['preload'].staticData;
+    this.services = staticData.services.map((service) => ({ ...service, amount: null, active: false }));
   }
 
   clearCoordinates(): void {
