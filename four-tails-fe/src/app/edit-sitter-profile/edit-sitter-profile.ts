@@ -21,13 +21,19 @@ interface SitterServiceRate extends ServiceOption {
   amount: number | null;
 }
 
+interface ProviderServiceFee {
+  amount: number;
+  pricingUnit: string;
+  serviceId: number | string;
+  serviceName: string;
+}
+
 interface SitterProfilePayload {
   serviceFees: {
     serviceId: number | string;
     serviceName: string;
     amount: number;
-    currency: 'AUD';
-    pricingUnit: string;
+    currency: 'AUD'
   }[];
   address: string;
   coverageRadius: number;
@@ -64,8 +70,16 @@ export class EditSitterProfile {
   private readonly apiUrl = inject(ApiUrlService);
 
   constructor(private readonly route: ActivatedRoute, public cdr: ChangeDetectorRef) {
+    const provider = this.route.snapshot.data['preload'].provider;
     const staticData: StaticData = this.route.snapshot.data['preload'].staticData;
     this.availableServices = staticData.services;
+    this.address = provider.address;
+    this.services = provider.serviceFees.map((serviceFee: { serviceId: any; serviceName: any; pricingUnit: any; amount: any; }) => ({
+      id: serviceFee.serviceId,
+      name: serviceFee.serviceName,
+      pricingUnit: serviceFee.pricingUnit,
+      amount: serviceFee.amount,
+    }));
 
     this.addressQuery$.pipe(
       debounceTime(300),
@@ -201,8 +215,7 @@ export class EditSitterProfile {
         serviceId: service.id,
         serviceName: service.name,
         amount: service.amount,
-        currency: 'AUD',
-        pricingUnit: service.pricingUnit,
+        currency: 'AUD'
       })),
       address,
       coverageRadius: this.coverageRadius,

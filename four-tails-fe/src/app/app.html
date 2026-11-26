@@ -56,6 +56,7 @@
       @if (showUserMenu) {
         <div id="user-dropdown" class="user-dropdown" role="menu" aria-label="Profile menu">
           <button class="dropdown-item" type="button" role="menuitem" (click)="navigateToProfile()">Edit profile</button>
+          <button class="dropdown-item" type="button" role="menuitem" (click)="navigateToProviderProfile()">Edit provider profile</button>
           <button class="dropdown-item logout" type="button" role="menuitem" (click)="logout()">Logout</button>
         </div>
       }

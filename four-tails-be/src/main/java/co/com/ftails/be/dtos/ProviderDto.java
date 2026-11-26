@@ -20,4 +20,7 @@ public class ProviderDto {
     private List<ServiceFeeDto> serviceFees;
     private Instant lastSeen;
     private List<String> photos;
+    private Double coverageRadius;
+    private Double latitude;
+    private Double longitude;
 }

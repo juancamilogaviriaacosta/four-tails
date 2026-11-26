@@ -1,31 +1,37 @@
 package co.com.ftails.be.services;
 
-import co.com.ftails.be.dtos.RegisterDeviceDto;
+import co.com.ftails.be.dtos.ProviderDto;
+import co.com.ftails.be.dtos.ServiceFeeDto;
 import co.com.ftails.be.dtos.UserDto;
-import co.com.ftails.be.entities.Client;
-import co.com.ftails.be.entities.IdentityProvider;
-import co.com.ftails.be.entities.RoleType;
-import co.com.ftails.be.entities.User;
-import co.com.ftails.be.repositories.ClientRepository;
-import co.com.ftails.be.repositories.RoleRepository;
-import co.com.ftails.be.repositories.UserRepository;
+import co.com.ftails.be.entities.*;
+import co.com.ftails.be.repositories.*;
 import co.com.ftails.be.util.JwtService;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.PrecisionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
-@Service
+@org.springframework.stereotype.Service
 @AllArgsConstructor
 public class UserService {
 
     private final UserRepository ur;
     private final RoleRepository rr;
     private final ClientRepository cr;
+    private final ServiceRepository sr;
+    private final ProviderRepository pr;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
@@ -90,7 +96,79 @@ public class UserService {
         return userToDto(savedUser);
     }
 
-    public UserDto setSitterProfile(Authentication authentication) {
-        return new UserDto();
+    public ProviderDto getProvider(Authentication authentication) {
+        Provider provider = pr.findByUserEmail(authentication.getName()).get();
+        return providerToDto(provider);
+    }
+
+    @Transactional
+    public ProviderDto setSitterProfile(ProviderDto providerDto, Authentication authentication) {
+        String email = authentication.getName();
+        Provider provider = pr.findByUserEmail(email)
+            .orElseGet(() -> {
+                Provider newProvider = new Provider();
+                User user = ur.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("User not found"));
+                newProvider.setUser(user);
+                newProvider.setVerified(false);
+                return newProvider;
+            });
+
+        provider.setAddress(providerDto.getAddress());
+        provider.setCoverageRadius(providerDto.getCoverageRadius());
+
+        if (providerDto.getLatitude() != null && providerDto.getLongitude() != null) {
+            GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
+            Point location = geometryFactory.createPoint(new Coordinate(providerDto.getLongitude(), providerDto.getLatitude()));
+            provider.setLocation(location);
+        }
+
+        provider.setServiceFees(new ArrayList<>());
+        for (ServiceFeeDto feeDto : providerDto.getServiceFees()) {
+            Service service = sr.findById(feeDto.getServiceId()).orElseThrow(() -> new EntityNotFoundException("Service not found: " + feeDto.getServiceId()));
+            ServiceFee serviceFee = new ServiceFee();
+            serviceFee.setService(service);
+            serviceFee.setAmount(feeDto.getAmount());
+            serviceFee.setCurrency(feeDto.getCurrency());
+            provider.addServiceFee(serviceFee);
+        }
+        Provider savedProvider = pr.save(provider);
+        return providerToDto(savedProvider);
+    }
+
+    private ProviderDto providerToDto(Provider savedProvider) {
+        ProviderDto dto = new ProviderDto();
+        dto.setId(savedProvider.getId());
+        dto.setName(savedProvider.getUser().getFirstName() + " " + savedProvider.getUser().getLastName());
+        dto.setDescription(savedProvider.getDescription());
+        dto.setAddress(savedProvider.getAddress());
+        dto.setRating(savedProvider.getRating() != null ? savedProvider.getRating().toString() : null);
+        dto.setReviews(savedProvider.getReviews());
+        dto.setLastSeen(savedProvider.getUser().getLastSeen());
+        dto.setCoverageRadius(savedProvider.getCoverageRadius());
+        if (savedProvider.getLocation() != null) {
+            dto.setLatitude(savedProvider.getLocation().getY());
+            dto.setLongitude(savedProvider.getLocation().getX());
+        }
+        if (savedProvider.getServiceFees() != null) {
+            List<ServiceFeeDto> serviceFees = new ArrayList<>();
+            for (ServiceFee serviceFee : savedProvider.getServiceFees()) {
+                ServiceFeeDto serviceFeeDto = new ServiceFeeDto();
+                serviceFeeDto.setServiceId(serviceFee.getService().getId());
+                serviceFeeDto.setServiceName(serviceFee.getService().getName());
+                serviceFeeDto.setAmount(serviceFee.getAmount());
+                serviceFeeDto.setCurrency(serviceFee.getCurrency());
+                serviceFeeDto.setPricingUnit(serviceFee.getService().getPricingUnit().name());
+                serviceFees.add(serviceFeeDto);
+            }
+            dto.setServiceFees(serviceFees);
+        }
+        if (savedProvider.getUser().getPhotos() != null) {
+            List<String> photos = new ArrayList<>();
+            for (UserPhoto photo : savedProvider.getUser().getPhotos()) {
+                photos.add(photo.getUrl());
+            }
+            dto.setPhotos(photos);
+        }
+        return dto;
     }
 }

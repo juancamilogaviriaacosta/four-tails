@@ -7,8 +7,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ProviderRepository extends JpaRepository<Provider, Long> {
+
+    Optional<Provider> findByUserEmail(String email);
 
     @Query(value = """
         SELECT DISTINCT p.*

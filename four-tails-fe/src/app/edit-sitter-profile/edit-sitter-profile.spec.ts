@@ -39,6 +39,24 @@ describe('EditSitterProfile', () => {
                   staticData: {
                     services: [{ id: 1, name: 'Dog walking', pricingUnit: 'PER_DAY' }],
                   },
+                  provider: {
+                    serviceFees: [
+                      {
+                        amount: 66,
+                        currency: 'AUD',
+                        pricingUnit: 'PER_NIGHT',
+                        serviceId: 1,
+                        serviceName: 'Hosting',
+                      },
+                      {
+                        amount: 77,
+                        currency: 'AUD',
+                        pricingUnit: 'PER_DAY',
+                        serviceId: 2,
+                        serviceName: 'Daycare',
+                      },
+                    ],
+                  },
                 },
               },
             },
@@ -56,9 +74,12 @@ describe('EditSitterProfile', () => {
     expect(component).toBeTruthy();
   });
 
-  it('loads services from resolved static data', () => {
+  it('maps provider service fees to the service rate model', () => {
     expect(component.availableServices).toEqual([{ id: 1, name: 'Dog walking', pricingUnit: 'PER_DAY' }]);
-    expect(component.services).toEqual([]);
+    expect(component.services).toEqual([
+      { id: 1, name: 'Hosting', pricingUnit: 'PER_NIGHT', amount: 66 },
+      { id: 2, name: 'Daycare', pricingUnit: 'PER_DAY', amount: 77 },
+    ]);
   });
 
   it('adds a service only once and can remove it', () => {

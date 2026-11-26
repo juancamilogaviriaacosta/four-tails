@@ -13,5 +13,6 @@ export const editSitterProfileResolver: ResolveFn<any> = () => {
 
   return forkJoin({
     staticData: staticDataCache.load(),
+    provider: http.get(`${apiUrl.apiUrl}/api/getProvider`),
   });
 };

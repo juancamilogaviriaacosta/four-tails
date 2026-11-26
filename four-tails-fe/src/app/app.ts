@@ -189,6 +189,12 @@ export class App implements OnInit, OnDestroy {
     this.router.navigate(['/edit-profile']);
   }
 
+  navigateToProviderProfile(): void {
+    this.showUserMenu = false;
+    this.mobileMenuOpen = false;
+    this.router.navigate(['/edit-sitter-profile']);
+  }
+
   navigateToMessages() {
     this.showUserMenu = false;
     this.mobileMenuOpen = false;

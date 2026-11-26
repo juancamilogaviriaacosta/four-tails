@@ -9,6 +9,7 @@ import org.locationtech.jts.geom.Point;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -46,6 +47,9 @@ public class Provider {
 	@Column(length = 255)
 	private String address;
 
+	@Column
+	private Double coverageRadius;
+
 	@Column(length = 100)
 	private String city;
 
@@ -72,5 +76,13 @@ public class Provider {
 	@PreUpdate
 	public void onUpdate() {
 		updatedAt = Instant.now();
+	}
+
+	public void addServiceFee(ServiceFee serviceFee) {
+		if (serviceFees == null) {
+			serviceFees = new ArrayList<>();
+		}
+		serviceFees.add(serviceFee);
+		serviceFee.setProvider(this);
 	}
 }
