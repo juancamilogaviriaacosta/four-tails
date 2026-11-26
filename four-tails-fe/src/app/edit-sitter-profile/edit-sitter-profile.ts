@@ -16,6 +16,7 @@ import type { AddressSuggestion } from '../find-sitter/address-autocomplete.serv
 import { Geolocation } from '@capacitor/geolocation';
 import { EnumConverterPipe } from '../utils/enum-converter.pipe';
 import { ApiUrlService } from '../utils/api-url.service';
+import { AuthService } from '../utils/auth-service';
 
 interface SitterServiceRate extends ServiceOption {
   amount: number | null;
@@ -68,6 +69,7 @@ export class EditSitterProfile {
   private readonly destroyRef = inject(DestroyRef);
   private readonly http = inject(HttpClient);
   private readonly apiUrl = inject(ApiUrlService);
+  private readonly authService = inject(AuthService);
 
   constructor(private readonly route: ActivatedRoute, public cdr: ChangeDetectorRef) {
     const provider = this.route.snapshot.data['preload'].provider;
@@ -228,13 +230,19 @@ export class EditSitterProfile {
     };
 
     this.saving = true;
-    this.http.post<unknown>(`${this.apiUrl.apiUrl}/api/setSitterProfile`, payload)
+    this.http.post<{ token?: string }>(`${this.apiUrl.apiUrl}/api/setSitterProfile`, payload)
       .pipe(finalize(() => {
         this.saving = false;
         this.cdr.markForCheck();
       }))
       .subscribe({
-        next: () => {
+        next: (response) => {
+          if (typeof response?.token !== 'string' || response.token.length === 0) {
+            this.saveError = 'Your profile was saved, but your session could not be refreshed. Please log in again.';
+            return;
+          }
+
+          this.authService.setAuthenticated(response.token);
           this.saveSuccess = 'Sitter profile request sent.';
         },
         error: (error: unknown) => {

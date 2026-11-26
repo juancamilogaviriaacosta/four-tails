@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 import { AddressAutocompleteService } from '../find-sitter/address-autocomplete.service';
 import { ApiUrlService } from '../utils/api-url.service';
+import { AuthService } from '../utils/auth-service';
 
 import { EditSitterProfile } from './edit-sitter-profile';
 
@@ -11,9 +12,11 @@ describe('EditSitterProfile', () => {
   let component: EditSitterProfile;
   let fixture: ComponentFixture<EditSitterProfile>;
   let postRequest: ReturnType<typeof vi.fn>;
+  let setAuthenticated: ReturnType<typeof vi.fn>;
 
   beforeEach(async () => {
-    postRequest = vi.fn().mockReturnValue(of({}));
+    postRequest = vi.fn().mockReturnValue(of({ token: 'updated-token' }));
+    setAuthenticated = vi.fn();
 
     await TestBed.configureTestingModule({
       imports: [EditSitterProfile],
@@ -25,6 +28,10 @@ describe('EditSitterProfile', () => {
         {
           provide: ApiUrlService,
           useValue: { apiUrl: 'https://api.example.test' },
+        },
+        {
+          provide: AuthService,
+          useValue: { setAuthenticated },
         },
         {
           provide: AddressAutocompleteService,
@@ -40,6 +47,8 @@ describe('EditSitterProfile', () => {
                     services: [{ id: 1, name: 'Dog walking', pricingUnit: 'PER_DAY' }],
                   },
                   provider: {
+                    id: 8,
+                    address: 'Current location',
                     serviceFees: [
                       {
                         amount: 66,
@@ -139,5 +148,6 @@ describe('EditSitterProfile', () => {
       longitude: -20,
     });
     expect(component.saveSuccess).toBe('Sitter profile request sent.');
+    expect(setAuthenticated).toHaveBeenCalledWith('updated-token');
   });
 });

@@ -21,7 +21,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 @org.springframework.stereotype.Service
 @AllArgsConstructor
@@ -102,7 +101,7 @@ public class UserService {
     }
 
     @Transactional
-    public ProviderDto setSitterProfile(ProviderDto providerDto, Authentication authentication) {
+    public UserDto setSitterProfile(ProviderDto providerDto, Authentication authentication) {
         String email = authentication.getName();
         Provider provider = pr.findByUserEmail(email)
             .orElseGet(() -> {
@@ -138,8 +137,8 @@ public class UserService {
         User user = savedProvider.getUser();
         user.getRoles().clear();
         user.getRoles().add(rr.findByName(RoleType.PROVIDER.name()));
-        ur.save(user);
-        return providerToDto(savedProvider);
+        User savedUser = ur.save(user);
+        return userToDto(savedUser);
     }
 
     private ProviderDto providerToDto(Provider savedProvider) {
