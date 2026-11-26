@@ -24,7 +24,7 @@
 						endDate: endDate
 					}"
 				>
-					<img class="sitter-photo" [src]="sitter.photos[0]"/>
+					<img class="sitter-photo" [src]="sitter.photos[0] ? sitter.photos[0] : '21-profile.png'"/>
 					<div class="sitter-details">
 						<div class="sitter-name-row">
 							<h2>{{ sitter.name }}</h2>

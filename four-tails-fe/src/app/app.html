@@ -56,7 +56,9 @@
       @if (showUserMenu) {
         <div id="user-dropdown" class="user-dropdown" role="menu" aria-label="Profile menu">
           <button class="dropdown-item" type="button" role="menuitem" (click)="navigateToProfile()">Edit profile</button>
-          <button class="dropdown-item" type="button" role="menuitem" (click)="navigateToProviderProfile()">Edit provider profile</button>
+          @if (authService.getRole()?.toLowerCase() === 'provider') {
+            <button class="dropdown-item" type="button" role="menuitem" (click)="navigateToProviderProfile()">Edit provider profile</button>
+          }
           <button class="dropdown-item logout" type="button" role="menuitem" (click)="logout()">Logout</button>
         </div>
       }
@@ -86,11 +88,11 @@
     <button class="mobile-messages" type="button" (click)="navigateToFindSitter()">Find a Sitter</button>
     <button class="mobile-messages" type="button" (click)="navigateToPetMarket()">Pet market</button>
 
-    @if (authService.getRole()?.toLowerCase() === 'sitter') {
+    @if (authService.getRole()?.toLowerCase() === 'provider') {
       <button class="mobile-messages" type="button" (click)="navigateSitterDashboard()">Dashboard</button>
     }
 
-    @if (authService.getRole()?.toLowerCase() !== 'sitter') {
+    @if (authService.getRole()?.toLowerCase() !== 'provider') {
       <button class="mobile-messages" type="button" (click)="navigateToBecomeSitter()">Become a sitter</button>
     }
 
@@ -99,6 +101,9 @@
       <button class="mobile-messages" type="button" (click)="navigateToMessages()">Messages <span class="mobile-event-count" aria-label="2 eventos">2</span></button>
       <button class="mobile-notifications" type="button" (click)="navigateToNotifications()">Notifications <span class="mobile-event-count" aria-label="1 evento">1</span></button>
       <button class="mobile-messages" type="button" (click)="navigateToProfile()">Edit Profile</button>
+      @if (authService.getRole()?.toLowerCase() === 'provider') {
+        <button class="mobile-messages" type="button" (click)="navigateToProviderProfile()">Edit provider profile</button>
+      }
       <button class="mobile-messages" type="button" (click)="logout()">Logout</button>
     } @else {
       <button type="button" class="mobile-login" [class.auth-action-highlight]="showAuthWarning" (click)="login()">Log in</button>

@@ -73,13 +73,16 @@ export class EditSitterProfile {
     const provider = this.route.snapshot.data['preload'].provider;
     const staticData: StaticData = this.route.snapshot.data['preload'].staticData;
     this.availableServices = staticData.services;
-    this.address = provider.address;
-    this.services = provider.serviceFees.map((serviceFee: { serviceId: any; serviceName: any; pricingUnit: any; amount: any; }) => ({
-      id: serviceFee.serviceId,
-      name: serviceFee.serviceName,
-      pricingUnit: serviceFee.pricingUnit,
-      amount: serviceFee.amount,
-    }));
+    
+    if(provider.id) {
+      this.address = provider.address;
+      this.services = provider.serviceFees.map((serviceFee: { serviceId: any; serviceName: any; pricingUnit: any; amount: any; }) => ({
+        id: serviceFee.serviceId,
+        name: serviceFee.serviceName,
+        pricingUnit: serviceFee.pricingUnit,
+        amount: serviceFee.amount,
+      }));
+    }
 
     this.addressQuery$.pipe(
       debounceTime(300),

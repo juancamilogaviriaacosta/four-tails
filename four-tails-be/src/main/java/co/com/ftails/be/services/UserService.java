@@ -97,8 +97,8 @@ public class UserService {
     }
 
     public ProviderDto getProvider(Authentication authentication) {
-        Provider provider = pr.findByUserEmail(authentication.getName()).get();
-        return providerToDto(provider);
+        Provider provider = pr.findByUserEmail(authentication.getName()).orElseGet(() -> new Provider());
+        return provider.getId() != null ? providerToDto(provider) : new ProviderDto();
     }
 
     @Transactional
@@ -122,7 +122,10 @@ public class UserService {
             provider.setLocation(location);
         }
 
-        provider.setServiceFees(new ArrayList<>());
+        if(provider.getServiceFees() == null) {
+            provider.setServiceFees(new ArrayList<>());
+        }
+        provider.getServiceFees().clear();
         for (ServiceFeeDto feeDto : providerDto.getServiceFees()) {
             Service service = sr.findById(feeDto.getServiceId()).orElseThrow(() -> new EntityNotFoundException("Service not found: " + feeDto.getServiceId()));
             ServiceFee serviceFee = new ServiceFee();
@@ -132,6 +135,10 @@ public class UserService {
             provider.addServiceFee(serviceFee);
         }
         Provider savedProvider = pr.save(provider);
+        User user = savedProvider.getUser();
+        user.getRoles().clear();
+        user.getRoles().add(rr.findByName(RoleType.PROVIDER.name()));
+        ur.save(user);
         return providerToDto(savedProvider);
     }
 

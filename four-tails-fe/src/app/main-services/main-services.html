@@ -55,7 +55,7 @@
           </div>
         </article>
       }
-      @if (authService.getRole()?.toLowerCase() === 'sitter') {
+      @if (authService.getRole()?.toLowerCase() === 'provider') {
         <article class="desktop-card" id="sitter"> <img class="card-image" src="17-home.png" alt="Cuidador con perro" />
           <div class="card-content">
             <button type="button" class="card-button" (click)="navigateSitterDashboard()"> Dashboard </button>
@@ -63,7 +63,7 @@
           </div>
         </article>
       }
-      @if (authService.getRole()?.toLowerCase() !== 'sitter') {
+      @if (authService.getRole()?.toLowerCase() !== 'provider') {
         <article class="desktop-card" id="sitter"> <img class="card-image" src="bs1.png" alt="Cuidador con perro" />
           <div class="card-content">
             <button type="button" class="card-button" (click)="navigateToBecomeSitter()"> Become a Sitter </button>
@@ -99,13 +99,13 @@
           <p>My bookings</p>
         </button>
       }
-      @if (authService.getRole()?.toLowerCase() === 'sitter') {
+      @if (authService.getRole()?.toLowerCase() === 'provider') {
         <button href="#sitter" class="mobile-card" (click)="navigateSitterDashboard()">
           <div class="mobile-icon"><img src="17-home.png" alt="Dashboard"/></div>
           <p>Dashboard</p>
         </button>
       }
-      @if (authService.getRole()?.toLowerCase() !== 'sitter') {
+      @if (authService.getRole()?.toLowerCase() !== 'provider') {
         <button href="#sitter" class="mobile-card" (click)="navigateToBecomeSitter()">
           <div class="mobile-icon"><img src="39-become-sitter.png" alt="Become a Sitter"/></div>
           <p>Become a Sitter</p>
