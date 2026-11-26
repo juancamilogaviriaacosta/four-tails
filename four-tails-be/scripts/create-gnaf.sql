@@ -454,10 +454,19 @@ ALTER TABLE gnaf.STREET_TYPE_AUT ADD
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
 
 CREATE INDEX CONCURRENTLY IF NOT EXISTS street_locality_street_name_trgm_idx
-    ON gnaf.street_locality USING GIN (street_name gin_trgm_ops);
+ON gnaf.street_locality USING GIN (street_name gin_trgm_ops);
 
 CREATE INDEX CONCURRENTLY IF NOT EXISTS address_detail_street_locality_idx
-    ON gnaf.address_detail (street_locality_pid) WHERE confidence > -1;
+ON gnaf.address_detail (street_locality_pid) WHERE confidence > -1;
+
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_adg_address_coordinates
+ON gnaf.address_default_geocode (address_detail_pid) INCLUDE (latitude, longitude)
+WHERE latitude IS NOT NULL
+AND longitude IS NOT NULL;
+
+CREATE INDEX CONCURRENTLY idx_street_locality_name_trgm
+ON gnaf.street_locality
+USING GIN (street_name gin_trgm_ops);
 
 ANALYZE gnaf.street_locality;
 ANALYZE gnaf.address_detail;

@@ -93,13 +93,9 @@ public class AddressRepository {
 
             FROM gnaf.address_view
 
-            WHERE street_name ILIKE ?
+            WHERE street_name LIKE ?
               AND latitude IS NOT NULL
               AND longitude IS NOT NULL
-
-            ORDER BY
-                street_name,
-                number_first NULLS LAST
 
             LIMIT 10
             """;
@@ -112,7 +108,7 @@ public class AddressRepository {
                         rs.getBigDecimal("latitude").doubleValue(),
                         rs.getBigDecimal("longitude").doubleValue()
                 ),
-                query + "%"
+                query.toUpperCase() + "%"
         );
     }
 }
